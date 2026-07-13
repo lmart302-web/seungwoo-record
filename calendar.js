@@ -14,15 +14,12 @@ const monthTitle = document.getElementById("monthTitle");
 let currentDate = new Date();
 
 
-async function loadRecords(){
 
-    console.log("Firebase 읽기 시작");
+async function loadRecords(){
 
     const snapshot = await getDocs(
         collection(db, "records")
     );
-
-    console.log("가져온 개수:", snapshot.size);
 
     records = [];
 
@@ -52,29 +49,19 @@ function drawCalendar(){
 
 
     const days = [
-        "일",
         "월",
         "화",
         "수",
         "목",
-        "금",
-        "토"
+        "금"
     ];
 
 
-    days.forEach(function(day,index){
+    days.forEach(function(day){
 
         const div = document.createElement("div");
 
         div.className = "day-name";
-
-        if(index === 0){
-            div.classList.add("sunday");
-        }
-
-        if(index === 6){
-            div.classList.add("saturday");
-        }
 
         div.innerText = day;
 
@@ -84,33 +71,62 @@ function drawCalendar(){
 
 
 
-    const firstDay =
-    new Date(year, month, 1).getDay();
-
-
     const lastDate =
     new Date(year, month + 1, 0).getDate();
 
 
 
-    for(let i = 0; i < firstDay; i++){
-
-        const empty =
-        document.createElement("div");
-
-        calendar.appendChild(empty);
-
-    }
+    let count = 0;
 
 
 
     for(let i = 1; i <= lastDate; i++){
 
 
+        const dateObj =
+        new Date(year, month, i);
+
+
+        const week =
+        dateObj.getDay();
+
+
+
+        // 토요일(6), 일요일(0) 제외
+        if(week === 0 || week === 6){
+
+            continue;
+
+        }
+
+
+
+        // 월요일 시작 맞추기
+        if(count === 0){
+
+            const firstWeek = week - 1;
+
+            for(let j = 0; j < firstWeek; j++){
+
+                const empty =
+                document.createElement("div");
+
+                calendar.appendChild(empty);
+
+                count++;
+
+            }
+
+        }
+
+
+
         const box =
         document.createElement("div");
 
-        box.className = "calendar-day";
+
+        box.className =
+        "calendar-day";
 
 
 
@@ -122,8 +138,6 @@ function drawCalendar(){
         String(i).padStart(2,"0");
 
 
-
-        let behavior = "";
 
         let html =
         "<strong>" + i + "</strong>";
@@ -142,15 +156,27 @@ function drawCalendar(){
         if(record){
 
 
+            let behavior = "";
+
+
             if(record.behavior === "good"){
+
                 behavior = "🟢";
+
             }
+
             else if(record.behavior === "normal"){
+
                 behavior = "🟡";
+
             }
+
             else if(record.behavior === "hard"){
+
                 behavior = "🔴";
+
             }
+
 
 
             html =
@@ -168,7 +194,6 @@ function drawCalendar(){
             }
 
 
-
             if(record.lunch){
 
                 html +=
@@ -177,7 +202,6 @@ function drawCalendar(){
                 "</div>";
 
             }
-
 
 
             if(record.afternoon){
@@ -190,21 +214,22 @@ function drawCalendar(){
             }
 
 
-
             if(record.running || record.weight){
 
                 html += "<div>";
 
                 if(record.running){
 
-                    html += "🏃" + record.running + "분 ";
+                    html +=
+                    "🏃" + record.running + "분 ";
 
                 }
 
 
                 if(record.weight){
 
-                    html += "⚖️" + record.weight + "kg";
+                    html +=
+                    "⚖️" + record.weight + "kg";
 
                 }
 
@@ -212,24 +237,6 @@ function drawCalendar(){
 
             }
 
-        }
-
-
-
-        const dayOfWeek =
-        new Date(year, month, i).getDay();
-
-
-        if(dayOfWeek === 0){
-
-            box.classList.add("sunday");
-
-        }
-
-
-        if(dayOfWeek === 6){
-
-            box.classList.add("saturday");
 
         }
 
@@ -239,10 +246,14 @@ function drawCalendar(){
 
         calendar.appendChild(box);
 
+
+        count++;
+
+
     }
 
-}
 
+}
 
 
 
