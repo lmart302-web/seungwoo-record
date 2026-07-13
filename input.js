@@ -2,13 +2,9 @@ import { app } from "./firebase.js";
 
 import { 
     getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    where,
     doc,
-    updateDoc
+    setDoc,
+    getDoc
 } 
 from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
@@ -54,7 +50,6 @@ behaviorButtons.forEach(function(button){
 
 const saveButton =
 document.getElementById("saveButton");
-
 
 
 
@@ -110,59 +105,13 @@ saveButton.addEventListener("click", async function(){
 
 
 
+    await setDoc(
 
+        doc(db,"records",record.date),
 
-
-    const q = query(
-
-        collection(db,"records"),
-
-        where("date","==",record.date)
+        record
 
     );
-
-
-
-    const snapshot = await getDocs(q);
-
-
-
-
-
-    if(snapshot.empty){
-
-
-        await addDoc(
-
-            collection(db,"records"),
-
-            record
-
-        );
-
-
-    }
-
-    else{
-
-
-        const documentId =
-        snapshot.docs[0].id;
-
-
-
-        await updateDoc(
-
-            doc(db,"records",documentId),
-
-            record
-
-        );
-
-
-    }
-
-
 
 
 
@@ -208,28 +157,18 @@ loadButton.addEventListener("click", async function(){
 
 
 
-
-
-    const q = query(
-
-        collection(db,"records"),
-
-        where("date","==",date)
-
-    );
-
-
+    const docRef =
+    doc(db,"records",date);
 
 
 
     const snapshot =
-    await getDocs(q);
+    await getDoc(docRef);
 
 
 
 
-
-    if(snapshot.empty){
+    if(!snapshot.exists()){
 
 
         alert("해당 날짜 기록이 없습니다.");
@@ -241,12 +180,8 @@ loadButton.addEventListener("click", async function(){
 
 
 
-
-
     const record =
-    snapshot.docs[0].data();
-
-
+    snapshot.data();
 
 
 
