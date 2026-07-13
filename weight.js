@@ -43,6 +43,14 @@ async function loadRecords(){
     });
 
 
+    // 날짜순 정렬 (오래된 날짜 → 최신 날짜)
+    records.sort(function(a, b){
+
+        return a.date.localeCompare(b.date);
+
+    });
+
+
     drawWeight();
 
 }
