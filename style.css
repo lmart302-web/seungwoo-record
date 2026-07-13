@@ -187,9 +187,23 @@ button:hover{
 }
 
 
+/* 기본 항목 한 줄 */
 .calendar-day div{
     margin-bottom:3px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
+
+
+/* 오전 / 오후 일과는 항상 2줄 공간 확보 */
+.calendar-day div:first-of-type,
+.calendar-day div:nth-of-type(3){
+    height:32px;
+    white-space:normal;
+    overflow:hidden;
+}
+
 
 
 .sunday strong{
@@ -278,6 +292,12 @@ canvas{
 
     .calendar-day div{
         margin-bottom:2px;
+    }
+
+
+    .calendar-day div:first-of-type,
+    .calendar-day div:nth-of-type(3){
+        height:28px;
     }
 
 }
