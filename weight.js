@@ -29,6 +29,10 @@ const weightList =
 document.getElementById("weightList");
 
 
+const weightChange =
+document.getElementById("weightChange");
+
+
 let currentDate = new Date();
 
 
@@ -92,7 +96,7 @@ function drawWeight(){
 
 
 
-    // 화면 표시 전 날짜 재정렬
+    // 날짜순 재정렬
 
     records.sort(function(a,b){
 
@@ -127,11 +131,19 @@ function drawWeight(){
 
 
 
-
     const labels = [];
 
 
     const weights = [];
+
+
+
+    let firstWeight = null;
+
+
+    let lastWeight = null;
+
+
 
 
 
@@ -157,6 +169,7 @@ function drawWeight(){
 
 
 
+
         if(
 
 
@@ -176,11 +189,10 @@ function drawWeight(){
 
 
 
+
             labels.push(
 
-
                 record.date.substring(8,10) + "일"
-
 
             );
 
@@ -190,12 +202,26 @@ function drawWeight(){
 
             weights.push(
 
-
                 Number(record.weight)
-
 
             );
 
+
+
+
+
+
+            if(firstWeight === null){
+
+
+                firstWeight = Number(record.weight);
+
+
+            }
+
+
+
+            lastWeight = Number(record.weight);
 
 
 
@@ -206,7 +232,6 @@ function drawWeight(){
             const li =
 
             document.createElement("li");
-
 
 
 
@@ -227,8 +252,6 @@ function drawWeight(){
 
 
 
-
-
             weightList.appendChild(li);
 
 
@@ -244,6 +267,63 @@ function drawWeight(){
 
 
 
+
+    // 체중 변화 표시
+
+    if(weightChange){
+
+
+        if(firstWeight !== null && lastWeight !== null){
+
+
+
+            const change =
+
+            (lastWeight - firstWeight).toFixed(1);
+
+
+
+
+            if(change > 0){
+
+
+                weightChange.innerText =
+
+                "체중 변화: +" + change + "kg";
+
+
+            }
+
+            else{
+
+
+                weightChange.innerText =
+
+                "체중 변화: " + change + "kg";
+
+
+            }
+
+
+
+        }
+
+        else{
+
+
+            weightChange.innerText = "";
+
+        }
+
+
+    }
+
+
+
+
+
+
+
     if(chart){
 
 
@@ -251,6 +331,7 @@ function drawWeight(){
 
 
     }
+
 
 
 
