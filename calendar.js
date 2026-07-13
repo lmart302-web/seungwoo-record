@@ -426,39 +426,22 @@ function drawCalendar(){
 
         else{
 
+    html +=
+    "<div class='record-line'></div>";
 
+    html +=
+    "<div class='record-line'></div>";
 
-            html +=
+    html +=
+    "<div class='record-line'></div>";
 
-            "<div class='record-line'>☀️ </div>";
+    html +=
+    "<div class='record-line'></div>";
 
+    html +=
+    "<div class='record-line'></div>";
 
-
-            html +=
-
-            "<div class='record-line'>🍚 </div>";
-
-
-
-            html +=
-
-            "<div class='record-line'>🌙 </div>";
-
-
-
-            html +=
-
-            "<div class='record-line'>🏃 </div>";
-
-
-
-            html +=
-
-            "<div class='record-line'>⚖️ </div>";
-
-
-
-        }
+}
 
 
 
