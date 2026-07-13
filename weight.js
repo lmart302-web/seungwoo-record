@@ -1,26 +1,23 @@
-const records =
+console.log("weight.js 실행됨");
 
-JSON.parse(localStorage.getItem("dailyRecords")) || [];
+import { app } from "./firebase.js";
+import { getFirestore, collection, getDocs } 
+from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
+const db = getFirestore(app);
 
+let records = [];
 
 const monthTitle =
-
 document.getElementById("monthTitle");
 
 
-
 const ctx =
-
 document.getElementById("weightChart");
 
 
-
 const weightList =
-
 document.getElementById("weightList");
-
-
 
 
 let currentDate = new Date();
@@ -29,6 +26,27 @@ let chart;
 
 
 
+async function loadRecords(){
+
+    const snapshot = await getDocs(
+        collection(db, "records")
+    );
+
+
+    records = [];
+
+
+    snapshot.forEach(function(doc){
+
+        records.push(doc.data());
+
+    });
+
+
+    drawWeight();
+
+}
+
 
 
 
@@ -36,26 +54,17 @@ let chart;
 function drawWeight(){
 
 
-
     const year =
-
     currentDate.getFullYear();
 
 
-
     const month =
-
     currentDate.getMonth();
 
 
 
-
-
     monthTitle.innerText =
-
     year + "년 " + (month + 1) + "월";
-
-
 
 
 
@@ -65,13 +74,7 @@ function drawWeight(){
 
 
 
-
-
-
-
     weightList.innerHTML = "";
-
-
 
 
 
@@ -80,12 +83,8 @@ function drawWeight(){
     records.forEach(function(record){
 
 
-
         const recordDate =
-
         new Date(record.date);
-
-
 
 
 
@@ -120,7 +119,6 @@ function drawWeight(){
 
 
             const li =
-
             document.createElement("li");
 
 
@@ -151,19 +149,11 @@ function drawWeight(){
 
 
 
-
-
-
     if(chart){
-
 
         chart.destroy();
 
-
     }
-
-
-
 
 
 
@@ -175,27 +165,20 @@ function drawWeight(){
         type:"line",
 
 
-
         data:{
-
 
 
             labels:labels,
 
 
-
             datasets:[
-
 
 
                 {
 
-
                     label:"체중(kg)",
 
-
                     data:weights
-
 
                 }
 
@@ -203,9 +186,7 @@ function drawWeight(){
             ]
 
 
-
         },
-
 
 
         options:{
@@ -237,12 +218,7 @@ function drawWeight(){
 
 
 
-
-
 }
-
-
-
 
 
 
@@ -255,7 +231,6 @@ document
 .addEventListener("click",function(){
 
 
-
     currentDate.setMonth(
 
         currentDate.getMonth()-1
@@ -263,13 +238,10 @@ document
     );
 
 
-
     drawWeight();
 
 
-
 });
-
 
 
 
@@ -283,7 +255,6 @@ document
 .addEventListener("click",function(){
 
 
-
     currentDate.setMonth(
 
         currentDate.getMonth()+1
@@ -291,9 +262,7 @@ document
     );
 
 
-
     drawWeight();
-
 
 
 });
@@ -302,5 +271,4 @@ document
 
 
 
-
-drawWeight();
+loadRecords();

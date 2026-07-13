@@ -1,3 +1,9 @@
+import { app } from "./firebase.js";
+import { getFirestore, collection, addDoc } 
+from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const db = getFirestore(app);
+
 let selectedBehavior = "";
 
 const behaviorButtons =
@@ -27,7 +33,7 @@ document.getElementById("saveButton");
 
 
 
-saveButton.addEventListener("click", function(){
+saveButton.addEventListener("click", async function(){
 
 
 
@@ -126,13 +132,7 @@ saveButton.addEventListener("click", function(){
 
 
 
-    localStorage.setItem(
-
-        "dailyRecords",
-
-        JSON.stringify(records)
-
-    );
+    await addDoc(collection(db, "records"), record);
 
 
 
