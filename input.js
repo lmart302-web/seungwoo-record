@@ -103,7 +103,8 @@ saveButton.addEventListener("click", async function(){
     }
 
 
-
+console.log("저장 문서:", record.date);
+console.log("firebase:", db);
 
     await setDoc(
 
