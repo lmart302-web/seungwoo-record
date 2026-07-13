@@ -1,20 +1,38 @@
 import { app } from "./firebase.js";
-import { getFirestore, collection, addDoc } 
+
+import { 
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    doc,
+    updateDoc
+} 
 from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
 
 const db = getFirestore(app);
 
+
 let selectedBehavior = "";
+
+
 
 const behaviorButtons =
 document.querySelectorAll(".behavior-btn");
+
+
 
 behaviorButtons.forEach(function(button){
 
     button.addEventListener("click",function(){
 
+
         selectedBehavior =
         button.dataset.value;
+
 
         behaviorButtons.forEach(function(btn){
 
@@ -22,14 +40,22 @@ behaviorButtons.forEach(function(button){
 
         });
 
+
         button.classList.add("selected");
+
 
     });
 
 });
 
+
+
+
+
 const saveButton =
 document.getElementById("saveButton");
+
+
 
 
 
@@ -63,11 +89,11 @@ saveButton.addEventListener("click", async function(){
         weight:
         document.getElementById("weight").value,
 
+
         behavior:selectedBehavior
 
 
     };
-
 
 
 
@@ -77,53 +103,8 @@ saveButton.addEventListener("click", async function(){
 
         alert("날짜를 선택하세요.");
 
-
         return;
 
-
-    }
-
-
-
-
-
-    let records =
-
-    JSON.parse(localStorage.getItem("dailyRecords")) || [];
-
-
-
-
-
-
-
-    const index =
-
-    records.findIndex(function(item){
-
-
-        return item.date === record.date;
-
-
-    });
-
-
-
-
-
-
-    if(index !== -1){
-
-
-        records[index] = record;
-
-
-    } else {
-
-
-        records.push(record);
-
-
     }
 
 
@@ -132,8 +113,54 @@ saveButton.addEventListener("click", async function(){
 
 
 
-    await addDoc(collection(db, "records"), record);
+    const q = query(
 
+        collection(db,"records"),
+
+        where("date","==",record.date)
+
+    );
+
+
+
+    const snapshot = await getDocs(q);
+
+
+
+
+
+    if(snapshot.empty){
+
+
+        await addDoc(
+
+            collection(db,"records"),
+
+            record
+
+        );
+
+
+    }
+
+    else{
+
+
+        const documentId =
+        snapshot.docs[0].id;
+
+
+
+        await updateDoc(
+
+            doc(db,"records",documentId),
+
+            record
+
+        );
+
+
+    }
 
 
 
@@ -145,18 +172,27 @@ saveButton.addEventListener("click", async function(){
 
 });
 
+
+
+
+
+
+
+
+
 const loadButton =
 document.getElementById("loadButton");
 
 
 
-loadButton.addEventListener("click", function(){
+
+loadButton.addEventListener("click", async function(){
 
 
 
     const date =
-
     document.getElementById("recordDate").value;
+
 
 
 
@@ -165,9 +201,7 @@ loadButton.addEventListener("click", function(){
 
         alert("날짜를 선택하세요.");
 
-
         return;
-
 
     }
 
@@ -176,9 +210,33 @@ loadButton.addEventListener("click", function(){
 
 
 
-    const records =
+    const q = query(
 
-    JSON.parse(localStorage.getItem("dailyRecords")) || [];
+        collection(db,"records"),
+
+        where("date","==",date)
+
+    );
+
+
+
+
+
+    const snapshot =
+    await getDocs(q);
+
+
+
+
+
+    if(snapshot.empty){
+
+
+        alert("해당 날짜 기록이 없습니다.");
+
+        return;
+
+    }
 
 
 
@@ -186,30 +244,7 @@ loadButton.addEventListener("click", function(){
 
 
     const record =
-
-    records.find(function(item){
-
-
-        return item.date === date;
-
-
-    });
-
-
-
-
-
-
-    if(!record){
-
-
-        alert("해당 날짜 기록이 없습니다.");
-
-
-        return;
-
-
-    }
+    snapshot.docs[0].data();
 
 
 
@@ -254,6 +289,35 @@ loadButton.addEventListener("click", function(){
     record.weight || "";
 
 
+
+
+
+
+
+    selectedBehavior =
+    record.behavior || "";
+
+
+
+
+
+    behaviorButtons.forEach(function(btn){
+
+
+        btn.classList.remove("selected");
+
+
+
+        if(btn.dataset.value === selectedBehavior){
+
+
+            btn.classList.add("selected");
+
+
+        }
+
+
+    });
 
 
 
