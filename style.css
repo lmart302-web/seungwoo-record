@@ -5,11 +5,22 @@ body {
     color:#333;
 }
 
-h1{text-align:center;margin-bottom:30px;}
-h2{margin-bottom:15px;}
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+h2{
+    margin-bottom:15px;
+}
+
 
 /* 상단 메뉴 */
-nav{text-align:center;margin-bottom:20px;}
+nav{
+    text-align:center;
+    margin-bottom:20px;
+}
+
 nav a{
     display:inline-block;
     padding:10px 15px;
@@ -21,6 +32,7 @@ nav a{
     box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
+
 /* 카드 */
 .section{
     background:#fff;
@@ -29,6 +41,7 @@ nav a{
     border-radius:15px;
     box-shadow:0 3px 8px rgba(0,0,0,.1);
 }
+
 
 /* 시작 화면 */
 .title-area{
@@ -70,12 +83,12 @@ nav a{
     color:#333;
     font-size:26px;
     font-weight:bold;
-    transition:.2s;
 }
+
 .menu-card:hover{
     transform:translateY(-5px);
-    box-shadow:0 6px 15px rgba(0,0,0,.15);
 }
+
 
 /* 입력 */
 input{
@@ -84,6 +97,7 @@ input{
     border-radius:10px;
     border:1px solid #ccc;
 }
+
 button{
     padding:12px 16px;
     border:none;
@@ -91,44 +105,39 @@ button{
     cursor:pointer;
     background:#e7efff;
 }
-button:hover{opacity:.8;}
-.selected{background:#9fc5ff;}
 
-button:hover{opacity:.8;}
-.selected{background:#9fc5ff;}
+button:hover{
+    opacity:.8;
+}
+
+.selected{
+    background:#9fc5ff;
+}
+
 
 /* 행동 상태 */
-
 .behavior-buttons{
-
     display:flex;
-
     justify-content:center;
-
     gap:15px;
-
     margin:15px 0;
-
 }
 
 .behavior-btn{
-
     min-width:120px;
-
 }
 
 .behavior-btn.selected{
-
     background:#9fc5ff;
-
 }
+
 
 .save{
     width:100%;
     background:#d8f5d8;
     font-size:18px;
-}s
-.save{width:100%;background:#d8f5d8;font-size:18px;}
+}
+
 
 /* 달력 */
 .calendar-header{
@@ -137,14 +146,26 @@ button:hover{opacity:.8;}
     align-items:center;
     margin-bottom:15px;
 }
-.calendar-header button{padding:10px 15px;}
+
+.calendar-header button{
+    padding:10px 15px;
+}
+
 
 #calendar{
     display:grid;
     grid-template-columns:repeat(7,1fr);
     gap:6px;
 }
-.day-name{text-align:center;font-weight:bold;padding:8px;}
+
+
+.day-name{
+    text-align:center;
+    font-weight:bold;
+    padding:8px;
+}
+
+
 .calendar-day{
     background:#fff;
     border:1px solid #ddd;
@@ -155,8 +176,20 @@ button:hover{opacity:.8;}
     line-height:1.4;
     overflow:hidden;
 }
-.calendar-day strong{display:block;font-size:18px;margin-bottom:8px;}
-.calendar-day div{margin-bottom:6px;}
+
+
+.calendar-day strong{
+    display:block;
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+
+.calendar-day div{
+    margin-bottom:6px;
+}
+
+
 .calendar-day .lunch{
     margin:8px 0;
     padding:6px 0;
@@ -164,38 +197,58 @@ button:hover{opacity:.8;}
     border-top:1px solid #ddd;
     border-bottom:1px solid #ddd;
 }
-.calendar-day div:last-child{font-weight:bold;}
 
-.sunday strong,.holiday strong{color:red;}
-.saturday strong{color:blue;}
+
+.calendar-day div:last-child{
+    font-weight:bold;
+}
+
+
+.sunday strong{
+    color:red;
+}
+
+
+.saturday strong{
+    color:blue;
+}
+
 
 /* 그래프 */
-canvas{max-width:100%;}
+canvas{
+    max-width:100%;
+}
+
+
 
 /* 모바일 */
- @media (max-width:600px){
+@media (max-width:600px){
 
     body{
         margin:10px;
     }
 
+
     h1{
         font-size:24px;
     }
+
 
     nav a{
         padding:8px;
         font-size:14px;
     }
 
-    /* 기록 입력 버튼 숨기기 */
+
     .input-link{
         display:none;
     }
 
+
     .menu-container{
         flex-direction:column;
     }
+
 
     .menu-card{
         width:80%;
@@ -204,23 +257,34 @@ canvas{max-width:100%;}
         font-size:24px;
     }
 
+
     .section{
         padding:15px;
         border-radius:12px;
     }
 
+
     .calendar-header h2{
         font-size:18px;
     }
 
-    .calendar-day{
-        min-height:120px;
-        font-size:10px;
-        padding:5px;
+
+    /* 모바일 달력 5칸 */
+    #calendar{
+        grid-template-columns:repeat(5,1fr);
+        gap:5px;
     }
 
+
+    .calendar-day{
+        min-height:110px;
+        font-size:12px;
+        padding:6px;
+    }
+
+
     .calendar-day strong{
-        font-size:15px;
+        font-size:16px;
     }
 
 }

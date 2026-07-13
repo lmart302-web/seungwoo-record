@@ -1,3 +1,5 @@
+console.log("calendar.js 실행됨");
+
 import { app } from "./firebase.js";
 import { getFirestore, collection, getDocs } 
 from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -26,8 +28,6 @@ async function loadRecords(){
 
     snapshot.forEach(function(doc){
 
-        console.log("데이터:", doc.data());
-
         records.push(doc.data());
 
     });
@@ -50,6 +50,7 @@ function drawCalendar(){
     year + "년 " + (month + 1) + "월";
 
 
+
     const days = [
         "일",
         "월",
@@ -61,11 +62,19 @@ function drawCalendar(){
     ];
 
 
-    days.forEach(function(day){
+    days.forEach(function(day,index){
 
         const div = document.createElement("div");
 
         div.className = "day-name";
+
+        if(index === 0){
+            div.classList.add("sunday");
+        }
+
+        if(index === 6){
+            div.classList.add("saturday");
+        }
 
         div.innerText = day;
 
@@ -86,7 +95,8 @@ function drawCalendar(){
 
     for(let i = 0; i < firstDay; i++){
 
-        const empty = document.createElement("div");
+        const empty =
+        document.createElement("div");
 
         calendar.appendChild(empty);
 
@@ -96,9 +106,12 @@ function drawCalendar(){
 
     for(let i = 1; i <= lastDate; i++){
 
-        const box = document.createElement("div");
+
+        const box =
+        document.createElement("div");
 
         box.className = "calendar-day";
+
 
 
         const date =
@@ -229,6 +242,7 @@ function drawCalendar(){
     }
 
 }
+
 
 
 
