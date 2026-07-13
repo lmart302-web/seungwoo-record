@@ -152,13 +152,11 @@ button:hover{
 }
 
 
-/* 월~금 5칸 고정 */
+/* 월~금 5칸 */
 #calendar{
     display:grid;
-    grid-template-columns:repeat(5,120px);
+    grid-template-columns:repeat(5,1fr);
     gap:6px;
-    overflow-x:auto;
-    padding-bottom:10px;
 }
 
 
@@ -173,12 +171,12 @@ button:hover{
     background:#fff;
     border:1px solid #ddd;
     border-radius:12px;
-    width:120px;
     min-height:150px;
     padding:8px;
     font-size:11px;
-    line-height:1.3;
+    line-height:1.4;
     overflow:hidden;
+    word-break:break-word;
 }
 
 
@@ -259,25 +257,27 @@ canvas{
     }
 
 
-
-    /* 모바일 가로 스크롤 달력 */
+    /* 모바일도 5칸 유지 */
     #calendar{
-        grid-template-columns:repeat(5,120px);
-        gap:5px;
-        overflow-x:auto;
+        grid-template-columns:repeat(5,1fr);
+        gap:4px;
     }
 
 
     .calendar-day{
-        width:120px;
         min-height:110px;
-        font-size:10px;
-        padding:5px;
+        font-size:9px;
+        padding:4px;
     }
 
 
     .calendar-day strong{
-        font-size:13px;
+        font-size:12px;
+    }
+
+
+    .calendar-day div{
+        margin-bottom:2px;
     }
 
 }
