@@ -251,71 +251,72 @@ function drawReport(){
 
 
 
-    // 평균 런닝
+    // 운동 기록
+
+
+let runningTotal = 0;
+
+let runningCount = 0;
 
 
 
-    let runningTotal = 0;
-
-
-    let runningCount = 0;
+monthRecords.forEach(function(record){
 
 
 
+    if(record.running){
 
 
-
-    monthRecords.forEach(function(record){
-
+        runningTotal += Number(record.running);
 
 
-        if(record.running){
-
-
-
-            runningTotal += Number(record.running);
-
-
-
-            runningCount++;
-
-
-
-        }
-
-
-
-    });
-
-
-
-
-
-
-    if(runningCount){
-
-
-
-        document.getElementById("runningSummary").innerText =
-
-        Math.round(runningTotal / runningCount) + "분";
-
+        runningCount++;
 
 
     }
 
-    else{
+
+
+});
 
 
 
-        document.getElementById("runningSummary").innerText =
-
-        "기록 없음";
 
 
+if(runningCount){
 
-    }
 
+
+    const runningAverage =
+
+    Math.round(runningTotal / runningCount);
+
+
+
+    document.getElementById("runningSummary").innerText =
+
+
+    "총 운동 횟수 : " + runningCount + "회\n\n" +
+
+    "총 이용시간 : " + runningTotal + "분\n\n" +
+
+    "평균 이용시간 : " + runningAverage + "분";
+
+
+
+}
+
+else{
+
+
+
+    document.getElementById("runningSummary").innerText =
+
+    "기록 없음";
+
+
+
+}
 
 
 
