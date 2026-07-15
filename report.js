@@ -320,7 +320,7 @@ function drawReport(){
 
         "운동 횟수 : " + runningCount + "회\n\n" +
 
-        "총 운동시간 : " + runningTotal + "분\n\n" +
+       // "총 운동시간 : " + runningTotal + "분\n\n" + //
 
         "평균 운동시간 : " + runningAverage + "분\n\n" +
 
