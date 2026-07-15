@@ -118,8 +118,7 @@ saveButton.addEventListener("click", async function(){
         !record.lunch &&
         !record.afternoon &&
         !record.running &&
-        !record.weight &&
-        !record.behavior
+        !record.weight
 
     ){
 
