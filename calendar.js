@@ -363,68 +363,82 @@ function drawCalendar(){
         if(record){
 
 
-
-            html +=
-
-            "<div class='record-line'>☀️ " +
-
-            (record.morning || "") +
-
-            "</div>";
+    if(record.holiday){
 
 
+        html +=
+        "<div class='holiday-text'>🚫 휴강</div>";
 
 
-
-            html +=
-
-            "<div class='record-line'>🍚 " +
-
-            (record.lunch || "") +
-
-            "</div>";
+        box.classList.add("holiday");
 
 
+    }
+    else{
 
 
+        html +=
 
-            html +=
+        "<div class='record-line'>☀️ " +
 
-            "<div class='record-line'>🌙 " +
+        (record.morning || "") +
 
-            (record.afternoon || "") +
-
-            "</div>";
+        "</div>";
 
 
 
 
 
-            html +=
+        html +=
 
-            "<div class='record-line'>🏃 " +
+        "<div class='record-line'>🍚 " +
 
-            (record.running ? record.running + "분" : "") +
+        (record.lunch || "") +
 
-            "</div>";
-
-
+        "</div>";
 
 
 
-            html +=
-
-            "<div class='record-line'>⚖️ " +
-
-            (record.weight ? record.weight + "kg" : "") +
-
-            "</div>";
 
 
+        html +=
 
-        }
+        "<div class='record-line'>🌙 " +
 
-        else{
+        (record.afternoon || "") +
+
+        "</div>";
+
+
+
+
+
+        html +=
+
+        "<div class='record-line'>🏃 " +
+
+        (record.running ? record.running + "분" : "") +
+
+        "</div>";
+
+
+
+
+
+        html +=
+
+        "<div class='record-line'>⚖️ " +
+
+        (record.weight ? record.weight + "kg" : "") +
+
+        "</div>";
+
+    }
+
+
+}
+else{
+
 
     html +=
     "<div class='record-line'></div>";

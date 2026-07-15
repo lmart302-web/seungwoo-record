@@ -48,6 +48,7 @@ behaviorButtons.forEach(function(button){
 
 
 
+
 const saveButton =
 document.getElementById("saveButton");
 
@@ -66,15 +67,15 @@ saveButton.addEventListener("click", async function(){
 
 
         morning:
-        document.getElementById("morning").value,
+        document.getElementById("morning").value.trim(),
 
 
         lunch:
-        document.getElementById("lunch").value,
+        document.getElementById("lunch").value.trim(),
 
 
         afternoon:
-        document.getElementById("afternoon").value,
+        document.getElementById("afternoon").value.trim(),
 
 
         running:
@@ -85,10 +86,14 @@ saveButton.addEventListener("click", async function(){
         document.getElementById("weight").value,
 
 
-        behavior:selectedBehavior
+        behavior:selectedBehavior,
+
+
+        holiday:false
 
 
     };
+
 
 
 
@@ -103,8 +108,31 @@ saveButton.addEventListener("click", async function(){
     }
 
 
-console.log("저장 문서:", record.date);
-console.log("firebase:", db);
+
+
+    // 아무 기록이 없으면 휴강 처리
+
+    if(
+
+        !record.morning &&
+        !record.lunch &&
+        !record.afternoon &&
+        !record.running &&
+        !record.weight &&
+        !record.behavior
+
+    ){
+
+        record.holiday = true;
+
+    }
+
+
+
+
+    console.log("저장 문서:", record);
+
+
 
     await setDoc(
 
@@ -116,7 +144,18 @@ console.log("firebase:", db);
 
 
 
-    alert("기록이 저장되었습니다.");
+
+
+    if(record.holiday){
+
+        alert("휴강으로 저장되었습니다.");
+
+    }
+    else{
+
+        alert("기록이 저장되었습니다.");
+
+    }
 
 
 
@@ -158,13 +197,16 @@ loadButton.addEventListener("click", async function(){
 
 
 
+
     const docRef =
     doc(db,"records",date);
 
 
 
+
     const snapshot =
     await getDoc(docRef);
+
 
 
 
@@ -181,8 +223,11 @@ loadButton.addEventListener("click", async function(){
 
 
 
+
     const record =
     snapshot.data();
+
+
 
 
 
@@ -196,9 +241,11 @@ loadButton.addEventListener("click", async function(){
 
 
 
+
     document.getElementById("lunch").value =
 
     record.lunch || "";
+
 
 
 
@@ -212,9 +259,11 @@ loadButton.addEventListener("click", async function(){
 
 
 
+
     document.getElementById("running").value =
 
     record.running || "";
+
 
 
 
@@ -237,6 +286,8 @@ loadButton.addEventListener("click", async function(){
 
 
 
+
+
     behaviorButtons.forEach(function(btn){
 
 
@@ -254,6 +305,7 @@ loadButton.addEventListener("click", async function(){
 
 
     });
+
 
 
 

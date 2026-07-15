@@ -400,3 +400,18 @@ canvas{
 
 }
 
+.holiday{
+
+    background-color:#ffe5e5;
+    border:2px solid red;
+
+}
+
+
+.holiday-text{
+
+    color:red;
+    font-weight:bold;
+    text-align:center;
+
+}
