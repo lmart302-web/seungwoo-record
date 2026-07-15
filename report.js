@@ -53,8 +53,6 @@ async function loadRecords(){
 
 
 
-    // 날짜순 정렬 (오래된 날짜 → 최신 날짜)
-
     records.sort(function(a,b){
 
 
@@ -134,8 +132,9 @@ function drawReport(){
 
 
 
-    // 체중
 
+
+    // 체중
 
 
     const weightRecords = monthRecords.filter(function(record){
@@ -147,7 +146,6 @@ function drawReport(){
 
 
     });
-
 
 
 
@@ -173,11 +171,9 @@ function drawReport(){
 
 
 
-
         const diff =
 
         (last - first).toFixed(1);
-
 
 
 
@@ -254,69 +250,98 @@ function drawReport(){
     // 운동 기록
 
 
-let runningTotal = 0;
+    let runningTotal = 0;
 
-let runningCount = 0;
+    let runningCount = 0;
 
-
-
-monthRecords.forEach(function(record){
+    let goalCount = 0;
 
 
 
-    if(record.running){
+    monthRecords.forEach(function(record){
 
 
-        runningTotal += Number(record.running);
+
+        if(record.running){
 
 
-        runningCount++;
+
+            const time = Number(record.running);
+
+
+
+            runningTotal += time;
+
+
+
+            runningCount++;
+
+
+
+
+            if(time >= 20){
+
+
+                goalCount++;
+
+
+            }
+
+
+
+        }
+
+
+
+    });
+
+
+
+
+
+
+
+
+    if(runningCount){
+
+
+
+        const runningAverage =
+
+        Math.round(runningTotal / runningCount);
+
+
+
+
+
+        document.getElementById("runningSummary").innerText =
+
+
+
+        "운동 횟수 : " + runningCount + "회\n\n" +
+
+        "총 운동시간 : " + runningTotal + "분\n\n" +
+
+        "평균 운동시간 : " + runningAverage + "분\n\n" +
+
+        "🎯 20분 목표 달성 : " + goalCount + "회";
+
 
 
     }
 
-
-
-});
-
+    else{
 
 
 
+        document.getElementById("runningSummary").innerText =
 
-if(runningCount){
-
-
-
-    const runningAverage =
-
-    Math.round(runningTotal / runningCount);
+        "기록 없음";
 
 
 
-    document.getElementById("runningSummary").innerText =
+    }
 
-
-    "운동 횟수 : " + runningCount + "회\n\n" +
-
-    "총 이용시간 : " + runningTotal + "분\n\n" +
-
-    "평균 이용시간 : " + runningAverage + "분";
-
-
-
-}
-
-else{
-
-
-
-    document.getElementById("runningSummary").innerText =
-
-    "기록 없음";
-
-
-
-}
 
 
 
@@ -328,7 +353,6 @@ else{
     // 행동
 
 
-
     let good = 0;
 
 
@@ -336,6 +360,7 @@ else{
 
 
     let hard = 0;
+
 
 
 
@@ -383,7 +408,6 @@ else{
     // 점심 TOP1
 
 
-
     const lunchMap = {};
 
 
@@ -416,8 +440,8 @@ else{
 
 
 
-
     });
+
 
 
 
@@ -428,6 +452,8 @@ else{
 
 
     let topCount = 0;
+
+
 
 
 

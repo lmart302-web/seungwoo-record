@@ -3,12 +3,12 @@ console.log("running.js 실행됨");
 
 import { app } from "./firebase.js";
 
-import { 
-    getFirestore, 
-    collection, 
-    getDocs 
-} 
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 const db = getFirestore(app);
@@ -18,25 +18,16 @@ let records = [];
 
 
 const monthTitle =
-document.getElementById("monthTitle");
+    document.getElementById("monthTitle");
 
 
 const ctx =
-document.getElementById("runningChart");
+    document.getElementById("runningChart");
 
 
-// 통계 표시 영역
-const totalCount =
-document.getElementById("totalCount");
-
-const totalTime =
-document.getElementById("totalTime");
-
-const averageTime =
-document.getElementById("averageTime");
-
-const goalCount =
-document.getElementById("goalCount");
+// 기록 표시 영역
+const runningList =
+    document.getElementById("runningList");
 
 
 
@@ -49,12 +40,12 @@ let chart;
 
 
 
-async function loadRecords(){
+async function loadRecords() {
 
 
     const snapshot = await getDocs(
 
-        collection(db,"records")
+        collection(db, "records")
 
     );
 
@@ -63,7 +54,7 @@ async function loadRecords(){
 
 
 
-    snapshot.forEach(function(doc){
+    snapshot.forEach(function (doc) {
 
 
         records.push(doc.data());
@@ -73,7 +64,7 @@ async function loadRecords(){
 
 
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -94,13 +85,11 @@ async function loadRecords(){
 
 
 
-
-
-function drawRunning(){
+function drawRunning() {
 
 
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -112,12 +101,12 @@ function drawRunning(){
 
 
     const year =
-    currentDate.getFullYear();
+        currentDate.getFullYear();
 
 
 
     const month =
-    currentDate.getMonth();
+        currentDate.getMonth();
 
 
 
@@ -125,7 +114,7 @@ function drawRunning(){
 
     monthTitle.innerText =
 
-    year + "년 " + (month + 1) + "월";
+        year + "년 " + (month + 1) + "월";
 
 
 
@@ -136,12 +125,7 @@ function drawRunning(){
     const runningTimes = [];
 
 
-
-    let count = 0;
-
-    let total = 0;
-
-    let goal = 0;
+    let listHTML = "";
 
 
 
@@ -149,20 +133,19 @@ function drawRunning(){
 
 
 
-    records.forEach(function(record){
+    records.forEach(function (record) {
 
 
 
         const recordDate =
 
-        new Date(record.date);
+            new Date(record.date);
 
 
 
 
 
-
-        if(
+        if (
 
 
             recordDate.getFullYear() === year &&
@@ -175,19 +158,20 @@ function drawRunning(){
 
 
 
-        ){
+        ) {
 
 
 
             const time =
 
-            Number(record.running);
+                Number(record.running);
+
 
 
 
             labels.push(
 
-                record.date.substring(8,10) + "일"
+                record.date.substring(8, 10) + "일"
 
             );
 
@@ -198,18 +182,15 @@ function drawRunning(){
 
 
 
-            count++;
+            li.innerText =
 
+                record.date +
 
-            total += time;
+                " : " +
 
+                record.running +
 
-
-            if(time >= 20){
-
-                goal++;
-
-            }
+                "분";
 
 
 
@@ -226,7 +207,8 @@ function drawRunning(){
 
 
 
-    if(chart){
+
+    if (chart) {
 
 
         chart.destroy();
@@ -245,29 +227,29 @@ function drawRunning(){
 
 
 
-        type:"line",
+        type: "line",
 
 
 
-        data:{
+        data: {
 
 
 
-            labels:labels,
+            labels: labels,
 
 
 
-            datasets:[
+            datasets: [
 
 
 
                 {
 
 
-                    label:"런닝머신(분)",
+                    label: "운동시간(분)",
 
 
-                    data:runningTimes
+                    data: runningTimes
 
 
 
@@ -283,23 +265,23 @@ function drawRunning(){
 
 
 
-        options:{
+        options: {
 
 
 
-            responsive:true,
+            responsive: true,
 
 
 
-            scales:{
+            scales: {
 
 
 
-                y:{
+                y: {
 
 
 
-                    beginAtZero:true
+                    beginAtZero: true
 
 
 
@@ -322,59 +304,34 @@ function drawRunning(){
 
 
 
-    // 통계 표시
 
 
-    const average =
+    // 운동 기록 표시
 
-    count > 0
 
-    ? Math.round(total / count)
-
-    : 0;
+    if (runningList) {
 
 
 
+        if (listHTML) {
 
 
-    if(totalCount){
-
-        totalCount.innerText =
-
-        "운동 횟수\n" + count + "회";
-
-    }
+            runningList.innerHTML = listHTML;
 
 
+        }
+
+        else {
 
 
-    if(totalTime){
+            runningList.innerHTML =
 
-        totalTime.innerText =
-
-        "총 이용시간\n" + total + "분";
-
-    }
+                "기록 없음";
 
 
+        }
 
 
-    if(averageTime){
-
-        averageTime.innerText =
-
-        "평균 이용시간\n" + average + "분";
-
-    }
-
-
-
-
-    if(goalCount){
-
-        goalCount.innerText =
-
-        "🎯 20분 목표 달성\n" + goal + "회";
 
     }
 
@@ -392,25 +349,25 @@ function drawRunning(){
 
 document
 
-.getElementById("prevMonth")
+    .getElementById("prevMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()-1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawRunning();
+        currentDate.setMonth(
+
+            currentDate.getMonth() - 1
+
+        );
 
 
 
-});
+        drawRunning();
+
+
+
+    });
 
 
 
@@ -422,25 +379,25 @@ document
 
 document
 
-.getElementById("nextMonth")
+    .getElementById("nextMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()+1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawRunning();
+        currentDate.setMonth(
+
+            currentDate.getMonth() + 1
+
+        );
 
 
 
-});
+        drawRunning();
+
+
+
+    });
 
 
 
