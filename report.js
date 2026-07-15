@@ -296,7 +296,7 @@ if(runningCount){
     document.getElementById("runningSummary").innerText =
 
 
-    "총 운동 횟수 : " + runningCount + "회\n\n" +
+    "운동 횟수 : " + runningCount + "회\n\n" +
 
     "총 이용시간 : " + runningTotal + "분\n\n" +
 
