@@ -121,7 +121,8 @@ saveButton.addEventListener("click", async function(){
         !record.weight
 
     ){
-
+        
+        record.behavior = "";
         record.holiday = true;
 
     }
