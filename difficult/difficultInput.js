@@ -1,7 +1,7 @@
 console.log("difficultInput.js 실행됨");
 
 
-import { app } from "./firebase.js";
+import { app } from "../firebase.js";
 
 
 import {
@@ -19,9 +19,65 @@ const db = getFirestore(app);
 
 
 
+let selectedLevel = "warning";
+
+
+
+
+const levelButtons =
+
+document.querySelectorAll(".behavior-btn");
+
+
+
+
+
+levelButtons.forEach(function(button){
+
+
+    button.addEventListener("click",function(){
+
+
+
+        selectedLevel =
+
+        button.dataset.value;
+
+
+
+
+
+        levelButtons.forEach(function(btn){
+
+
+            btn.classList.remove("selected");
+
+
+        });
+
+
+
+
+
+        button.classList.add("selected");
+
+
+
+    });
+
+
+});
+
+
+
+
+
+
+
 const saveButton =
 
 document.getElementById("saveButton");
+
 
 
 
@@ -38,9 +94,13 @@ saveButton.addEventListener("click", async function(){
 
 
 
+
+
     const content =
 
     document.getElementById("content").value.trim();
+
+
 
 
 
@@ -54,6 +114,8 @@ saveButton.addEventListener("click", async function(){
         return;
 
     }
+
+
 
 
 
@@ -81,6 +143,9 @@ saveButton.addEventListener("click", async function(){
 
 
             date:date,
+
+
+            level:selectedLevel,
 
 
             content:content,

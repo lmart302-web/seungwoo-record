@@ -435,3 +435,167 @@ canvas {
     text-decoration:none;
     color:inherit;
 }
+
+/* 어려운 행동 게시판 */
+
+.difficult-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:#fff;
+
+}
+
+
+
+.difficult-table th{
+
+    background:#f1f3f8;
+
+    padding:12px;
+
+    border-bottom:1px solid #ddd;
+
+    text-align:center;
+
+}
+
+
+
+.difficult-table td{
+
+    padding:12px;
+
+    border-bottom:1px solid #eee;
+
+    text-align:center;
+
+}
+
+
+
+.difficult-table tr:hover{
+
+    background:#f8faff;
+
+}
+
+
+
+/* 내용 클릭 가능 표시 */
+
+.difficult-content{
+
+    cursor:pointer;
+
+    text-align:left !important;
+
+}
+
+
+
+.difficult-content:hover{
+
+    text-decoration:underline;
+
+}
+
+
+
+/* 상태 표시 */
+
+.level-warning{
+
+    color:#d99b00;
+
+    font-weight:bold;
+
+}
+
+
+
+.level-hard{
+
+    color:red;
+
+    font-weight:bold;
+
+}
+
+
+
+/* 수정 삭제 버튼 */
+
+.edit-btn{
+
+    background:#e7efff;
+
+    padding:8px 12px;
+
+    margin-right:5px;
+
+}
+
+
+
+.delete-btn{
+
+    background:#ffe5e5;
+
+    padding:8px 12px;
+
+}
+
+
+
+
+
+/* 모바일 게시판 */
+
+@media(max-width:600px){
+
+
+    .difficult-table{
+
+        font-size:12px;
+
+    }
+
+
+    .difficult-table th,
+    .difficult-table td{
+
+        padding:8px 4px;
+
+    }
+
+
+    .edit-btn,
+    .delete-btn{
+
+        padding:6px 8px;
+
+        font-size:11px;
+
+    }
+
+
+}
+
+.difficult-content{
+    max-width:300px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.difficult-table th:nth-child(2),
+.difficult-table td:nth-child(2){
+
+    width:100px;
+
+    text-align:left;
+
+}

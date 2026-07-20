@@ -98,12 +98,14 @@ if(snapshot.exists()){
     if(record.holiday){
 
         alert("휴강으로 저장되었습니다.");
+        location.href = "calendar.html";
 
     }
 
     else{
 
         alert("기록이 저장되었습니다.");
+        location.href = "calendar.html";
 
     }
 

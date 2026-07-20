@@ -130,5 +130,6 @@ saveButton.addEventListener("click", async function(){
     });
 
     alert("행동상태가 저장되었습니다.");
+    location.href = "calendar.html";
 
 });
