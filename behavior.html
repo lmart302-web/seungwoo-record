@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>행동 관리</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="input-page">
+
+<nav>
+
+<a href="index.html">🏠 홈</a>
+<a href="calendar.html">📅 달력</a>
+<a href="weight.html">⚖️ 체중</a>
+<a href="report.html">📊 월간리포트</a>
+
+</nav>
+
+
+<h1>😊 행동 관리</h1>
+
+
+<div class="section">
+
+<label>날짜</label>
+
+<input type="date" id="date">
+
+</div>
+
+
+<div class="section">
+
+<h2>행동 상태</h2>
+
+<div class="behavior-buttons">
+
+<button
+class="behavior-btn"
+data-value="good">
+
+🟢 안정
+
+</button>
+
+<button
+class="behavior-btn"
+data-value="normal">
+
+🟡 보통
+
+</button>
+
+<button
+class="behavior-btn"
+data-value="hard">
+
+🔴 어려움
+
+</button>
+
+</div>
+
+</div>
+
+
+<button
+class="save"
+id="saveBtn">
+
+저장
+
+</button>
+
+
+<script type="module" src="behavior.js"></script>
+
+</body>
+
+</html>
