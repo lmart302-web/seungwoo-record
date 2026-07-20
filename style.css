@@ -599,3 +599,13 @@ canvas {
     text-align:left;
 
 }
+
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.difficult-table{
+    min-width:700px;
+}
