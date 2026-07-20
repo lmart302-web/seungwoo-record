@@ -897,3 +897,16 @@ canvas {
     opacity: .85;
 
 }
+
+.weight-link {
+
+    background: #fff3cd;
+
+}
+
+
+.weight-link:hover {
+
+    background: #ffe69c;
+
+}

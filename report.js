@@ -111,7 +111,17 @@ function drawReport() {
     }
 
 
+const weightLink = document.querySelector(".weight-link");
 
+if (weightLink) {
+
+    const monthValue =
+        year + "-" + String(month + 1).padStart(2, "0");
+
+    weightLink.href =
+        "weight.html?month=" + monthValue;
+
+}
 
     const monthRecords = records.filter(function (record) {
 
