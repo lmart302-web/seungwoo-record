@@ -53,11 +53,12 @@ nav a {
 
 .input-link {
     background: #fff;
-    padding: 10px 15px;
+    padding: 14px 18px;
     border-radius: 12px;
     text-decoration: none;
     color: #333;
     box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    font-size: 16px;
 }
 
 .menu-container {
@@ -865,7 +866,7 @@ canvas {
 
     font-weight: bold;
 
-    box-shadow: 0 2px 5px rgba(0,0,0,.15);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .15);
 
     transition: 0.2s;
 
