@@ -103,7 +103,7 @@ input {
 }
 
 button {
-    padding: 12px 16px;
+    padding: 12px 8px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -128,8 +128,9 @@ button:hover {
 }
 
 .behavior-btn {
-    min-width: 0;
-    flex: 1;
+    min-width:0;
+    flex:1;
+    white-space:nowrap;
 }
 
 .behavior-btn.selected {
@@ -533,9 +534,9 @@ canvas {
 
     background: #e7efff;
 
-    padding: 8px 12px;
+    padding:4px 5px;
 
-    margin-right: 5px;
+    font-size:11px;
 
 }
 
@@ -545,7 +546,9 @@ canvas {
 
     background: #ffe5e5;
 
-    padding: 8px 12px;
+    padding:4px 5px;
+
+    font-size:11px;
 
 }
 
@@ -586,10 +589,15 @@ canvas {
 }
 
 .difficult-content {
-    max-width: 300px;
+
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
+    max-width: 80px;
+
 }
 
 .difficult-table th:nth-child(2),
@@ -603,12 +611,11 @@ canvas {
 
 .table-wrap {
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
 }
 
 .difficult-table {
-    min-width: 600px;
+    min-width:0;
 }
 
 .pagination {
@@ -766,10 +773,10 @@ canvas {
 
     .difficult-table button {
 
-        font-size: 11px;
+    font-size: 10px;
 
-        padding: 3px 4px;
+    padding: 2px 3px;
 
-    }
+}
 
 }
