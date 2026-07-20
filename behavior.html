@@ -28,7 +28,7 @@
 
 
 <h1>
-<a href="difficult/difficult.html" class="smile-link">😊</a>
+<a href="#" class="smile-link" onclick="checkPassword(); return false;">😊</a>
 행동 관리
 </h1>
 
@@ -84,8 +84,32 @@ id="saveBtn">
 
 </button>
 
-
 <script type="module" src="behavior.js"></script>
+
+
+<script>
+
+function checkPassword(){
+
+    const password =
+    prompt("비밀번호를 입력하세요");
+
+
+    if(password === "1002"){
+
+        location.href =
+        "difficult/difficult.html";
+
+    }
+    else if(password !== null){
+
+        alert("비밀번호가 틀렸습니다.");
+
+    }
+
+}
+
+</script>
 
 </body>
 

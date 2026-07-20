@@ -23,11 +23,20 @@ const difficultList =
     document.getElementById("difficultList");
 
 
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const pageInfo = document.getElementById("pageInfo");
 
+const pageSize = 10;
+
+let currentPage = 1;
+let records = [];
 
 
 
 async function loadDifficultRecords() {
+    
+    records = [];
 
 
     const snapshot = await getDocs(
@@ -35,11 +44,6 @@ async function loadDifficultRecords() {
         collection(db, "difficultBehaviors")
 
     );
-
-
-
-    let records = [];
-
 
 
     snapshot.forEach(function (doc) {
@@ -76,199 +80,195 @@ async function loadDifficultRecords() {
 
     difficultList.innerHTML = "";
 
+    if(records.length===0){
 
-
-
-
-
-    if (records.length === 0) {
-
-
-        difficultList.innerHTML =
-
-            `
-        <tr>
+    difficultList.innerHTML=`
+    <tr>
         <td colspan="4">
         기록 없음
         </td>
-        </tr>
-        `;
+    </tr>
+    `;
 
+    pageInfo.textContent="1 / 1";
 
-        return;
+    return;
+}
 
-    }
+renderPage();
 
+}
+    
+function renderPage() {
 
+    difficultList.innerHTML = "";
 
+    const totalPage =
+    Math.ceil(records.length/pageSize);
 
+    const start =
+    (currentPage-1)*pageSize;
 
+    const end =
+    start+pageSize;
 
+    const pageRecords =
+records.slice(start,end);
 
-    records.forEach(function (record) {
+pageInfo.textContent =
+currentPage + " / " + totalPage;
 
 
 
-        const tr =
+    pageRecords.forEach(function(record){
 
-            document.createElement("tr");
+    const tr =
+    document.createElement("tr");
 
+    let levelText = "";
 
+    if(record.level==="warning"){
 
+    levelText="🟡 보통";
 
+}else{
 
-        let levelText = "";
-
-
-
-        if (record.level === "warning") {
-
-
-            levelText = "🟡 보통";
-
-
-        }
-        else {
-
-
-            levelText = "🔴 어려움";
-
-
-        }
-
-
-
-
-
-
-        tr.innerHTML =
-
-
-            `
-        <td>
-        ${record.date}
-        </td>
-
-
-        <td>
-        ${levelText}
-        </td>
-
-
-        <td class="difficult-content">
-${record.content}
-</td>
-
-
-        <td>
-
-        <button class="edit-btn">
-        수정
-        </button>
-
-
-        <button class="delete-btn">
-        삭제
-        </button>
-
-        </td>
-        `;
-
-
-
-
-
-
-
-        // 내용 클릭 → 상세보기
-
-        tr.querySelector(".difficult-content")
-            .addEventListener("click", function () {
-
-
-                location.href =
-                    "difficultView.html?id=" + record.id;
-
-
-            });
-
-
-
-
-
-
-        // 수정
-
-        tr.querySelector(".edit-btn")
-            .addEventListener("click", function () {
-
-
-                location.href =
-                    "difficultEdit.html?id=" + record.id;
-
-
-            });
-
-
-
-
-
-
-
-        // 삭제
-
-        tr.querySelector(".delete-btn")
-            .addEventListener("click", async function () {
-
-
-
-                const result =
-                    confirm("삭제하시겠습니까?");
-
-
-
-                if (result) {
-
-
-                    await deleteDoc(
-
-                        doc(
-                            db,
-                            "difficultBehaviors",
-                            record.id
-                        )
-
-                    );
-
-
-                    alert("삭제되었습니다.");
-
-
-                    loadDifficultRecords();
-
-
-                }
-
-
-
-            });
-
-
-
-
-
-        difficultList.appendChild(tr);
-
-
-
-    });
-
-
+    levelText="🔴 어려움";
 
 }
 
 
+tr.innerHTML = `
+
+<td>
+${record.date}
+</td>
+
+<td>
+${levelText}
+</td>
+
+<td class="difficult-content">
+${record.content}
+</td>
+
+<td>
+
+<button class="edit-btn">
+수정
+</button>
+
+<button class="delete-btn">
+삭제
+</button>
+
+</td>
+
+`;
+
+tr.querySelector(".difficult-content")
+.addEventListener("click", function(){
+
+    location.href =
+    "difficultView.html?id=" + record.id;
+
+});
 
 
+tr.querySelector(".edit-btn")
+.addEventListener("click", function(){
+
+    location.href =
+    "difficultEdit.html?id=" + record.id;
+
+});
+
+
+tr.querySelector(".delete-btn")
+.addEventListener("click", async function(){
+
+    const result =
+    confirm("삭제하시겠습니까?");
+
+
+    if(result){
+
+        await deleteDoc(
+
+            doc(
+                db,
+                "difficultBehaviors",
+                record.id
+            )
+
+        );
+
+
+        alert("삭제되었습니다.");
+
+
+        records =
+        records.filter(function(item){
+
+            return item.id !== record.id;
+
+        });
+
+
+        const totalPage =
+        Math.max(
+            1,
+            Math.ceil(records.length / pageSize)
+        );
+
+
+        if(currentPage > totalPage){
+
+            currentPage = totalPage;
+
+        }
+
+
+        renderPage();
+
+    }
+
+});
+
+
+difficultList.appendChild(tr);
+
+});
+
+}
+
+prevBtn.addEventListener("click", function () {
+
+    if (currentPage > 1) {
+
+        currentPage--;
+
+        renderPage();
+        window.scrollTo(0,0);
+
+    }
+
+});
+
+nextBtn.addEventListener("click", function () {
+
+    const totalPage =
+        Math.ceil(records.length / pageSize);
+
+    if (currentPage < totalPage) {
+
+        currentPage++;
+
+        renderPage();
+        window.scrollTo(0,0);
+
+    }
+
+});
 
 loadDifficultRecords();
