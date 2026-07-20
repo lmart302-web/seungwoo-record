@@ -807,12 +807,14 @@ canvas {
 
 }
 
-/* 리포트 제목 옆 버튼 */
+/* 리포트 제목 + 이동 버튼 */
 
 .report-title {
 
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 
 }
@@ -827,16 +829,33 @@ canvas {
 
 .report-link {
 
+    display: inline-block;
+
     text-decoration: none;
 
     background: #e7efff;
 
-    padding: 8px 12px;
+    padding: 8px 14px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
     color: #333;
 
     font-size: 14px;
+
+    font-weight: bold;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,.15);
+
+    transition: 0.2s;
+
+}
+
+
+.report-link:hover {
+
+    background: #cfe0ff;
+
+    transform: translateY(-2px);
 
 }
