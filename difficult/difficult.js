@@ -19,7 +19,7 @@ if(auth !== "true"){
 
     }else{
 
-        location.href="../behavior.html";
+        location.href="../report.html";
 
     }
 
