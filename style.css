@@ -741,6 +741,7 @@ canvas {
         width: 65px;
         white-space: nowrap;
         text-align: left;
+        font-size: 12px;
 
     }
 
@@ -764,7 +765,7 @@ canvas {
 
         width: auto;
 
-    }       
+    }
 
 
     /* 관리 */
@@ -816,4 +817,3 @@ canvas {
     font-size: 16px;
 
 }
-
