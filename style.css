@@ -665,3 +665,31 @@ canvas {
     text-align:center;
 
 }
+
+.small-info{
+    padding:5px 10px;
+}
+
+
+.small-info h2{
+    margin:0 0 3px 0;
+    font-size:16px;
+}
+
+
+.small-info p{
+    margin:0;
+    font-size:15px;
+}
+
+
+.content-box{
+    min-height:450px;
+}
+
+
+.content-box p{
+    line-height:1.7;
+    white-space:pre-wrap;
+}
+
