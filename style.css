@@ -534,21 +534,20 @@ canvas {
 
     background: #e7efff;
 
-    padding: 4px 5px;
+    padding: 8px 14px;
 
-    font-size: 11px;
+    font-size: 14px;
 
 }
-
 
 
 .delete-btn {
 
     background: #ffe5e5;
 
-    padding: 4px 5px;
+    padding: 8px 14px;
 
-    font-size: 11px;
+    font-size: 14px;
 
 }
 
