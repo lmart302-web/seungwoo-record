@@ -117,7 +117,7 @@ async function loadRecord(){
 
         document.getElementById("viewLevel").innerText =
 
-        "🟡 주의";
+        "🟡 보통";
 
 
     }

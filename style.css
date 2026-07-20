@@ -128,7 +128,8 @@ button:hover {
 }
 
 .behavior-btn {
-    min-width: 120px;
+    min-width: 0;
+    flex: 1;
 }
 
 .behavior-btn.selected {
@@ -425,60 +426,60 @@ canvas {
     line-height: 1.5;
 }
 
-.rainbow-link{
+.rainbow-link {
 
-    text-decoration:none;
+    text-decoration: none;
 
 }
 
-.smile-link{
-    text-decoration:none;
-    color:inherit;
+.smile-link {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* 어려운 행동 게시판 */
 
-.difficult-table{
+.difficult-table {
 
-    width:100%;
+    width: 100%;
 
-    border-collapse:collapse;
+    border-collapse: collapse;
 
-    background:#fff;
-
-}
-
-
-
-.difficult-table th{
-
-    background:#f1f3f8;
-
-    padding:12px;
-
-    border-bottom:1px solid #ddd;
-
-    text-align:center;
+    background: #fff;
 
 }
 
 
 
-.difficult-table td{
+.difficult-table th {
 
-    padding:12px;
+    background: #f1f3f8;
 
-    border-bottom:1px solid #eee;
+    padding: 12px;
 
-    text-align:center;
+    border-bottom: 1px solid #ddd;
+
+    text-align: center;
 
 }
 
 
 
-.difficult-table tr:hover{
+.difficult-table td {
 
-    background:#f8faff;
+    padding: 12px;
+
+    border-bottom: 1px solid #eee;
+
+    text-align: center;
+
+}
+
+
+
+.difficult-table tr:hover {
+
+    background: #f8faff;
 
 }
 
@@ -486,19 +487,19 @@ canvas {
 
 /* 내용 클릭 가능 표시 */
 
-.difficult-content{
+.difficult-content {
 
-    cursor:pointer;
+    cursor: pointer;
 
-    text-align:left !important;
+    text-align: left !important;
 
 }
 
 
 
-.difficult-content:hover{
+.difficult-content:hover {
 
-    text-decoration:underline;
+    text-decoration: underline;
 
 }
 
@@ -506,21 +507,21 @@ canvas {
 
 /* 상태 표시 */
 
-.level-warning{
+.level-warning {
 
-    color:#d99b00;
+    color: #d99b00;
 
-    font-weight:bold;
+    font-weight: bold;
 
 }
 
 
 
-.level-hard{
+.level-hard {
 
-    color:red;
+    color: red;
 
-    font-weight:bold;
+    font-weight: bold;
 
 }
 
@@ -528,23 +529,23 @@ canvas {
 
 /* 수정 삭제 버튼 */
 
-.edit-btn{
+.edit-btn {
 
-    background:#e7efff;
+    background: #e7efff;
 
-    padding:8px 12px;
+    padding: 8px 12px;
 
-    margin-right:5px;
+    margin-right: 5px;
 
 }
 
 
 
-.delete-btn{
+.delete-btn {
 
-    background:#ffe5e5;
+    background: #ffe5e5;
 
-    padding:8px 12px;
+    padding: 8px 12px;
 
 }
 
@@ -554,142 +555,221 @@ canvas {
 
 /* 모바일 게시판 */
 
-@media(max-width:600px){
+@media(max-width:600px) {
 
 
-    .difficult-table{
+    .difficult-table {
 
-        font-size:12px;
+        font-size: 12px;
 
     }
 
 
     .difficult-table th,
-    .difficult-table td{
+    .difficult-table td {
 
-        padding:8px 4px;
+        padding: 8px 4px;
 
     }
 
 
     .edit-btn,
-    .delete-btn{
+    .delete-btn {
 
-        padding:6px 8px;
+        padding: 6px 8px;
 
-        font-size:11px;
+        font-size: 11px;
 
     }
 
 
 }
 
-.difficult-content{
-    max-width:300px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+.difficult-content {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .difficult-table th:nth-child(2),
-.difficult-table td:nth-child(2){
+.difficult-table td:nth-child(2) {
 
-    width:100px;
+    width: 100px;
 
-    text-align:left;
-
-}
-
-.table-wrap{
-    width:100%;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-}
-
-.difficult-table{
-    min-width:600px;
-}
-
-.pagination{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:15px;
-
-    margin:20px 0;
+    text-align: left;
 
 }
 
-.pagination button{
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
-    padding:8px 16px;
+.difficult-table {
+    min-width: 600px;
+}
 
-    font-size:15px;
+.pagination {
 
-    cursor:pointer;
+    display: flex;
 
-    border:none;
+    justify-content: center;
 
-    border-radius:8px;
+    align-items: center;
 
-    background:#4caf50;
+    gap: 15px;
 
-    color:white;
+    margin: 20px 0;
 
 }
 
-.pagination button:hover{
+.pagination button {
 
-    background:#43a047;
+    padding: 8px 16px;
 
-}
+    font-size: 15px;
 
-.pagination button:disabled{
+    cursor: pointer;
 
-    background:#ccc;
+    border: none;
 
-    cursor:default;
+    border-radius: 8px;
 
-}
+    background: #4caf50;
 
-#pageInfo{
-
-    font-weight:bold;
-
-    min-width:60px;
-
-    text-align:center;
+    color: white;
 
 }
 
-.small-info{
-    padding:5px 10px;
+.pagination button:hover {
+
+    background: #43a047;
+
+}
+
+.pagination button:disabled {
+
+    background: #ccc;
+
+    cursor: default;
+
+}
+
+#pageInfo {
+
+    font-weight: bold;
+
+    min-width: 60px;
+
+    text-align: center;
+
+}
+
+.small-info {
+    padding: 5px 10px;
 }
 
 
-.small-info h2{
-    margin:0 0 3px 0;
-    font-size:16px;
+.small-info h2 {
+    margin: 0 0 3px 0;
+    font-size: 16px;
 }
 
 
-.small-info p{
-    margin:0;
-    font-size:15px;
+.small-info p {
+    margin: 0;
+    font-size: 15px;
 }
 
 
-.content-box{
-    min-height:300px;
+.content-box {
+    min-height: 300px;
 }
 
 
-.content-box p{
-    line-height:1.7;
-    white-space:pre-wrap;
+.content-box p {
+    line-height: 1.7;
+    white-space: pre-wrap;
 }
 
+@media(max-width:600px) {
+
+    .difficult-table {
+
+        width: 100%;
+
+        table-layout: fixed;
+
+        font-size: 13px;
+
+    }
+
+
+    .difficult-table th,
+    .difficult-table td {
+
+        padding: 6px 2px;
+
+        text-align: center;
+
+    }
+
+
+    /* 날짜 */
+    .difficult-table th:nth-child(1),
+    .difficult-table td:nth-child(1) {
+
+        width: 55px;
+
+    }
+
+
+    /* 구분(상태) */
+    .difficult-table th:nth-child(2),
+    .difficult-table td:nth-child(2) {
+
+        width: 50px;
+
+    }
+
+
+    /* 내용 */
+    .difficult-table th:nth-child(3),
+    .difficult-table td:nth-child(3) {
+
+        width: auto;
+
+    }
+
+
+    /* 관리 */
+    .difficult-table th:nth-child(4),
+    .difficult-table td:nth-child(4) {
+
+        width: 80px;
+
+    }
+
+
+    .difficult-content {
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+    }
+
+
+    .difficult-table button {
+
+        font-size: 11px;
+
+        padding: 3px 4px;
+
+    }
+
+}

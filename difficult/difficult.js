@@ -1,5 +1,29 @@
 console.log("difficult.js 실행됨");
 
+const auth =
+sessionStorage.getItem("difficultAuth");
+
+
+if(auth !== "true"){
+
+    const password =
+    prompt("비밀번호를 입력하세요");
+
+
+    if(password === "1002"){
+
+        sessionStorage.setItem(
+            "difficultAuth",
+            "true"
+        );
+
+    }else{
+
+        location.href="../behavior.html";
+
+    }
+
+}
 
 import { app } from "../firebase.js";
 
