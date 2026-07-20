@@ -730,7 +730,7 @@ canvas {
     .difficult-table th:nth-child(1),
     .difficult-table td:nth-child(1) {
 
-        width: 75px;
+        width: 70px;
         white-space: nowrap;
         text-align: center;
 
@@ -741,7 +741,7 @@ canvas {
     .difficult-table th:nth-child(2),
     .difficult-table td:nth-child(2) {
 
-        width: 35px;
+        width: 30px;
         padding: 0;
 
         text-align: center;
@@ -763,7 +763,7 @@ canvas {
     .difficult-table th:nth-child(4),
     .difficult-table td:nth-child(4) {
 
-        width: 120px;
+        width: 90px;
 
         white-space: nowrap;
 
