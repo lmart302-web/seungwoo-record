@@ -596,14 +596,14 @@ canvas {
 
     text-overflow: ellipsis;
 
-    max-width:none;
+    max-width:150px;
 
 }
 
 .difficult-table th:nth-child(2),
 .difficult-table td:nth-child(2) {
 
-    width: 30px;
+    width: 35px;
     padding: 0;
 
     text-align: center;
@@ -741,7 +741,7 @@ canvas {
     .difficult-table th:nth-child(2),
     .difficult-table td:nth-child(2) {
 
-        width: 30px;
+        width: 35px;
         padding: 0;
 
         text-align: center;
