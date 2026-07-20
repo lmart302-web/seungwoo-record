@@ -827,13 +827,33 @@ canvas {
 }
 
 
+/* 리포트 제목 + 이동 버튼 */
+
+.report-title {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.report-title h2 {
+
+    margin: 0;
+
+}
+
+
+/* 리포트 이동 버튼 공통 */
+
 .report-link {
 
     display: inline-block;
 
     text-decoration: none;
-
-    background: #e7efff;
 
     padding: 8px 14px;
 
@@ -852,10 +872,28 @@ canvas {
 }
 
 
+/* 운동 기록 보기 */
+
+.running-link {
+
+    background: #cfefff;
+
+}
+
+
+/* 행동 게시판 */
+
+.behavior-link {
+
+    background: #d8f5d8;
+
+}
+
+
 .report-link:hover {
 
-    background: #cfe0ff;
-
     transform: translateY(-2px);
+
+    opacity: .85;
 
 }
