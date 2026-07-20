@@ -3,12 +3,12 @@ console.log("report.js 실행됨");
 
 import { app } from "./firebase.js";
 
-import { 
-    getFirestore, 
-    collection, 
-    getDocs 
-} 
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 const db = getFirestore(app);
@@ -18,7 +18,7 @@ let records = [];
 
 
 const monthTitle =
-document.getElementById("monthTitle");
+    document.getElementById("monthTitle");
 
 
 let currentDate = new Date();
@@ -27,12 +27,12 @@ let currentDate = new Date();
 
 
 
-async function loadRecords(){
+async function loadRecords() {
 
 
     const snapshot = await getDocs(
 
-        collection(db,"records")
+        collection(db, "records")
 
     );
 
@@ -42,7 +42,7 @@ async function loadRecords(){
 
 
 
-    snapshot.forEach(function(doc){
+    snapshot.forEach(function (doc) {
 
 
         records.push(doc.data());
@@ -53,7 +53,7 @@ async function loadRecords(){
 
 
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -77,17 +77,17 @@ async function loadRecords(){
 
 
 
-function drawReport(){
+function drawReport() {
 
 
 
     const year =
-    currentDate.getFullYear();
+        currentDate.getFullYear();
 
 
 
     const month =
-    currentDate.getMonth();
+        currentDate.getMonth();
 
 
 
@@ -95,21 +95,31 @@ function drawReport(){
 
     monthTitle.innerText =
 
-    year + "년 " + (month + 1) + "월";
+        year + "년 " + (month + 1) + "월";
+
+
+    const runningLink = document.querySelector(".running-link");
+
+    if (runningLink) {
+
+        const monthValue =
+            year + "-" + String(month + 1).padStart(2, "0");
+
+        runningLink.href =
+            "running.html?month=" + monthValue;
+
+    }
 
 
 
 
-
-
-
-    const monthRecords = records.filter(function(record){
+    const monthRecords = records.filter(function (record) {
 
 
 
         const recordDate =
 
-        new Date(record.date);
+            new Date(record.date);
 
 
 
@@ -137,7 +147,7 @@ function drawReport(){
     // 체중
 
 
-    const weightRecords = monthRecords.filter(function(record){
+    const weightRecords = monthRecords.filter(function (record) {
 
 
 
@@ -151,13 +161,13 @@ function drawReport(){
 
 
 
-    if(weightRecords.length){
+    if (weightRecords.length) {
 
 
 
         const first =
 
-        Number(weightRecords[0].weight);
+            Number(weightRecords[0].weight);
 
 
 
@@ -165,7 +175,7 @@ function drawReport(){
 
         const last =
 
-        Number(weightRecords[weightRecords.length - 1].weight);
+            Number(weightRecords[weightRecords.length - 1].weight);
 
 
 
@@ -173,7 +183,7 @@ function drawReport(){
 
         const diff =
 
-        (last - first).toFixed(1);
+            (last - first).toFixed(1);
 
 
 
@@ -182,7 +192,7 @@ function drawReport(){
         let result =
 
 
-        first + "kg → " + last + "kg";
+            first + "kg → " + last + "kg";
 
 
 
@@ -190,7 +200,7 @@ function drawReport(){
 
 
 
-        if(diff > 0){
+        if (diff > 0) {
 
 
             result += " (+" + diff + "kg)";
@@ -198,7 +208,7 @@ function drawReport(){
 
         }
 
-        else if(diff < 0){
+        else if (diff < 0) {
 
 
             result += " (" + diff + "kg)";
@@ -206,7 +216,7 @@ function drawReport(){
 
         }
 
-        else{
+        else {
 
 
             result += " (변화 없음)";
@@ -221,19 +231,19 @@ function drawReport(){
 
         document.getElementById("weightSummary").innerText =
 
-        result;
+            result;
 
 
 
     }
 
-    else{
+    else {
 
 
 
         document.getElementById("weightSummary").innerText =
 
-        "기록 없음";
+            "기록 없음";
 
 
 
@@ -258,11 +268,11 @@ function drawReport(){
 
 
 
-    monthRecords.forEach(function(record){
+    monthRecords.forEach(function (record) {
 
 
 
-        if(record.running){
+        if (record.running) {
 
 
 
@@ -279,7 +289,7 @@ function drawReport(){
 
 
 
-            if(time >= 20){
+            if (time >= 20) {
 
 
                 goalCount++;
@@ -302,13 +312,13 @@ function drawReport(){
 
 
 
-    if(runningCount){
+    if (runningCount) {
 
 
 
         const runningAverage =
 
-        Math.round(runningTotal / runningCount);
+            Math.round(runningTotal / runningCount);
 
 
 
@@ -318,25 +328,25 @@ function drawReport(){
 
 
 
-        "운동 횟수 : " + runningCount + "회\n\n" +
+            "운동 횟수 : " + runningCount + "회\n\n" +
 
-       // "총 운동시간 : " + runningTotal + "분\n\n" + //
+            // "총 운동시간 : " + runningTotal + "분\n\n" + //
 
-        "평균 운동시간 : " + runningAverage + "분\n\n" +
+            "평균 운동시간 : " + runningAverage + "분\n\n" +
 
-        "🎯 20분 목표 달성 : " + goalCount + "회";
+            "🎯 20분 목표 달성 : " + goalCount + "회";
 
 
 
     }
 
-    else{
+    else {
 
 
 
         document.getElementById("runningSummary").innerText =
 
-        "기록 없음";
+            "기록 없음";
 
 
 
@@ -367,17 +377,17 @@ function drawReport(){
 
 
 
-    monthRecords.forEach(function(record){
+    monthRecords.forEach(function (record) {
 
 
 
-        if(record.behavior === "good") good++;
+        if (record.behavior === "good") good++;
 
 
-        if(record.behavior === "normal") normal++;
+        if (record.behavior === "normal") normal++;
 
 
-        if(record.behavior === "hard") hard++;
+        if (record.behavior === "hard") hard++;
 
 
 
@@ -415,17 +425,17 @@ function drawReport(){
 
 
 
-    monthRecords.forEach(function(record){
+    monthRecords.forEach(function (record) {
 
 
 
-        if(!record.lunch) return;
+        if (!record.lunch) return;
 
 
 
 
 
-        if(!lunchMap[record.lunch]){
+        if (!lunchMap[record.lunch]) {
 
 
             lunchMap[record.lunch] = 0;
@@ -460,11 +470,11 @@ function drawReport(){
 
 
 
-    for(const lunch in lunchMap){
+    for (const lunch in lunchMap) {
 
 
 
-        if(lunchMap[lunch] > topCount){
+        if (lunchMap[lunch] > topCount) {
 
 
 
@@ -487,25 +497,25 @@ function drawReport(){
 
 
 
-    if(topCount){
+    if (topCount) {
 
 
 
         document.getElementById("topLunch").innerText =
 
-        topLunch + " (" + topCount + "회)";
+            topLunch + " (" + topCount + "회)";
 
 
 
     }
 
-    else{
+    else {
 
 
 
         document.getElementById("topLunch").innerText =
 
-        "기록 없음";
+            "기록 없음";
 
 
 
@@ -525,25 +535,25 @@ function drawReport(){
 
 document
 
-.getElementById("prevMonth")
+    .getElementById("prevMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()-1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawReport();
+        currentDate.setMonth(
+
+            currentDate.getMonth() - 1
+
+        );
 
 
 
-});
+        drawReport();
+
+
+
+    });
 
 
 
@@ -555,25 +565,25 @@ document
 
 document
 
-.getElementById("nextMonth")
+    .getElementById("nextMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()+1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawReport();
+        currentDate.setMonth(
+
+            currentDate.getMonth() + 1
+
+        );
 
 
 
-});
+        drawReport();
+
+
+
+    });
 
 
 

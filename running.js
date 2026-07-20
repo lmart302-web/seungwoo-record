@@ -29,7 +29,14 @@ const runningList =
 document.getElementById("runningList");
 
 
-let currentDate = new Date();
+const params = new URLSearchParams(location.search);
+
+const monthParam = params.get("month");
+
+
+let currentDate = monthParam
+    ? new Date(monthParam + "-01")
+    : new Date();
 
 
 let chart;
