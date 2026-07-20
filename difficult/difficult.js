@@ -153,11 +153,11 @@ currentPage + " / " + totalPage;
 
     if(record.level==="warning"){
 
-    levelText="🟡 보통";
+    levelText="🟡";
 
 }else{
 
-    levelText="🔴 어려움";
+    levelText="🔴";
 
 }
 

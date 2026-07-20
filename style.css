@@ -128,9 +128,9 @@ button:hover {
 }
 
 .behavior-btn {
-    min-width:0;
-    flex:1;
-    white-space:nowrap;
+    min-width: 0;
+    flex: 1;
+    white-space: nowrap;
 }
 
 .behavior-btn.selected {
@@ -534,9 +534,9 @@ canvas {
 
     background: #e7efff;
 
-    padding:4px 5px;
+    padding: 4px 5px;
 
-    font-size:11px;
+    font-size: 11px;
 
 }
 
@@ -546,9 +546,9 @@ canvas {
 
     background: #ffe5e5;
 
-    padding:4px 5px;
+    padding: 4px 5px;
 
-    font-size:11px;
+    font-size: 11px;
 
 }
 
@@ -596,16 +596,18 @@ canvas {
 
     text-overflow: ellipsis;
 
-    max-width: 80px;
+    max-width:none;
 
 }
 
 .difficult-table th:nth-child(2),
 .difficult-table td:nth-child(2) {
 
-    width: 100px;
+    width: 30px;
+    padding: 0;
 
-    text-align: left;
+    text-align: center;
+    vertical-align: middle;
 
 }
 
@@ -615,7 +617,7 @@ canvas {
 }
 
 .difficult-table {
-    min-width:0;
+    min-width: 0;
 }
 
 .pagination {
@@ -728,7 +730,9 @@ canvas {
     .difficult-table th:nth-child(1),
     .difficult-table td:nth-child(1) {
 
-        width: 55px;
+        width: 75px;
+        white-space: nowrap;
+        text-align: center;
 
     }
 
@@ -737,7 +741,11 @@ canvas {
     .difficult-table th:nth-child(2),
     .difficult-table td:nth-child(2) {
 
-        width: 50px;
+        width: 30px;
+        padding: 0;
+
+        text-align: center;
+        vertical-align: middle;
 
     }
 
@@ -755,7 +763,9 @@ canvas {
     .difficult-table th:nth-child(4),
     .difficult-table td:nth-child(4) {
 
-        width: 80px;
+        width: 120px;
+
+        white-space: nowrap;
 
     }
 
@@ -773,10 +783,20 @@ canvas {
 
     .difficult-table button {
 
-    font-size: 10px;
+        font-size: 13px;
 
-    padding: 2px 3px;
+        padding: 8px 10px;
+
+        white-space: nowrap;
+
+    }
 
 }
+
+.difficult-table td:nth-child(1) {
+
+    white-space: nowrap;
+
+    font-size: 12px;
 
 }
