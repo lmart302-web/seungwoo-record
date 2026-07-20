@@ -764,8 +764,8 @@ canvas {
     .difficult-table td:nth-child(4) {
 
         width: 90px;
-
         white-space: nowrap;
+        text-align: right;
 
     }
 
