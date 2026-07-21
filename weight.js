@@ -189,11 +189,12 @@ function drawWeight() {
 
 
 
-            labels.push(
+            const week = ["일", "월", "화", "수", "목", "금", "토"];
 
-                record.date.substring(8, 10) + "일"
-
-            );
+labels.push([
+    record.date.substring(8,10),
+    week[recordDate.getDay()]
+]);
 
 
 
