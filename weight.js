@@ -142,7 +142,7 @@ function drawWeight() {
 
     const weights = [];
 
-    const pointColors = [];
+   
 
 
 
@@ -204,12 +204,6 @@ function drawWeight() {
                 Number(record.weight)
 
             );
-
-            if (recordDate.getDay() === 1) {
-                pointColors.push("red");
-            } else {
-                pointColors.push("#36a2eb");
-            }
 
 
 
@@ -293,8 +287,6 @@ function drawWeight() {
                 {
                     label: "체중(kg)",
                     data: weights,
-                    pointBackgroundColor: pointColors,
-                    pointBorderColor: pointColors,
                     pointRadius: 5
                 }
 

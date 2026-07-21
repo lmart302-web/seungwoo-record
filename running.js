@@ -3,12 +3,12 @@ console.log("running.js 실행됨");
 
 import { app } from "./firebase.js";
 
-import { 
-    getFirestore, 
-    collection, 
-    getDocs 
-} 
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 const db = getFirestore(app);
@@ -18,15 +18,15 @@ let records = [];
 
 
 const monthTitle =
-document.getElementById("monthTitle");
+    document.getElementById("monthTitle");
 
 
 const ctx =
-document.getElementById("runningChart");
+    document.getElementById("runningChart");
 
 
 const runningList =
-document.getElementById("runningList");
+    document.getElementById("runningList");
 
 
 const params = new URLSearchParams(location.search);
@@ -45,12 +45,12 @@ let chart;
 
 
 
-async function loadRecords(){
+async function loadRecords() {
 
 
     const snapshot = await getDocs(
 
-        collection(db,"records")
+        collection(db, "records")
 
     );
 
@@ -59,7 +59,7 @@ async function loadRecords(){
 
 
 
-    snapshot.forEach(function(doc){
+    snapshot.forEach(function (doc) {
 
 
         records.push(doc.data());
@@ -71,7 +71,7 @@ async function loadRecords(){
 
 
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -95,11 +95,11 @@ async function loadRecords(){
 
 
 
-function drawRunning(){
+function drawRunning() {
 
 
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -113,12 +113,12 @@ function drawRunning(){
 
 
     const year =
-    currentDate.getFullYear();
+        currentDate.getFullYear();
 
 
 
     const month =
-    currentDate.getMonth();
+        currentDate.getMonth();
 
 
 
@@ -127,7 +127,7 @@ function drawRunning(){
 
     monthTitle.innerText =
 
-    year + "년 " + (month + 1) + "월";
+        year + "년 " + (month + 1) + "월";
 
 
 
@@ -152,13 +152,13 @@ function drawRunning(){
 
 
 
-    records.forEach(function(record){
+    records.forEach(function (record) {
 
 
 
         const recordDate =
 
-        new Date(record.date);
+            new Date(record.date);
 
 
 
@@ -166,7 +166,7 @@ function drawRunning(){
 
 
 
-        if(
+        if (
 
 
             recordDate.getFullYear() === year &&
@@ -179,7 +179,7 @@ function drawRunning(){
 
 
 
-        ){
+        ) {
 
 
 
@@ -187,7 +187,7 @@ function drawRunning(){
 
             labels.push(
 
-                record.date.substring(8,10) + "일"
+                record.date.substring(8, 10) + "일"
 
             );
 
@@ -211,7 +211,7 @@ function drawRunning(){
 
             const li =
 
-            document.createElement("li");
+                document.createElement("li");
 
 
 
@@ -221,13 +221,13 @@ function drawRunning(){
             li.innerText =
 
 
-            record.date +
+                record.date +
 
-            " : " +
+                " : " +
 
-            record.running +
+                record.running +
 
-            "분";
+                "분";
 
 
 
@@ -253,7 +253,7 @@ function drawRunning(){
 
 
 
-    if(chart){
+    if (chart) {
 
 
         chart.destroy();
@@ -273,31 +273,31 @@ function drawRunning(){
 
 
 
-        type:"line",
+        type: "line",
 
 
 
-        data:{
+        data: {
 
 
 
-            labels:labels,
+            labels: labels,
 
 
 
-            datasets:[
+            datasets: [
 
 
 
                 {
 
 
-                    label:"운동시간(분)",
+                    label: "운동시간(분)",
 
 
-                    data:runningTimes
+                    data: runningTimes,
 
-
+                    pointRadius: 5
 
                 }
 
@@ -311,23 +311,23 @@ function drawRunning(){
 
 
 
-        options:{
+        options: {
 
 
 
-            responsive:true,
+            responsive: true,
 
 
 
-            scales:{
+            scales: {
 
 
 
-                y:{
+                y: {
 
 
 
-                    beginAtZero:true
+                    beginAtZero: true
 
 
 
@@ -359,25 +359,25 @@ function drawRunning(){
 
 document
 
-.getElementById("prevMonth")
+    .getElementById("prevMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()-1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawRunning();
+        currentDate.setMonth(
+
+            currentDate.getMonth() - 1
+
+        );
 
 
 
-});
+        drawRunning();
+
+
+
+    });
 
 
 
@@ -389,25 +389,25 @@ document
 
 document
 
-.getElementById("nextMonth")
+    .getElementById("nextMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()+1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawRunning();
+        currentDate.setMonth(
+
+            currentDate.getMonth() + 1
+
+        );
 
 
 
-});
+        drawRunning();
+
+
+
+    });
 
 
 
