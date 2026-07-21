@@ -94,9 +94,12 @@ async function loadRecord(){
 
 
 
-    document.getElementById("viewDate").innerText =
+   const date = new Date(record.date);
 
-    record.date;
+const week = ["일", "월", "화", "수", "목", "금", "토"];
+
+document.getElementById("viewDate").innerText =
+    record.date + " (" + week[date.getDay()] + ")";
 
 
 

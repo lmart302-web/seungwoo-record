@@ -3,12 +3,12 @@ console.log("weight.js 실행됨");
 
 import { app } from "./firebase.js";
 
-import { 
-    getFirestore, 
-    collection, 
-    getDocs 
-} 
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 const db = getFirestore(app);
@@ -18,15 +18,15 @@ let records = [];
 
 
 const monthTitle =
-document.getElementById("monthTitle");
+    document.getElementById("monthTitle");
 
 
 const ctx =
-document.getElementById("weightChart");
+    document.getElementById("weightChart");
 
 
 const weightList =
-document.getElementById("weightList");
+    document.getElementById("weightList");
 
 
 const params = new URLSearchParams(location.search);
@@ -45,12 +45,12 @@ let chart;
 
 
 
-async function loadRecords(){
+async function loadRecords() {
 
 
     const snapshot = await getDocs(
 
-        collection(db,"records")
+        collection(db, "records")
 
     );
 
@@ -60,7 +60,7 @@ async function loadRecords(){
 
 
 
-    snapshot.forEach(function(doc){
+    snapshot.forEach(function (doc) {
 
 
         records.push(doc.data());
@@ -73,7 +73,7 @@ async function loadRecords(){
 
     // 날짜순 정렬
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -97,13 +97,13 @@ async function loadRecords(){
 
 
 
-function drawWeight(){
+function drawWeight() {
 
 
 
     // 화면 표시 전 날짜 재정렬
 
-    records.sort(function(a,b){
+    records.sort(function (a, b) {
 
 
         return new Date(a.date) - new Date(b.date);
@@ -116,12 +116,12 @@ function drawWeight(){
 
 
     const year =
-    currentDate.getFullYear();
+        currentDate.getFullYear();
 
 
 
     const month =
-    currentDate.getMonth();
+        currentDate.getMonth();
 
 
 
@@ -129,7 +129,7 @@ function drawWeight(){
 
     monthTitle.innerText =
 
-    year + "년 " + (month + 1) + "월";
+        year + "년 " + (month + 1) + "월";
 
 
 
@@ -142,7 +142,7 @@ function drawWeight(){
 
     const weights = [];
 
-
+    const pointColors = [];
 
 
 
@@ -154,7 +154,7 @@ function drawWeight(){
 
 
 
-    records.forEach(function(record){
+    records.forEach(function (record) {
 
 
 
@@ -162,7 +162,7 @@ function drawWeight(){
 
         const recordDate =
 
-        new Date(record.date);
+            new Date(record.date);
 
 
 
@@ -170,7 +170,7 @@ function drawWeight(){
 
 
 
-        if(
+        if (
 
 
             recordDate.getFullYear() === year &&
@@ -183,7 +183,7 @@ function drawWeight(){
 
 
 
-        ){
+        ) {
 
 
 
@@ -191,7 +191,7 @@ function drawWeight(){
 
             labels.push(
 
-                record.date.substring(8,10) + "일"
+                record.date.substring(8, 10) + "일"
 
             );
 
@@ -205,6 +205,12 @@ function drawWeight(){
 
             );
 
+            if (recordDate.getDay() === 1) {
+                pointColors.push("red");
+            } else {
+                pointColors.push("#36a2eb");
+            }
+
 
 
 
@@ -213,7 +219,7 @@ function drawWeight(){
 
             const li =
 
-            document.createElement("li");
+                document.createElement("li");
 
 
 
@@ -222,13 +228,13 @@ function drawWeight(){
             li.innerText =
 
 
-            record.date +
+                record.date +
 
-            " : " +
+                " : " +
 
-            record.weight +
+                record.weight +
 
-            "kg";
+                "kg";
 
 
 
@@ -250,7 +256,7 @@ function drawWeight(){
 
 
 
-    if(chart){
+    if (chart) {
 
 
         chart.destroy();
@@ -268,32 +274,28 @@ function drawWeight(){
 
 
 
-        type:"line",
+        type: "line",
 
 
 
-        data:{
+        data: {
 
 
 
-            labels:labels,
+            labels: labels,
 
 
 
-            datasets:[
+            datasets: [
 
 
 
                 {
-
-
-                    label:"체중(kg)",
-
-
-                    data:weights
-
-
-
+                    label: "체중(kg)",
+                    data: weights,
+                    pointBackgroundColor: pointColors,
+                    pointBorderColor: pointColors,
+                    pointRadius: 5
                 }
 
 
@@ -306,23 +308,23 @@ function drawWeight(){
 
 
 
-        options:{
+        options: {
 
 
 
-            responsive:true,
+            responsive: true,
 
 
 
-            scales:{
+            scales: {
 
 
 
-                y:{
+                y: {
 
 
 
-                    beginAtZero:false
+                    beginAtZero: false
 
 
 
@@ -354,25 +356,25 @@ function drawWeight(){
 
 document
 
-.getElementById("prevMonth")
+    .getElementById("prevMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()-1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawWeight();
+        currentDate.setMonth(
+
+            currentDate.getMonth() - 1
+
+        );
 
 
 
-});
+        drawWeight();
+
+
+
+    });
 
 
 
@@ -384,25 +386,25 @@ document
 
 document
 
-.getElementById("nextMonth")
+    .getElementById("nextMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()+1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawWeight();
+        currentDate.setMonth(
+
+            currentDate.getMonth() + 1
+
+        );
 
 
 
-});
+        drawWeight();
+
+
+
+    });
 
 
 
