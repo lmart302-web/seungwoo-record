@@ -341,17 +341,18 @@ function drawReport() {
 
 
 
+        const goalRate =
+
+            Math.round((goalCount / runningCount) * 100);
+
+
+
         document.getElementById("runningSummary").innerText =
 
 
+            "🎯 목표 달성 : " + goalCount + " / " + runningCount + "회 (" + goalRate + "%)\n\n" +
 
-            "운동 횟수 : " + runningCount + "회\n\n" +
-
-            // "총 운동시간 : " + runningTotal + "분\n\n" + //
-
-            "평균 운동시간 : " + runningAverage + "분\n\n" +
-
-            "🎯 20분 목표 달성 : " + goalCount + "회";
+            "평균 운동시간 : " + runningAverage + "분";
 
 
 
