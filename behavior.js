@@ -1,3 +1,4 @@
+
 import { app } from "./firebase.js";
 
 import {
@@ -41,6 +42,21 @@ behaviorButtons.forEach(function(button){
 
 const dateInput =
 document.getElementById("date");
+
+
+// 오늘 날짜 기본 설정
+
+const today = new Date();
+
+const yyyy = today.getFullYear();
+
+const mm = String(today.getMonth() + 1).padStart(2, "0");
+
+const dd = String(today.getDate()).padStart(2, "0");
+
+
+dateInput.value =
+yyyy + "-" + mm + "-" + dd;
 
 
 dateInput.addEventListener("change", async function(){
