@@ -13,7 +13,7 @@ from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 const db = getFirestore(app);
 
 
-let selectedBehavior = "";
+let selectedBehavior = "good";
 
 
 const behaviorButtons =
@@ -58,6 +58,15 @@ const dd = String(today.getDate()).padStart(2, "0");
 dateInput.value =
 yyyy + "-" + mm + "-" + dd;
 
+behaviorButtons.forEach(function(btn){
+
+    if(btn.dataset.value === "good"){
+
+        btn.classList.add("selected");
+
+    }
+
+});
 
 dateInput.addEventListener("change", async function(){
 
@@ -81,7 +90,19 @@ dateInput.addEventListener("change", async function(){
 
     });
 
-    selectedBehavior = "";
+    selectedBehavior = "good";
+
+    behaviorButtons.forEach(function(btn){
+
+    btn.classList.remove("selected");
+
+    if(btn.dataset.value === "good"){
+
+        btn.classList.add("selected");
+
+    }
+
+});
 
     if(snapshot.exists()){
 
