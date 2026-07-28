@@ -3,126 +3,132 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>월간 리포트</title>
+    <title>월간 리포트</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<nav>
+    <nav>
 
-<a href="index.html">🏠 홈</a>
-<a href="calendar.html">📅 달력</a>
-<!--<a href="weight.html">⚖️ 체중</a>
+        <a href="index.html">🏠 홈</a>
+        <a href="calendar.html">📅 달력</a>
+        <!--<a href="weight.html">⚖️ 체중</a>
 <a href="running.html">🏃 운동</a>
 <a href="report.html">📊 월간리포트</a>-->
 
-</nav>
+    </nav>
 
 
 
-<h1>📊 월간 리포트</h1>
+    <h1>📊 월간 리포트</h1>
 
 
 
-<div class="section">
+    <div class="section">
 
-    <div class="calendar-header">
+        <div class="calendar-header">
 
-        <button id="prevMonth">
+            <button id="prevMonth">
 
-            ◀ 이전
+                ◀ 이전
 
-        </button>
+            </button>
 
-        <h2 id="monthTitle"></h2>
+            <h2 id="monthTitle"></h2>
 
-        <button id="nextMonth">
+            <button id="nextMonth">
 
-            다음 ▶
+                다음 ▶
 
-        </button>
+            </button>
 
-    </div>
-
-</div>
-
-
-
-<div class="section">
-
-    <div class="report-title">
-
-        <h2>⚖️ 체중 변화</h2>
-
-        <a href="weight.html" class="report-link weight-link">
-            체중 기록 보기
-        </a>
-
-    </div>
-
-    <p id="weightSummary">-</p>
-
-</div>
-
-
-
-<div class="section">
-
-    <div class="report-title">
-
-        <h2>🏃 운동 기록</h2>
-
-        <a href="running.html" class="report-link running-link">
-            운동 기록 보기
-        </a>
-
-    </div>
-
-    <p id="runningSummary">-</p>
-
-</div>
-
-
-
-<div class="section">
-
-    <div class="report-title">
-
-        <h2>🟢 행동 통계</h2>
-
-        <a href="difficult/difficult.html" class="report-link behavior-link">
-            행동 게시판
-        </a>
+        </div>
 
     </div>
 
 
-    <p>🟢 안정 : <span id="goodCount">0</span>일</p>
-    <p>🟡 보통 : <span id="normalCount">0</span>일</p>
-    <p>🔴 어려움 : <span id="hardCount">0</span>일</p>
 
-</div>
+    <div class="section">
+
+        <div class="report-title">
+
+            <h2>⚖️ 체중 변화</h2>
+
+            <a href="weight.html" class="report-link weight-link">
+                체중 기록 보기
+            </a>
+
+        </div>
+
+        <p id="weightSummary">-</p>
+
+    </div>
 
 
 
-<div class="section">
+    <div class="section">
 
-    <h2>🍚 가장 많이 먹은 점심</h2>
+        <div class="report-title">
 
-    <p id="topLunch">기록 없음</p>
+            <h2>🏃 운동 기록</h2>
 
-</div>
+            <a href="running.html" class="report-link running-link">
+                운동 기록 보기
+            </a>
+
+        </div>
+
+        <p id="runningSummary">-</p>
+
+    </div>
 
 
 
-<script type="module" src="report.js"></script>
+    <div class="section">
+
+        <div class="report-title">
+
+            <h2>🟢 행동 통계</h2>
+
+            <a href="difficult/difficult.html" class="report-link behavior-link">
+                행동 게시판
+            </a>
+
+        </div>
+
+
+        <p class="behavior-summary">
+            🟢 <span id="goodCount">0</span>일
+            &nbsp;&nbsp;&nbsp;
+            🟡 <span id="normalCount">0</span>일
+            &nbsp;&nbsp;&nbsp;
+            🔴 <span id="hardCount">0</span>일
+        </p>
+
+        <div id="behaviorMiniCalendar" class="mini-calendar"></div>
+
+    </div>
+
+
+
+    <div class="section">
+
+        <h2>🍚 가장 많이 먹은 점심</h2>
+
+        <p id="topLunch">기록 없음</p>
+
+    </div>
+
+
+
+    <script type="module" src="report.js"></script>
 
 </body>
 

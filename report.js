@@ -111,17 +111,17 @@ function drawReport() {
     }
 
 
-const weightLink = document.querySelector(".weight-link");
+    const weightLink = document.querySelector(".weight-link");
 
-if (weightLink) {
+    if (weightLink) {
 
-    const monthValue =
-        year + "-" + String(month + 1).padStart(2, "0");
+        const monthValue =
+            year + "-" + String(month + 1).padStart(2, "0");
 
-    weightLink.href =
-        "weight.html?month=" + monthValue;
+        weightLink.href =
+            "weight.html?month=" + monthValue;
 
-}
+    }
 
     const monthRecords = records.filter(function (record) {
 
@@ -201,42 +201,49 @@ if (weightLink) {
 
         let result =
 
-
             first + "kg → " + last + "kg";
-
-
-
-
-
-
 
         if (diff > 0) {
 
-
             result += " (+" + diff + "kg)";
 
-
         }
-
         else if (diff < 0) {
-
 
             result += " (" + diff + "kg)";
 
-
         }
-
         else {
-
 
             result += " (변화 없음)";
 
-
         }
 
 
+        // 최고 / 최저 체중 계산
+        const maxWeight =
+
+            Math.max(...weightRecords.map(function (record) {
+
+                return Number(record.weight);
+
+            }));
 
 
+        const minWeight =
+
+            Math.min(...weightRecords.map(function (record) {
+
+                return Number(record.weight);
+
+            }));
+
+
+        result +=
+
+            "\n\n⬆ 최고 : " + maxWeight + "kg" +
+
+            "\n⬇ 최저 : " + minWeight + "kg";
 
 
         document.getElementById("weightSummary").innerText =
@@ -418,7 +425,100 @@ if (weightLink) {
     document.getElementById("hardCount").innerText = hard;
 
 
+    // ===== 행동 미니 달력 =====
 
+    const miniCalendar =
+        document.getElementById("behaviorMiniCalendar");
+
+    miniCalendar.innerHTML = "";
+
+    // 요일 제목
+    ["월", "화", "수", "목", "금"].forEach(function (day) {
+
+        const header =
+            document.createElement("div");
+
+        header.className = "mini-header";
+
+        header.innerText = day;
+
+        miniCalendar.appendChild(header);
+
+    });
+
+    // 이번 달 첫날
+    const firstDay =
+        new Date(year, month, 1);
+
+    // 월요일 기준 시작 위치
+    let start =
+        firstDay.getDay();
+
+    if (start === 0) {
+        start = 6;
+    }
+    else {
+        start--;
+    }
+
+    // 첫 주 빈칸
+    for (let i = 0; i < start; i++) {
+
+        const empty =
+            document.createElement("div");
+
+        empty.className =
+            "mini-empty";
+
+        miniCalendar.appendChild(empty);
+
+    }
+
+    // 날짜 출력
+    monthRecords.forEach(function (record) {
+
+        const recordDate =
+            new Date(record.date);
+
+        const day =
+            recordDate.getDay();
+
+        // 토,일은 표시 안함
+        if (day === 0 || day === 6) {
+
+            return;
+
+        }
+
+        const cell =
+            document.createElement("div");
+
+        cell.className =
+            "mini-day";
+
+        if (record.behavior === "good") {
+
+            cell.classList.add("mini-good");
+
+        }
+
+        else if (record.behavior === "normal") {
+
+            cell.classList.add("mini-normal");
+
+        }
+
+        else if (record.behavior === "hard") {
+
+            cell.classList.add("mini-hard");
+
+        }
+
+        cell.title = record.date;
+
+        miniCalendar.appendChild(cell);
+
+    });
 
 
 

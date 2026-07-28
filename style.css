@@ -911,3 +911,77 @@ canvas {
     background: #ffe69c;
 
 }
+
+/* ===== 월간 리포트 행동 미니 달력 ===== */
+
+.behavior-summary {
+
+    text-align: center;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    margin-bottom: 18px;
+
+}
+
+.mini-calendar {
+
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 8px;
+
+}
+
+.mini-header {
+
+    text-align: center;
+
+    font-weight: bold;
+
+    color: #666;
+
+    font-size: 14px;
+
+}
+
+.mini-day {
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    margin: 0 auto;
+
+    background: #eee;
+
+}
+
+.mini-good {
+
+    background: #4caf50;
+
+}
+
+.mini-normal {
+
+    background: #ffc107;
+
+}
+
+.mini-hard {
+
+    background: #f44336;
+
+}
+
+.mini-empty {
+
+    background: transparent;
+
+}
