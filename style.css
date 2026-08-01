@@ -986,32 +986,6 @@ canvas {
 
 }
 
-.plan-link{
-
-    display:block;
-
-    background:#fff3cd;
-
-    padding:12px;
-
-    margin:20px auto;
-
-    width:220px;
-
-    text-align:center;
-
-    border-radius:12px;
-
-    text-decoration:none;
-
-    color:#555;
-
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
-
-}
-
-
-
 .plan-box{
 
     max-width:700px;
@@ -1021,7 +995,6 @@ canvas {
     padding:10px;
 
 }
-
 
 
 .plan-image{
