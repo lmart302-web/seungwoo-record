@@ -1,4 +1,3 @@
-
 import { app } from "./firebase.js";
 
 import {
@@ -13,31 +12,8 @@ from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 const db = getFirestore(app);
 
 
-let selectedBehavior = "good";
-
-
-const behaviorButtons =
-document.querySelectorAll(".behavior-btn");
-
-
-behaviorButtons.forEach(function(button){
-
-    button.addEventListener("click",function(){
-
-        selectedBehavior =
-        button.dataset.value;
-
-        behaviorButtons.forEach(function(btn){
-
-            btn.classList.remove("selected");
-
-        });
-
-        button.classList.add("selected");
-
-    });
-
-});
+const behaviorSelect =
+document.getElementById("behavior");
 
 
 const dateInput =
@@ -58,15 +34,8 @@ const dd = String(today.getDate()).padStart(2, "0");
 dateInput.value =
 yyyy + "-" + mm + "-" + dd;
 
-behaviorButtons.forEach(function(btn){
 
-    if(btn.dataset.value === "good"){
-
-        btn.classList.add("selected");
-
-    }
-
-});
+// 날짜 변경 시 기존 기록 불러오기
 
 dateInput.addEventListener("change", async function(){
 
@@ -78,54 +47,35 @@ dateInput.addEventListener("change", async function(){
 
     }
 
+
     const docRef =
     doc(db,"records",date);
+
 
     const snapshot =
     await getDoc(docRef);
 
-    behaviorButtons.forEach(function(btn){
 
-        btn.classList.remove("selected");
+    // 기본값 안정
 
-    });
+    behaviorSelect.value = "good";
 
-    selectedBehavior = "good";
-
-    behaviorButtons.forEach(function(btn){
-
-    btn.classList.remove("selected");
-
-    if(btn.dataset.value === "good"){
-
-        btn.classList.add("selected");
-
-    }
-
-});
 
     if(snapshot.exists()){
 
         const record =
         snapshot.data();
 
-        selectedBehavior =
-        record.behavior || "";
 
-        behaviorButtons.forEach(function(btn){
-
-            if(btn.dataset.value === selectedBehavior){
-
-                btn.classList.add("selected");
-
-            }
-
-        });
+        behaviorSelect.value =
+        record.behavior || "good";
 
     }
 
 });
 
+
+// 저장
 
 const saveButton =
 document.getElementById("saveBtn");
@@ -136,6 +86,7 @@ saveButton.addEventListener("click", async function(){
     const date =
     dateInput.value;
 
+
     if(!date){
 
         alert("날짜를 선택하세요.");
@@ -144,11 +95,14 @@ saveButton.addEventListener("click", async function(){
 
     }
 
+
     const docRef =
     doc(db,"records",date);
 
+
     const snapshot =
     await getDoc(docRef);
+
 
     if(!snapshot.exists()){
 
@@ -158,15 +112,18 @@ saveButton.addEventListener("click", async function(){
 
     }
 
+
     await updateDoc(docRef,{
 
-        behavior:selectedBehavior,
+        behavior: behaviorSelect.value,
 
         holiday:false
 
     });
 
+
     alert("행동상태가 저장되었습니다.");
+
     location.href = "calendar.html";
 
 });
