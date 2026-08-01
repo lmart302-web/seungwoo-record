@@ -532,6 +532,7 @@ button:hover {
 .record-row select {
     flex: 1;
     height: 45px;
+    font-size: 18px;
 }
 
 .record-row .save {
