@@ -99,6 +99,7 @@ nav a {
 
 .menu-card:hover {
     transform: translateY(-5px);
+    transition:.2s;
 }
 
 /* ==========================================================================
@@ -538,10 +539,9 @@ button:hover {
     }
 
     .menu-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        display: flex;
         flex-direction: column;
+        gap: 15px;
     }
 
     .menu-card {
