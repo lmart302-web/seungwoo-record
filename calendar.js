@@ -3,12 +3,12 @@ console.log("calendar.js 실행됨");
 
 import { app } from "./firebase.js";
 
-import { 
-    getFirestore, 
-    collection, 
-    getDocs 
-} 
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 const db = getFirestore(app);
@@ -18,11 +18,11 @@ let records = [];
 
 
 const calendar =
-document.getElementById("calendar");
+    document.getElementById("calendar");
 
 
 const monthTitle =
-document.getElementById("monthTitle");
+    document.getElementById("monthTitle");
 
 
 let currentDate = new Date();
@@ -33,12 +33,12 @@ let currentDate = new Date();
 
 
 
-async function loadRecords(){
+async function loadRecords() {
 
 
     const snapshot = await getDocs(
 
-        collection(db,"records")
+        collection(db, "records")
 
     );
 
@@ -48,7 +48,7 @@ async function loadRecords(){
 
 
 
-    snapshot.forEach(function(doc){
+    snapshot.forEach(function (doc) {
 
 
         records.push(doc.data());
@@ -71,7 +71,7 @@ async function loadRecords(){
 
 
 
-function drawCalendar(){
+function drawCalendar() {
 
 
 
@@ -80,12 +80,12 @@ function drawCalendar(){
 
 
     const year =
-    currentDate.getFullYear();
+        currentDate.getFullYear();
 
 
 
     const month =
-    currentDate.getMonth();
+        currentDate.getMonth();
 
 
 
@@ -93,7 +93,7 @@ function drawCalendar(){
 
     monthTitle.innerText =
 
-    year + "년 " + (month + 1) + "월";
+        year + "년 " + (month + 1) + "월";
 
 
 
@@ -115,12 +115,12 @@ function drawCalendar(){
 
 
 
-    days.forEach(function(day){
+    days.forEach(function (day) {
 
 
         const div =
 
-        document.createElement("div");
+            document.createElement("div");
 
 
 
@@ -147,7 +147,7 @@ function drawCalendar(){
 
     const lastDate =
 
-    new Date(year, month + 1, 0).getDate();
+        new Date(year, month + 1, 0).getDate();
 
 
 
@@ -161,13 +161,13 @@ function drawCalendar(){
 
 
 
-    for(let i = 1; i <= lastDate; i++){
+    for (let i = 1; i <= lastDate; i++) {
 
 
 
         const dateObj =
 
-        new Date(year, month, i);
+            new Date(year, month, i);
 
 
 
@@ -175,7 +175,7 @@ function drawCalendar(){
 
         const week =
 
-        dateObj.getDay();
+            dateObj.getDay();
 
 
 
@@ -185,7 +185,7 @@ function drawCalendar(){
 
         // 토요일(6), 일요일(0) 제외
 
-        if(week === 0 || week === 6){
+        if (week === 0 || week === 6) {
 
             continue;
 
@@ -199,24 +199,24 @@ function drawCalendar(){
 
         // 첫 주 빈칸 생성
 
-        if(count === 0){
+        if (count === 0) {
 
 
 
             const firstWeek =
 
-            week - 1;
+                week - 1;
 
 
 
 
-            for(let j = 0; j < firstWeek; j++){
+            for (let j = 0; j < firstWeek; j++) {
 
 
 
                 const empty =
 
-                document.createElement("div");
+                    document.createElement("div");
 
 
 
@@ -244,13 +244,13 @@ function drawCalendar(){
 
         const box =
 
-        document.createElement("div");
+            document.createElement("div");
 
 
 
         box.className =
 
-        "calendar-day";
+            "calendar-day";
 
 
 
@@ -260,15 +260,15 @@ function drawCalendar(){
 
         const date =
 
-        year +
+            year +
 
-        "-" +
+            "-" +
 
-        String(month + 1).padStart(2,"0") +
+            String(month + 1).padStart(2, "0") +
 
-        "-" +
+            "-" +
 
-        String(i).padStart(2,"0");
+            String(i).padStart(2, "0");
 
 
 
@@ -278,7 +278,7 @@ function drawCalendar(){
 
         let html =
 
-        "<strong>" + i;
+            "<strong>" + i;
 
 
 
@@ -288,15 +288,15 @@ function drawCalendar(){
 
         const record =
 
-        records.find(function(item){
+            records.find(function (item) {
 
 
 
-            return item.date === date;
+                return item.date === date;
 
 
 
-        });
+            });
 
 
 
@@ -304,7 +304,7 @@ function drawCalendar(){
 
 
 
-        if(record){
+        if (record) {
 
 
 
@@ -315,7 +315,7 @@ function drawCalendar(){
 
 
 
-            if(record.behavior === "good"){
+            if (record.behavior === "good") {
 
 
                 behavior = " 🟢";
@@ -323,7 +323,7 @@ function drawCalendar(){
 
             }
 
-            else if(record.behavior === "normal"){
+            else if (record.behavior === "normal") {
 
 
                 behavior = " 🟡";
@@ -331,7 +331,7 @@ function drawCalendar(){
 
             }
 
-            else if(record.behavior === "hard"){
+            else if (record.behavior === "hard") {
 
 
                 behavior = " 🔴";
@@ -360,99 +360,99 @@ function drawCalendar(){
 
 
 
-        if(record){
+        if (record) {
 
 
-    if(record.behavior === "holiday"){
+            if (record.holiday || record.behavior === "holiday") {
 
-    html +=
-    "<div class='holiday-text'>🚫 휴강</div>";
+                html +=
+                    "<div class='holiday-text'>🚫 휴강</div>";
 
-    box.classList.add("holiday");
+                box.classList.add("holiday");
 
-}
-else{
-
-
-        html +=
-
-        "<div class='record-line'>☀️ " +
-
-        (record.morning || "") +
-
-        "</div>";
+            }
+            else {
 
 
+                html +=
 
+                    "<div class='record-line'>☀️ " +
 
+                    (record.morning || "") +
 
-        html +=
-
-        "<div class='record-line'>🍚 " +
-
-        (record.lunch || "") +
-
-        "</div>";
+                    "</div>";
 
 
 
 
 
-        html +=
+                html +=
 
-        "<div class='record-line'>🌙 " +
+                    "<div class='record-line'>🍚 " +
 
-        (record.afternoon || "") +
+                    (record.lunch || "") +
 
-        "</div>";
-
-
-
-
-
-        html +=
-
-        "<div class='record-line'>🏃 " +
-
-        (record.running ? record.running + "분" : "") +
-
-        "</div>";
+                    "</div>";
 
 
 
 
 
-        html +=
+                html +=
 
-        "<div class='record-line'>⚖️ " +
+                    "<div class='record-line'>🌙 " +
 
-        (record.weight ? record.weight + "kg" : "") +
+                    (record.afternoon || "") +
 
-        "</div>";
-
-    }
+                    "</div>";
 
 
-}
-else{
 
 
-    html +=
-    "<div class='record-line'></div>";
 
-    html +=
-    "<div class='record-line'></div>";
+                html +=
 
-    html +=
-    "<div class='record-line'></div>";
+                    "<div class='record-line'>🏃 " +
 
-    html +=
-    "<div class='record-line'></div>";
+                    (record.running ? record.running + "분" : "") +
 
-    html +=
-    "<div class='record-line'></div>";
+                    "</div>";
 
-}
+
+
+
+
+                html +=
+
+                    "<div class='record-line'>⚖️ " +
+
+                    (record.weight ? record.weight + "kg" : "") +
+
+                    "</div>";
+
+            }
+
+
+        }
+        else {
+
+
+            html +=
+                "<div class='record-line'></div>";
+
+            html +=
+                "<div class='record-line'></div>";
+
+            html +=
+                "<div class='record-line'></div>";
+
+            html +=
+                "<div class='record-line'></div>";
+
+            html +=
+                "<div class='record-line'></div>";
+
+        }
 
 
 
@@ -488,25 +488,25 @@ else{
 
 document
 
-.getElementById("prevMonth")
+    .getElementById("prevMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()-1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawCalendar();
+        currentDate.setMonth(
+
+            currentDate.getMonth() - 1
+
+        );
 
 
 
-});
+        drawCalendar();
+
+
+
+    });
 
 
 
@@ -518,25 +518,25 @@ document
 
 document
 
-.getElementById("nextMonth")
+    .getElementById("nextMonth")
 
-.addEventListener("click",function(){
-
-
-
-    currentDate.setMonth(
-
-        currentDate.getMonth()+1
-
-    );
+    .addEventListener("click", function () {
 
 
 
-    drawCalendar();
+        currentDate.setMonth(
+
+            currentDate.getMonth() + 1
+
+        );
 
 
 
-});
+        drawCalendar();
+
+
+
+    });
 
 
 
