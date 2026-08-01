@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. Base & Global Styles
+   ========================================================================== */
 body {
     font-family: "맑은 고딕", Arial, sans-serif;
     margin: 20px;
@@ -14,8 +17,13 @@ h2 {
     margin-bottom: 15px;
 }
 
+canvas {
+    max-width: 100%;
+}
 
-/* 상단 메뉴 */
+/* ==========================================================================
+   2. Layout & Navigation
+   ========================================================================== */
 nav {
     text-align: center;
     margin-bottom: 20px;
@@ -32,8 +40,6 @@ nav a {
     box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
 }
 
-
-/* 카드 */
 .section {
     background: #fff;
     padding: 20px;
@@ -42,8 +48,9 @@ nav a {
     box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
 }
 
-
-/* 시작 화면 */
+/* ==========================================================================
+   3. Start Screen & Menu Cards
+   ========================================================================== */
 .title-area {
     display: flex;
     justify-content: center;
@@ -61,16 +68,15 @@ nav a {
     font-size: 16px;
 }
 
+.rainbow-link {
+    text-decoration: none;
+}
+
 .menu-container {
-
     display: flex;
-
     justify-content: center;
-
     gap: 30px;
-
     margin: 40px auto;
-
 }
 
 .menu-card {
@@ -88,14 +94,16 @@ nav a {
     color: #333;
     font-size: 26px;
     font-weight: bold;
+    line-height: 1.5;
 }
 
 .menu-card:hover {
     transform: translateY(-5px);
 }
 
-
-/* 입력 */
+/* ==========================================================================
+   4. Form & Inputs
+   ========================================================================== */
 input {
     padding: 12px;
     font-size: 16px;
@@ -119,8 +127,7 @@ button:hover {
     background: #9fc5ff;
 }
 
-
-/* 행동 상태 */
+/* 행동 상태 버튼 */
 .behavior-buttons {
     display: flex;
     justify-content: center;
@@ -138,15 +145,15 @@ button:hover {
     background: #9fc5ff;
 }
 
-
 .save {
     width: 100%;
     background: #d8f5d8;
     font-size: 18px;
 }
 
-
-/* 달력 */
+/* ==========================================================================
+   5. Calendar
+   ========================================================================== */
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -158,21 +165,17 @@ button:hover {
     padding: 10px 15px;
 }
 
-
-/* 월~금 5칸 */
 #calendar {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 6px;
 }
 
-
 .day-name {
     text-align: center;
     font-weight: bold;
     padding: 8px;
 }
-
 
 .calendar-day {
     background: #fff;
@@ -186,15 +189,12 @@ button:hover {
     word-break: break-word;
 }
 
-
 .calendar-day strong {
     display: block;
     font-size: 14px;
     margin-bottom: 5px;
 }
 
-
-/* 기본 항목 한 줄 */
 .calendar-day div {
     margin-bottom: 3px;
     white-space: nowrap;
@@ -202,8 +202,6 @@ button:hover {
     text-overflow: ellipsis;
 }
 
-
-/* 오전 / 오후 일과는 항상 2줄 공간 확보 */
 .calendar-day div:first-of-type,
 .calendar-day div:nth-of-type(3) {
     height: 32px;
@@ -211,88 +209,360 @@ button:hover {
     overflow: hidden;
 }
 
-
-
 .sunday strong {
     color: red;
 }
-
 
 .saturday strong {
     color: blue;
 }
 
-
-/* 그래프 */
-canvas {
-    max-width: 100%;
+.holiday-text {
+    color: red;
+    font-weight: bold;
+    text-align: center;
 }
 
+/* ==========================================================================
+   6. Board & Tables
+   ========================================================================== */
+.table-wrap {
+    width: 100%;
+    overflow: hidden;
+}
 
+.difficult-table {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+    background: #fff;
+}
 
-/* 모바일 */
-@media (max-width:600px) {
+.difficult-table th {
+    background: #f1f3f8;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
 
+.difficult-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.difficult-table tr:hover {
+    background: #f8faff;
+}
+
+.difficult-table th:nth-child(2),
+.difficult-table td:nth-child(2) {
+    width: 35px;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.difficult-content {
+    cursor: pointer;
+    text-align: left !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.difficult-content:hover {
+    text-decoration: underline;
+}
+
+.level-warning {
+    color: #d99b00;
+    font-weight: bold;
+}
+
+.level-hard {
+    color: red;
+    font-weight: bold;
+}
+
+.edit-btn {
+    background: #e7efff;
+    padding: 8px 14px;
+    font-size: 14px;
+}
+
+.delete-btn {
+    background: #ffe5e5;
+    padding: 8px 14px;
+    font-size: 14px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #4caf50;
+    color: white;
+}
+
+.pagination button:hover {
+    background: #43a047;
+}
+
+.pagination button:disabled {
+    background: #ccc;
+    cursor: default;
+}
+
+#pageInfo {
+    font-weight: bold;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   7. Information & Detail Boxes
+   ========================================================================== */
+.small-info {
+    padding: 5px 10px;
+}
+
+.small-info h2 {
+    margin: 0 0 3px 0;
+    font-size: 16px;
+}
+
+.small-info p {
+    margin: 0;
+    font-size: 15px;
+}
+
+.content-box {
+    min-height: 300px;
+}
+
+.content-box p {
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.plan-box {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.plan-image {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   8. Reports & Summary Components
+   ========================================================================== */
+.report-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.report-title h2 {
+    margin: 0;
+}
+
+.report-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 12px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .15);
+    transition: 0.2s;
+}
+
+.report-link:hover {
+    transform: translateY(-2px);
+    opacity: .85;
+}
+
+.running-link {
+    background: #cfefff;
+}
+
+.behavior-link {
+    background: #d8f5d8;
+}
+
+.weight-link {
+    background: #fff3cd;
+}
+
+.weight-link:hover {
+    background: #ffe69c;
+}
+
+/* 월간 리포트 미니 달력 */
+.behavior-summary {
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.mini-calendar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.mini-header {
+    text-align: center;
+    font-weight: bold;
+    color: #666;
+    font-size: 14px;
+}
+
+.mini-day {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: #eee;
+}
+
+.mini-good {
+    background: #4caf50;
+}
+
+.mini-normal {
+    background: #ffc107;
+}
+
+.mini-hard {
+    background: #f44336;
+}
+
+.mini-empty {
+    background: transparent;
+}
+
+/* ==========================================================================
+   9. Input Page PC Optimization
+   ========================================================================== */
+.input-page {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.input-page .section {
+    padding: 25px;
+}
+
+.input-page input {
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+.input-page textarea {
+    width: 100%;
+    height: 70px;
+    box-sizing: border-box;
+    padding: 15px;
+    font-size: 17px;
+    line-height: 1.6;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.input-page h1 {
+    margin-top: 20px;
+}
+
+.input-page .behavior-buttons {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.input-page .behavior-btn {
+    flex: 1;
+    height: 55px;
+    font-size: 18px;
+    min-width: 0;
+}
+
+.input-page .save {
+    height: 60px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   10. Media Queries (Responsive Design)
+   ========================================================================== */
+@media (max-width: 600px) {
     body {
         margin: 10px;
     }
 
-
     h1 {
         font-size: 24px;
     }
-
 
     nav a {
         padding: 8px;
         font-size: 14px;
     }
 
-
     .input-link {
         display: none;
     }
 
-
     .menu-container {
-
         display: grid;
-
         grid-template-columns: repeat(2, 1fr);
-
         gap: 15px;
-
+        flex-direction: column;
     }
-
 
     .menu-card {
-
         width: 100%;
-
         height: 130px;
-
         font-size: 20px;
-
     }
-
 
     .section {
         padding: 15px;
         border-radius: 12px;
     }
 
-
     .calendar-header h2 {
         font-size: 18px;
     }
 
-
-    /* 모바일도 5칸 유지 */
     #calendar {
         grid-template-columns: repeat(5, 1fr);
         gap: 4px;
     }
-
 
     .calendar-day {
         min-height: 110px;
@@ -300,732 +570,84 @@ canvas {
         padding: 4px;
     }
 
-
     .calendar-day strong {
         font-size: 12px;
     }
 
-
     .calendar-day div {
         margin-bottom: 2px;
     }
-
 
     .calendar-day div:first-of-type,
     .calendar-day div:nth-of-type(3) {
         height: 28px;
     }
 
-}
-
-/* 입력 화면 PC 최적화 */
-
-.input-page {
-    max-width: 750px;
-    margin: 0 auto;
-}
-
-
-.input-page .section {
-    padding: 25px;
-}
-
-
-.input-page input {
-
-    width: 100%;
-    height: 50px;
-
-    box-sizing: border-box;
-
-    font-size: 18px;
-
-}
-
-
-
-.input-page textarea {
-
-    width: 100%;
-
-    height: 70px;
-
-    box-sizing: border-box;
-
-    padding: 15px;
-
-    font-size: 17px;
-
-    line-height: 1.6;
-
-    border-radius: 10px;
-
-    border: 1px solid #ccc;
-
-    resize: none;
-
-}
-
-
-
-.input-page h1 {
-
-    margin-top: 20px;
-
-}
-
-
-
-/* 행동 상태 */
-
-.input-page .behavior-buttons {
-
-    display: flex;
-
-    gap: 15px;
-
-    width: 100%;
-
-}
-
-
-
-.input-page .behavior-btn {
-
-    flex: 1;
-
-    height: 55px;
-
-    font-size: 18px;
-
-    min-width: 0;
-
-}
-
-
-
-/* 저장 버튼 */
-
-.input-page .save {
-
-    height: 60px;
-
-    font-size: 22px;
-
-    font-weight: bold;
-
-}
-
-.holiday-text {
-
-    color: red;
-    font-weight: bold;
-    text-align: center;
-
-}
-
-.menu-card {
-    line-height: 1.5;
-}
-
-.rainbow-link {
-
-    text-decoration: none;
-
-}
-
-
-
-/* 어려운 행동 게시판 */
-
-.difficult-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-    background: #fff;
-
-}
-
-
-
-.difficult-table th {
-
-    background: #f1f3f8;
-
-    padding: 12px;
-
-    border-bottom: 1px solid #ddd;
-
-    text-align: center;
-
-}
-
-
-
-.difficult-table td {
-
-    padding: 12px;
-
-    border-bottom: 1px solid #eee;
-
-    text-align: center;
-
-}
-
-
-
-.difficult-table tr:hover {
-
-    background: #f8faff;
-
-}
-
-
-
-/* 내용 클릭 가능 표시 */
-
-.difficult-content {
-
-    cursor: pointer;
-
-    text-align: left !important;
-
-}
-
-
-
-.difficult-content:hover {
-
-    text-decoration: underline;
-
-}
-
-
-
-/* 상태 표시 */
-
-.level-warning {
-
-    color: #d99b00;
-
-    font-weight: bold;
-
-}
-
-
-
-.level-hard {
-
-    color: red;
-
-    font-weight: bold;
-
-}
-
-
-
-/* 수정 삭제 버튼 */
-
-.edit-btn {
-
-    background: #e7efff;
-
-    padding: 8px 14px;
-
-    font-size: 14px;
-
-}
-
-
-.delete-btn {
-
-    background: #ffe5e5;
-
-    padding: 8px 14px;
-
-    font-size: 14px;
-
-}
-
-
-
-
-
-/* 모바일 게시판 */
-
-@media(max-width:600px) {
-
-
+    /* Mobile Table */
     .difficult-table {
-
-        font-size: 12px;
-
-    }
-
-
-    .difficult-table th,
-    .difficult-table td {
-
-        padding: 8px 4px;
-
-    }
-
-
-    .edit-btn,
-    .delete-btn {
-
-        padding: 6px 8px;
-
-        font-size: 11px;
-
-    }
-
-
-}
-
-.difficult-content {
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    max-width: 150px;
-
-}
-
-.difficult-table th:nth-child(2),
-.difficult-table td:nth-child(2) {
-
-    width: 35px;
-    padding: 0;
-
-    text-align: center;
-    vertical-align: middle;
-
-}
-
-.table-wrap {
-    width: 100%;
-    overflow: hidden;
-}
-
-.difficult-table {
-    min-width: 0;
-}
-
-.pagination {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 15px;
-
-    margin: 20px 0;
-
-}
-
-.pagination button {
-
-    padding: 8px 16px;
-
-    font-size: 15px;
-
-    cursor: pointer;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background: #4caf50;
-
-    color: white;
-
-}
-
-.pagination button:hover {
-
-    background: #43a047;
-
-}
-
-.pagination button:disabled {
-
-    background: #ccc;
-
-    cursor: default;
-
-}
-
-#pageInfo {
-
-    font-weight: bold;
-
-    min-width: 60px;
-
-    text-align: center;
-
-}
-
-.small-info {
-    padding: 5px 10px;
-}
-
-
-.small-info h2 {
-    margin: 0 0 3px 0;
-    font-size: 16px;
-}
-
-
-.small-info p {
-    margin: 0;
-    font-size: 15px;
-}
-
-
-.content-box {
-    min-height: 300px;
-}
-
-
-.content-box p {
-    line-height: 1.7;
-    white-space: pre-wrap;
-}
-
-@media(max-width:600px) {
-
-    .difficult-table {
-
         width: 100%;
-
         table-layout: fixed;
-
         font-size: 13px;
-
     }
-
 
     .difficult-table th,
     .difficult-table td {
-
         padding: 6px 2px;
-
         text-align: center;
-
     }
 
-
-    /* 날짜 */
-    /* 날짜 제목 */
-    .difficult-table th:nth-child(1) {
-
-        width: 65px;
-        text-align: center;
-
-    }
-
-
-    /* 날짜 데이터 */
+    .difficult-table th:nth-child(1),
     .difficult-table td:nth-child(1) {
-
         width: 65px;
         white-space: nowrap;
         text-align: left;
         font-size: 12px;
-
     }
 
+    .difficult-table th:nth-child(1) {
+        text-align: center;
+    }
 
-    /* 구분(상태) */
     .difficult-table th:nth-child(2),
     .difficult-table td:nth-child(2) {
-
         width: 30px;
         padding: 0;
-
         text-align: center;
         vertical-align: middle;
-
     }
 
-
-    /* 내용 */
     .difficult-table th:nth-child(3),
     .difficult-table td:nth-child(3) {
-
         width: auto;
-
     }
 
-
-    /* 관리 */
     .difficult-table th:nth-child(4) {
-
         width: 90px;
         white-space: nowrap;
         text-align: center;
-
     }
 
-
     .difficult-table td:nth-child(4) {
-
         width: 90px;
         white-space: nowrap;
         text-align: right;
-
     }
-
 
     .difficult-content {
-
         white-space: nowrap;
-
         overflow: hidden;
-
         text-overflow: ellipsis;
-
     }
-
 
     .difficult-table button {
-
         font-size: 13px;
-
         padding: 8px 10px;
-
         white-space: nowrap;
-
     }
 
-}
-
-/* 리포트 제목 + 이동 버튼 */
-
-.report-title {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-}
-
-
-.report-title h2 {
-
-    margin: 0;
-
-}
-
-
-/* 리포트 제목 + 이동 버튼 */
-
-.report-title {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-}
-
-
-.report-title h2 {
-
-    margin: 0;
-
-}
-
-
-/* 리포트 이동 버튼 공통 */
-
-.report-link {
-
-    display: inline-block;
-
-    text-decoration: none;
-
-    padding: 8px 14px;
-
-    border-radius: 12px;
-
-    color: #333;
-
-    font-size: 14px;
-
-    font-weight: bold;
-
-    box-shadow: 0 2px 5px rgba(0, 0, 0, .15);
-
-    transition: 0.2s;
-
-}
-
-
-/* 운동 기록 보기 */
-
-.running-link {
-
-    background: #cfefff;
-
-}
-
-
-/* 행동 게시판 */
-
-.behavior-link {
-
-    background: #d8f5d8;
-
-}
-
-
-.report-link:hover {
-
-    transform: translateY(-2px);
-
-    opacity: .85;
-
-}
-
-.weight-link {
-
-    background: #fff3cd;
-
-}
-
-
-.weight-link:hover {
-
-    background: #ffe69c;
-
-}
-
-/* ===== 월간 리포트 행동 미니 달력 ===== */
-
-.behavior-summary {
-
-    text-align: center;
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    margin-bottom: 18px;
-
-}
-
-.mini-calendar {
-
-    display: grid;
-
-    grid-template-columns: repeat(5, 1fr);
-
-    gap: 8px;
-
-}
-
-.mini-header {
-
-    text-align: center;
-
-    font-weight: bold;
-
-    color: #666;
-
-    font-size: 14px;
-
-}
-
-.mini-day {
-
-    width: 18px;
-
-    height: 18px;
-
-    border-radius: 50%;
-
-    margin: 0 auto;
-
-    background: #eee;
-
-}
-
-.mini-good {
-
-    background: #4caf50;
-
-}
-
-.mini-normal {
-
-    background: #ffc107;
-
-}
-
-.mini-hard {
-
-    background: #f44336;
-
-}
-
-.mini-empty {
-
-    background: transparent;
-
-}
-
-.plan-box{
-
-    max-width:700px;
-
-    margin:20px auto;
-
-    padding:10px;
-
-}
-
-
-.plan-image{
-
-    width:100%;
-
-    border-radius:12px;
-
-    display:block;
-
-    border:1px solid #ddd;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-
-}
-
-@media(max-width:600px){
-
-    .menu-container{
-
-        flex-direction:column;
-
-        gap:20px;
-
+    .edit-btn,
+    .delete-btn {
+        padding: 6px 8px;
+        font-size: 11px;
     }
-
-
-    .menu-card{
-
-        width:100%;
-
-    }
-
 }
