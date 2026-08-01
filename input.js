@@ -40,34 +40,45 @@ saveButton.addEventListener("click", async function(){
 
         behavior:"",
 
-        holiday:false
-
     };
 
 
     if(!record.date){
 
-        alert("날짜를 선택하세요.");
+    alert("날짜를 선택하세요.");
 
-        return;
+    return;
 
-    }
+}
 
 
-    // 아무 기록이 없으면 휴강 처리
-    if(
+if(!record.morning){
 
-        !record.morning &&
-        !record.lunch &&
-        !record.afternoon &&
-        !record.running &&
-        !record.weight
+    alert("오전일과를 입력해주세요.");
 
-    ){
+    return;
 
-        record.holiday = true;
+}
 
-    }
+
+if(!record.lunch){
+
+    alert("점심 내용을 입력해주세요.");
+
+    return;
+
+}
+
+
+if(!record.afternoon){
+
+    alert("오후일과를 입력해주세요.");
+
+    return;
+
+}
+
+
 
 
     const docRef =
@@ -95,18 +106,8 @@ if(snapshot.exists()){
     );
 
 
-    if(record.holiday){
+    alert("기록이 저장되었습니다.");
 
-        alert("휴강으로 저장되었습니다.");
-        location.href = "calendar.html";
-
-    }
-
-    else{
-
-        alert("기록이 저장되었습니다.");
-        location.href = "calendar.html";
-
-    }
+location.href = "calendar.html";
 
 });

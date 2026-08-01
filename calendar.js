@@ -363,18 +363,15 @@ function drawCalendar(){
         if(record){
 
 
-    if(record.holiday){
+    if(record.behavior === "holiday"){
 
+    html +=
+    "<div class='holiday-text'>🚫 휴강</div>";
 
-        html +=
-        "<div class='holiday-text'>🚫 휴강</div>";
+    box.classList.add("holiday");
 
-
-        box.classList.add("holiday");
-
-
-    }
-    else{
+}
+else{
 
 
         html +=
