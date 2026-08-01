@@ -703,23 +703,27 @@ button:hover {
         font-size: 18px;
     }
 
+    @media (max-width: 600px) {
+
     .record-row {
-        gap: 6px;
+        gap: 5px;
     }
 
     .record-row input[type="date"] {
-        width: 130px;
-        font-size: 14px;
+        width: 145px;
+        font-size: 13px;
     }
 
     .record-row select {
-        width: 110px;
-        font-size: 14px;
+        width: 95px;
+        font-size: 13px;
     }
 
     .record-row .save {
-        width: 70px;
-        font-size: 14px;
+        width: 65px;
+        font-size: 13px;
     }
+
+}
 
 }
