@@ -1010,3 +1010,22 @@ canvas {
     box-shadow:0 2px 8px rgba(0,0,0,0.1);
 
 }
+
+@media(max-width:600px){
+
+    .menu-container{
+
+        flex-direction:column;
+
+        gap:20px;
+
+    }
+
+
+    .menu-card{
+
+        width:100%;
+
+    }
+
+}
