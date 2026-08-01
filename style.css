@@ -650,4 +650,8 @@ button:hover {
         padding: 6px 8px;
         font-size: 11px;
     }
+
+    .behavior-buttons {
+        flex-direction: column;
+    }
 }
