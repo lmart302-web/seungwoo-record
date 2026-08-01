@@ -546,7 +546,7 @@ button:hover {
 
     .menu-card {
 
-    width: 100%;
+    width: 85%;
 
     height: 70px;
 
@@ -561,6 +561,8 @@ button:hover {
     font-weight: bold;
 
     padding: 0 20px;
+
+    margin: 0 auto;
 
 }
 
