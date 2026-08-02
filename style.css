@@ -713,17 +713,17 @@ button:hover {
 
         .record-row input[type="date"] {
             flex: none;
-            width: 146px;
+            width: 144px;
             font-size: 17px;
         }
 
         .record-row select {
-            width: 87px;
+            width: 88px;
             font-size: 15px;
         }
 
         .record-row .save {
-            width: 87px;
+            width: 88px;
             font-size: 15px;
         }
 
