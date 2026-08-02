@@ -711,12 +711,12 @@ button:hover {
     }
 
     .record-row input[type="date"] {
-        width: 145px;
-        font-size: 13px;
+        width: 160px;
+        font-size: 15px;
     }
 
     .record-row select {
-        width: 95px;
+        width: 80px;
         font-size: 13px;
     }
 
