@@ -707,25 +707,26 @@ button:hover {
 
     @media (max-width: 600px) {
 
-    .record-row {
-        gap: 5px;
-    }
+        .record-row {
+            gap: 5px;
+        }
 
-    .record-row input[type="date"] {
-        width: 180px;
-        font-size: 15px;
-    }
+        .record-row input[type="date"] {
+            flex: none;
+            width: 180px;
+            font-size: 15px;
+        }
 
-    .record-row select {
-        width: 60px;
-        font-size: 13px;
-    }
+        .record-row select {
+            width: 60px;
+            font-size: 13px;
+        }
 
-    .record-row .save {
-        width: 65px;
-        font-size: 13px;
-    }
+        .record-row .save {
+            width: 65px;
+            font-size: 13px;
+        }
 
-}
+    }
 
 }
