@@ -527,6 +527,7 @@ button:hover {
 .record-row input[type="date"] {
     flex: 1;
     min-width: 0;
+    font-size: 20px;
 }
 
 .record-row select {
@@ -711,12 +712,12 @@ button:hover {
     }
 
     .record-row input[type="date"] {
-        width: 160px;
+        width: 180px;
         font-size: 15px;
     }
 
     .record-row select {
-        width: 80px;
+        width: 60px;
         font-size: 13px;
     }
 
