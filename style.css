@@ -630,8 +630,8 @@ button:hover {
 
 
     .calendar-day div:first-of-type {
-        height: 28px;
-        /* 오전 유지 */
+        height: 42px;
+        /* 오전 3줄 */
         white-space: pre-line;
         overflow: hidden;
     }
