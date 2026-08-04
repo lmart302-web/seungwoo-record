@@ -151,13 +151,21 @@ currentPage + " / " + totalPage;
 
     let levelText = "";
 
-    if(record.level==="warning"){
+if(record.level === "warning" || record.level === "normal"){
 
-    levelText="🟡";
+    levelText = "🟡";
 
-}else{
+}
 
-    levelText="🔴";
+else if(record.level === "hard"){
+
+    levelText = "🔴";
+
+}
+
+else if(record.level === "other"){
+
+    levelText = "🔵";
 
 }
 

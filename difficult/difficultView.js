@@ -9,7 +9,7 @@ import {
     doc,
     getDoc
 }
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 
@@ -21,24 +21,24 @@ const db = getFirestore(app);
 
 const params =
 
-new URLSearchParams(location.search);
+    new URLSearchParams(location.search);
 
 
 
 const id =
 
-params.get("id");
+    params.get("id");
 
 
 
 
 
-if(!id){
+if (!id) {
 
 
     alert("기록 정보를 찾을 수 없습니다.");
 
-    location.href="difficult.html";
+    location.href = "difficult.html";
 
 
 }
@@ -48,31 +48,31 @@ if(!id){
 
 
 
-async function loadRecord(){
+async function loadRecord() {
 
 
 
     const docRef =
 
-    doc(db,"difficultBehaviors",id);
+        doc(db, "difficultBehaviors", id);
 
 
 
 
     const snapshot =
 
-    await getDoc(docRef);
+        await getDoc(docRef);
 
 
 
 
 
-    if(!snapshot.exists()){
+    if (!snapshot.exists()) {
 
 
         alert("기록이 없습니다.");
 
-        location.href="difficult.html";
+        location.href = "difficult.html";
 
         return;
 
@@ -86,7 +86,7 @@ async function loadRecord(){
 
     const record =
 
-    snapshot.data();
+        snapshot.data();
 
 
 
@@ -94,34 +94,35 @@ async function loadRecord(){
 
 
 
-   const date = new Date(record.date);
+    const date = new Date(record.date);
 
-const week = ["일", "월", "화", "수", "목", "금", "토"];
+    const week = ["일", "월", "화", "수", "목", "금", "토"];
 
-document.getElementById("viewDate").innerText =
-    record.date + " (" + week[date.getDay()] + ")";
-
-
+    document.getElementById("viewDate").innerText =
+        record.date + " (" + week[date.getDay()] + ")";
 
 
 
 
-    if(record.level === "hard"){
 
+
+    if (record.level === "hard") {
 
         document.getElementById("viewLevel").innerText =
-
-        "🔴 어려움";
-
+            "🔴 어려운 행동";
 
     }
-    else{
-
+    else if (record.level === "other") {
 
         document.getElementById("viewLevel").innerText =
+            "🔵 기타";
 
-        "🟡 보통";
+    }
+    else {
 
+        // 기존 warning 데이터와 새 normal 데이터 모두 보통으로 표시
+        document.getElementById("viewLevel").innerText =
+            "🟡 보통";
 
     }
 
@@ -132,7 +133,7 @@ document.getElementById("viewDate").innerText =
 
     document.getElementById("viewContent").innerText =
 
-    record.content;
+        record.content;
 
 
 

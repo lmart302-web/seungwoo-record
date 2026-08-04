@@ -10,7 +10,7 @@ import {
     getDoc,
     updateDoc
 }
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 
@@ -22,19 +22,19 @@ const db = getFirestore(app);
 
 const params =
 
-new URLSearchParams(location.search);
+    new URLSearchParams(location.search);
 
 
 
 const id =
 
-params.get("id");
+    params.get("id");
 
 
 
 
 
-let selectedLevel = "warning";
+let selectedLevel = "normal";
 
 
 
@@ -42,29 +42,29 @@ let selectedLevel = "warning";
 
 const buttons =
 
-document.querySelectorAll(".behavior-btn");
+    document.querySelectorAll(".behavior-btn");
 
 
 
 
 
 
-buttons.forEach(function(button){
+buttons.forEach(function (button) {
 
 
-    button.addEventListener("click",function(){
+    button.addEventListener("click", function () {
 
 
 
         selectedLevel =
 
-        button.dataset.value;
+            button.dataset.value;
 
 
 
 
 
-        buttons.forEach(function(btn){
+        buttons.forEach(function (btn) {
 
 
             btn.classList.remove("selected");
@@ -92,13 +92,13 @@ buttons.forEach(function(button){
 
 
 
-async function loadRecord(){
+async function loadRecord() {
 
 
 
     const docRef =
 
-    doc(db,"difficultBehaviors",id);
+        doc(db, "difficultBehaviors", id);
 
 
 
@@ -106,19 +106,19 @@ async function loadRecord(){
 
     const snapshot =
 
-    await getDoc(docRef);
+        await getDoc(docRef);
 
 
 
 
 
 
-    if(!snapshot.exists()){
+    if (!snapshot.exists()) {
 
 
         alert("기록이 없습니다.");
 
-        location.href="difficult.html";
+        location.href = "difficult.html";
 
         return;
 
@@ -132,7 +132,7 @@ async function loadRecord(){
 
     const record =
 
-    snapshot.data();
+        snapshot.data();
 
 
 
@@ -141,7 +141,7 @@ async function loadRecord(){
 
     document.getElementById("recordDate").value =
 
-    record.date;
+        record.date;
 
 
 
@@ -149,7 +149,7 @@ async function loadRecord(){
 
     document.getElementById("content").value =
 
-    record.content;
+        record.content;
 
 
 
@@ -157,17 +157,23 @@ async function loadRecord(){
 
 
 
-    selectedLevel =
+    if (record.level === "warning") {
 
-    record.level || "warning";
+        selectedLevel = "normal";
+
+    }
+    else {
+
+        selectedLevel = record.level || "normal";
+
+    }
 
 
 
 
 
 
-
-    buttons.forEach(function(button){
+    buttons.forEach(function (button) {
 
 
 
@@ -175,7 +181,7 @@ async function loadRecord(){
 
 
 
-        if(button.dataset.value === selectedLevel){
+        if (button.dataset.value === selectedLevel) {
 
 
             button.classList.add("selected");
@@ -210,14 +216,14 @@ loadRecord();
 
 const updateButton =
 
-document.getElementById("updateButton");
+    document.getElementById("updateButton");
 
 
 
 
 
 
-updateButton.addEventListener("click",async function(){
+updateButton.addEventListener("click", async function () {
 
 
 
@@ -225,7 +231,7 @@ updateButton.addEventListener("click",async function(){
 
     const date =
 
-    document.getElementById("recordDate").value;
+        document.getElementById("recordDate").value;
 
 
 
@@ -233,7 +239,7 @@ updateButton.addEventListener("click",async function(){
 
     const content =
 
-    document.getElementById("content").value.trim();
+        document.getElementById("content").value.trim();
 
 
 
@@ -241,7 +247,7 @@ updateButton.addEventListener("click",async function(){
 
 
 
-    if(!date){
+    if (!date) {
 
 
         alert("날짜를 선택하세요.");
@@ -256,7 +262,7 @@ updateButton.addEventListener("click",async function(){
 
 
 
-    if(!content){
+    if (!content) {
 
 
         alert("내용을 입력하세요.");
@@ -273,18 +279,18 @@ updateButton.addEventListener("click",async function(){
 
     await updateDoc(
 
-        doc(db,"difficultBehaviors",id),
+        doc(db, "difficultBehaviors", id),
 
         {
 
 
-            date:date,
+            date: date,
 
 
-            level:selectedLevel,
+            level: selectedLevel,
 
 
-            content:content
+            content: content
 
 
         }
@@ -302,7 +308,7 @@ updateButton.addEventListener("click",async function(){
 
 
 
-    location.href="difficult.html";
+    location.href = "difficult.html";
 
 
 

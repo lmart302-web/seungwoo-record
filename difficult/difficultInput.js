@@ -19,7 +19,7 @@ const db = getFirestore(app);
 
 
 
-let selectedLevel = "warning";
+let selectedLevel = "normal";
 
 
 
