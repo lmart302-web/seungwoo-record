@@ -182,7 +182,7 @@ button:hover {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 12px;
-    min-height: 170px;
+    min-height: 150px;
     padding: 8px;
     font-size: 11px;
     line-height: 1.4;
@@ -204,13 +204,15 @@ button:hover {
 }
 
 .calendar-day div:first-of-type {
-    height: 32px;   /* 오전 2줄 */
+    height: 32px;
+    /* 오전 2줄 */
     white-space: pre-line;
     overflow: hidden;
 }
 
 .calendar-day div:nth-of-type(3) {
-    height: 48px;   /* 오후 3줄 */
+    height: 32px;
+    /* 오후 3줄 */
     white-space: pre-line;
     overflow: hidden;
 }
@@ -613,7 +615,7 @@ button:hover {
     }
 
     .calendar-day {
-        min-height: 110px;
+        min-height: 125px;
         font-size: 9px;
         padding: 4px;
     }
@@ -626,9 +628,19 @@ button:hover {
         margin-bottom: 2px;
     }
 
-    .calendar-day div:first-of-type,
-    .calendar-day div:nth-of-type(3) {
+
+    .calendar-day div:first-of-type {
         height: 28px;
+        /* 오전 유지 */
+        white-space: pre-line;
+        overflow: hidden;
+    }
+
+    .calendar-day div:nth-of-type(3) {
+        height: 42px;
+        /* 오후 3줄 */
+        white-space: pre-line;
+        overflow: hidden;
     }
 
     /* Mobile Table */
