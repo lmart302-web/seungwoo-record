@@ -637,8 +637,8 @@ button:hover {
     }
 
     .calendar-day div:nth-of-type(3) {
-        height: 42px;
-        /* 오후 3줄 */
+        height: 28px;
+        /* 오후 2줄 */
         white-space: pre-line;
         overflow: hidden;
     }
