@@ -274,101 +274,63 @@ function drawReport() {
 
 
 
-    // 운동 기록
+   // 운동 기록
+
+let runningTotal = 0;
+
+let runningCount = 0;
+
+let goalCount = 0;
 
 
-    let runningTotal = 0;
+monthRecords.forEach(function (record) {
 
-    let runningCount = 0;
+    if (record.running) {
 
-    let goalCount = 0;
+        const time = Number(record.running);
 
+        runningTotal += time;
 
+        runningCount++;
 
-    monthRecords.forEach(function (record) {
+        if (time >= 20) {
 
-
-
-        if (record.running) {
-
-
-
-            const time = Number(record.running);
-
-
-
-            runningTotal += time;
-
-
-
-            runningCount++;
-
-
-
-
-            if (time >= 20) {
-
-
-                goalCount++;
-
-
-            }
-
-
+            goalCount++;
 
         }
 
-
-
-    });
-
-
-
-
-
-
-
-
-    if (runningCount) {
-
-
-
-        const runningAverage =
-
-            Math.round(runningTotal / runningCount);
-
-
-
-
-
-        const goalRate =
-
-            Math.round((goalCount / runningCount) * 100);
-
-
-
-        document.getElementById("runningSummary").innerText =
-
-
-            "🎯 목표 달성 : " + goalCount + " / " + runningCount + "회 (" + goalRate + "%)\n\n" +
-
-            "평균 운동시간 : " + runningAverage + "분";
-
-
-
     }
 
-    else {
+});
 
 
+if (runningCount) {
 
-        document.getElementById("runningSummary").innerText =
+    const goalRate =
+        Math.round((goalCount / runningCount) * 100);
 
-            "기록 없음";
+    document.getElementById("runningSummary").innerText =
+
+        "🎯 20분 목표 달성 : " +
+        goalCount + " / " +
+        runningCount + "일 (" +
+        goalRate + "%)\n\n" +
+
+        "🏃 총 운동시간 : " +
+        runningTotal + "분";
+
+}
+
+else {
+
+    document.getElementById("runningSummary").innerText =
+
+        "기록 없음";
+
+}
 
 
-
-    }
+    
 
 
 
