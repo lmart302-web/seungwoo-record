@@ -19,7 +19,7 @@ if(auth !== "true"){
 
     }else{
 
-        location.href="../report.html";
+        location.href="../index.html";
 
     }
 
