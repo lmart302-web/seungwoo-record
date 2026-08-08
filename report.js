@@ -316,7 +316,7 @@ if (runningCount) {
         runningCount + "일 (" +
         goalRate + "%)\n\n" +
 
-        "🏃 총 운동시간 : " +
+        "💦 총 운동시간 : " +
         runningTotal + "분";
 
 }
