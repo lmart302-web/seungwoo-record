@@ -148,6 +148,9 @@ function drawWeight() {
 
     weightList.innerHTML = "";
 
+    let maxShown = false;
+let minShown = false;
+
     const maxWeight =
     Math.max(...records
         .filter(function (record) {
@@ -264,16 +267,17 @@ let text =
     "kg";
 
 
-if (Number(record.weight) === maxWeight) {
+if (Number(record.weight) === maxWeight && !maxShown) {
 
     text += " (최고)";
+    maxShown = true;
 
 }
 
-
-if (Number(record.weight) === minWeight) {
+if (Number(record.weight) === minWeight && !minShown) {
 
     text += " (최저)";
+    minShown = true;
 
 }
 
