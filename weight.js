@@ -29,6 +29,7 @@ const weightList =
     document.getElementById("weightList");
 
 
+
 const params = new URLSearchParams(location.search);
 
 const monthParam = params.get("month");
@@ -41,7 +42,49 @@ let currentDate = monthParam
 
 let chart;
 
+const averageLabelPlugin = {
+    id: "averageLabel",
 
+    afterDatasetsDraw: function (chart) {
+
+        const dataset =
+            chart.data.datasets[1];
+
+        if (!dataset || !dataset.data.length) {
+            return;
+        }
+
+        const meta =
+            chart.getDatasetMeta(1);
+
+        const point =
+            meta.data[meta.data.length - 1];
+
+        if (!point) {
+            return;
+        }
+
+        const value =
+            dataset.data[dataset.data.length - 1];
+
+        const ctx =
+            chart.ctx;
+
+        ctx.save();
+
+        ctx.font = "12px sans-serif";
+       ctx.textAlign = "left";
+ctx.textBaseline = "middle";
+
+ctx.fillText(
+    "평균 " + Number(value).toFixed(1) + "kg",
+    chart.chartArea.left + 5,
+    point.y
+);
+
+        ctx.restore();
+    }
+};
 
 
 
@@ -139,58 +182,60 @@ function drawWeight() {
 
     const labels = [];
 
+const weights = [];
 
-    const weights = [];
+weightList.innerHTML = "";
 
-   
-
-
-
-    weightList.innerHTML = "";
-
-    let maxShown = false;
+let maxShown = false;
 let minShown = false;
 
-    const maxWeight =
-    Math.max(...records
-        .filter(function (record) {
 
-            const date = new Date(record.date);
+// 이번 달 체중 기록만 추출
 
-            return (
-                date.getFullYear() === year &&
-                date.getMonth() === month &&
-                record.weight
-            );
+const monthWeights = records.filter(function (record) {
 
-        })
-        .map(function (record) {
-            return Number(record.weight);
-        })
+    const recordDate = new Date(record.date);
+
+    return (
+        recordDate.getFullYear() === year &&
+        recordDate.getMonth() === month &&
+        record.weight
     );
+
+});
+
+
+const weightValues = monthWeights.map(function (record) {
+
+    return Number(record.weight);
+
+});
+
+
+// 평균 / 최고 / 최저
+
+const averageWeight =
+    weightValues.reduce(function (sum, weight) {
+
+        return sum + weight;
+
+    }, 0) / weightValues.length;
+
+
+const maxWeight =
+    Math.max(...weightValues);
 
 
 const minWeight =
-    Math.min(...records
-        .filter(function (record) {
-
-            const date = new Date(record.date);
-
-            return (
-                date.getFullYear() === year &&
-                date.getMonth() === month &&
-                record.weight
-            );
-
-        })
-        .map(function (record) {
-            return Number(record.weight);
-        })
-    );
+    Math.min(...weightValues);
 
 
-const week = ["일", "월", "화", "수", "목", "금", "토"];
 
+
+const week =
+    ["일", "월", "화", "수", "목", "금", "토"];
+
+    
 
 
 
@@ -315,73 +360,54 @@ weightList.appendChild(li);
 
 
 
-    chart = new Chart(ctx, {
-
-
+        chart = new Chart(ctx, {
 
         type: "line",
 
-
-
         data: {
-
-
 
             labels: labels,
 
-
-
             datasets: [
-
-
 
                 {
                     label: "체중(kg)",
                     data: weights,
                     pointRadius: 5
+                },
+
+                {
+                    label: "평균 체중",
+                    data: weights.map(function () {
+
+                        return Number(averageWeight.toFixed(1));
+
+                    }),
+                    borderDash: [5, 5],
+                    pointRadius: 0
                 }
-
-
 
             ]
 
-
-
         },
-
-
 
         options: {
 
-
-
             responsive: true,
-
-
 
             scales: {
 
-
-
                 y: {
-
-
 
                     beginAtZero: false
 
-
-
                 }
-
-
 
             }
 
+        },
 
-
-        }
-
-
+        plugins: [averageLabelPlugin]
 
     });
 
