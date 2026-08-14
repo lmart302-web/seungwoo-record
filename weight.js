@@ -148,6 +148,46 @@ function drawWeight() {
 
     weightList.innerHTML = "";
 
+    const maxWeight =
+    Math.max(...records
+        .filter(function (record) {
+
+            const date = new Date(record.date);
+
+            return (
+                date.getFullYear() === year &&
+                date.getMonth() === month &&
+                record.weight
+            );
+
+        })
+        .map(function (record) {
+            return Number(record.weight);
+        })
+    );
+
+
+const minWeight =
+    Math.min(...records
+        .filter(function (record) {
+
+            const date = new Date(record.date);
+
+            return (
+                date.getFullYear() === year &&
+                date.getMonth() === month &&
+                record.weight
+            );
+
+        })
+        .map(function (record) {
+            return Number(record.weight);
+        })
+    );
+
+
+const week = ["일", "월", "화", "수", "목", "금", "토"];
+
 
 
 
@@ -189,7 +229,6 @@ function drawWeight() {
 
 
 
-            const week = ["일", "월", "화", "수", "목", "금", "토"];
 
 labels.push([
     record.date.substring(8,10),
@@ -213,29 +252,36 @@ labels.push([
 
 
             const li =
-
-                document.createElement("li");
-
+    document.createElement("li");
 
 
+let text =
+    record.date.substring(5, 10) +
+    " (" +
+    week[recordDate.getDay()] +
+    ") : " +
+    record.weight +
+    "kg";
 
 
-            li.innerText =
+if (Number(record.weight) === maxWeight) {
+
+    text += " (최고)";
+
+}
 
 
-                record.date +
+if (Number(record.weight) === minWeight) {
 
-                " : " +
+    text += " (최저)";
 
-                record.weight +
-
-                "kg";
+}
 
 
+li.innerText = text;
 
 
-
-            weightList.appendChild(li);
+weightList.appendChild(li);
 
 
 
