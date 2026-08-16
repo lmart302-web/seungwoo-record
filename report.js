@@ -219,6 +219,14 @@ function drawReport() {
 
         }
 
+ // 평균 체중 계산
+        const averageWeight =
+
+    weightRecords.reduce(function (sum, record) {
+
+        return sum + Number(record.weight);
+
+    }, 0) / weightRecords.length;
 
         // 최고 / 최저 체중 계산
         const maxWeight =
@@ -241,9 +249,11 @@ function drawReport() {
 
         result +=
 
-            "\n\n⬆ 최고 : " + maxWeight + "kg" +
+    "\n\n⬆ 최고 : " + maxWeight + "kg" +
 
-            "\n⬇ 최저 : " + minWeight + "kg";
+    "\n⬇ 최저 : " + minWeight + "kg" +
+
+    "\n📊 평균 : " + averageWeight.toFixed(1) + "kg";
 
 
         document.getElementById("weightSummary").innerText =
