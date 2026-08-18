@@ -308,7 +308,7 @@ let text =
     " (" +
     week[recordDate.getDay()] +
     ") : " +
-    record.weight +
+    Number(record.weight).toFixed(1) +
     "kg";
 
 

@@ -424,11 +424,11 @@ function drawCalendar() {
 
                 html +=
 
-                    "<div class='record-line'>⚖️ " +
+    "<div class='record-line'>⚖️ " +
 
-                    (record.weight ? record.weight + "kg" : "") +
+    (record.weight ? Number(record.weight).toFixed(1) + "kg" : "") +
 
-                    "</div>";
+    "</div>";
 
             }
 
