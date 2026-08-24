@@ -165,7 +165,13 @@ else if(record.level === "hard"){
 
 else if(record.level === "other"){
 
-    levelText = "🔵";
+    levelText = "🥶";
+
+}
+
+else if(record.level === "home"){
+
+    levelText = "🏠";
 
 }
 

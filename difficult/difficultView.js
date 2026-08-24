@@ -108,23 +108,29 @@ async function loadRecord() {
 
     if (record.level === "hard") {
 
-        document.getElementById("viewLevel").innerText =
-            "🔴 어려운 행동";
+    document.getElementById("viewLevel").innerText =
+        "🔴 어려운 행동";
 
-    }
-    else if (record.level === "other") {
+}
+else if (record.level === "other") {
 
-        document.getElementById("viewLevel").innerText =
-            "🔵 기타";
+    document.getElementById("viewLevel").innerText =
+        "🥶 기타";
 
-    }
-    else {
+}
+else if (record.level === "home") {
 
-        // 기존 warning 데이터와 새 normal 데이터 모두 보통으로 표시
-        document.getElementById("viewLevel").innerText =
-            "🟡 보통";
+    document.getElementById("viewLevel").innerText =
+        "🏠 가정";
 
-    }
+}
+else {
+
+    // 기존 warning 데이터와 새 normal 데이터 모두 보통으로 표시
+    document.getElementById("viewLevel").innerText =
+        "🟡 보통";
+
+}
 
 
 
