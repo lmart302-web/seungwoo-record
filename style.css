@@ -821,3 +821,36 @@ button:hover {
     object-fit: cover;
     display: block;
 }
+
+/* =========================
+   PC에서는 클릭하지 않음
+========================= */
+
+.rainbow-link {
+    text-decoration: none;
+    pointer-events: none;
+}
+
+.profile-photo-link {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    pointer-events: none;
+}
+
+
+/* =========================
+   스마트폰에서만 클릭 가능
+========================= */
+
+@media (max-width: 600px) {
+
+    .rainbow-link {
+        pointer-events: auto;
+    }
+
+    .profile-photo-link {
+        pointer-events: auto;
+    }
+
+}
