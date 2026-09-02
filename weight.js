@@ -8,7 +8,7 @@ import {
     collection,
     getDocs
 }
-from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
 const db = getFirestore(app);
@@ -18,6 +18,7 @@ let records = [];
 
 let chart;
 let yearChart;
+let allChart;
 
 
 
@@ -48,6 +49,18 @@ const yearCtx =
 
 const yearWeightList =
     document.getElementById("yearWeightList");
+
+
+
+/* =========================
+   전체 요소
+========================= */
+
+const allCtx =
+    document.getElementById("allWeightChart");
+
+const allWeightList =
+    document.getElementById("allWeightList");
 
 
 
@@ -466,8 +479,6 @@ function drawYearlyWeight() {
     const monthlyAverages = [];
 
 
-    /* 기존 월 평균 기록 삭제 */
-
     yearWeightList.innerHTML = "";
 
 
@@ -631,6 +642,283 @@ function drawYearlyWeight() {
 
 
 /* =========================
+   전체 그래프
+========================= */
+
+function drawAllWeight() {
+
+    allWeightList.innerHTML = "";
+
+
+    /* =========================
+       전체 데이터의 연도 / 월 범위 찾기
+    ========================= */
+
+    const validRecords =
+        records.filter(function (record) {
+
+            return record.weight &&
+                record.date;
+
+        });
+
+
+    if (!validRecords.length) {
+        return;
+    }
+
+
+    const dates =
+        validRecords.map(function (record) {
+
+            return new Date(record.date);
+
+        });
+
+
+    dates.sort(function (a, b) {
+
+        return a - b;
+
+    });
+
+
+    const startYear =
+        dates[0].getFullYear();
+
+    const startMonth =
+        dates[0].getMonth();
+
+
+    const lastDate =
+        dates[dates.length - 1];
+
+    const endYear =
+        lastDate.getFullYear();
+
+    const endMonth =
+        lastDate.getMonth();
+
+
+
+    /* =========================
+       실제 시간 순서대로 월 생성
+    ========================= */
+
+    const labels = [];
+    const monthlyData = [];
+
+    const monthlyRecords = [];
+
+
+    let year = startYear;
+    let month = startMonth;
+
+
+    while (
+        year < endYear ||
+        (
+            year === endYear &&
+            month <= endMonth
+        )
+    ) {
+
+        const monthRecords =
+            validRecords.filter(function (record) {
+
+                const recordDate =
+                    new Date(record.date);
+
+                return (
+                    recordDate.getFullYear() === year &&
+                    recordDate.getMonth() === month
+                );
+
+            });
+
+
+        let average = null;
+
+
+        if (monthRecords.length) {
+
+            const total =
+                monthRecords.reduce(
+                    function (sum, record) {
+
+                        return sum +
+                            Number(record.weight);
+
+                    },
+                    0
+                );
+
+
+            average =
+                Number(
+                    (
+                        total /
+                        monthRecords.length
+                    ).toFixed(1)
+                );
+
+        }
+
+
+        /* 연도가 바뀌는 지점 표시 */
+
+        labels.push(
+
+            String(year).slice(2) +
+            "." +
+            String(month + 1).padStart(2, "0")
+
+        );
+
+
+        monthlyData.push(average);
+
+
+        monthlyRecords.push({
+
+            year: year,
+
+            month: month,
+
+            average: average
+
+        });
+
+
+        month++;
+
+
+        if (month === 12) {
+
+            month = 0;
+            year++;
+
+        }
+
+    }
+
+
+
+    /* =========================
+   전체 기록 목록
+========================= */
+
+    monthlyRecords.forEach(function (item) {
+
+        /* 기록이 없는 달은 표시하지 않음 */
+
+        if (item.average === null) {
+            return;
+        }
+
+
+        const li =
+            document.createElement("li");
+
+
+        li.innerText =
+            String(item.year).slice(2) +
+            "." +
+            String(item.month + 1).padStart(2, "0") +
+            " : " +
+            item.average +
+            "kg";
+
+
+        allWeightList.appendChild(li);
+
+    });
+
+
+
+
+
+    /* =========================
+       기존 그래프 삭제
+    ========================= */
+
+    if (allChart) {
+
+        allChart.destroy();
+
+    }
+
+
+
+    /* =========================
+       전체 그래프
+    ========================= */
+
+    allChart =
+        new Chart(allCtx, {
+
+            type: "line",
+
+            data: {
+
+                labels: labels,
+
+                datasets: [
+
+                    {
+
+                        label: "월 평균 체중",
+
+                        data: monthlyData,
+
+                        pointRadius: 5,
+
+                        pointHoverRadius: 7,
+
+                        spanGaps: true,
+
+                        tension: 0.2
+
+                    }
+
+                ]
+
+            },
+
+
+            options: {
+
+                responsive: true,
+
+
+                interaction: {
+
+                    mode: "index",
+
+                    intersect: false
+
+                },
+
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: false
+
+                    }
+
+                }
+
+            }
+
+        });
+
+}
+
+
+
+/* =========================
    월간 버튼
 ========================= */
 
@@ -651,12 +939,22 @@ document
 
 
             document
+                .getElementById("allView")
+                .style.display = "none";
+
+
+            document
                 .getElementById("monthlyBtn")
                 .classList.add("active");
 
 
             document
                 .getElementById("yearlyBtn")
+                .classList.remove("active");
+
+
+            document
+                .getElementById("allBtn")
                 .classList.remove("active");
 
         }
@@ -685,6 +983,11 @@ document
 
 
             document
+                .getElementById("allView")
+                .style.display = "none";
+
+
+            document
                 .getElementById("yearlyBtn")
                 .classList.add("active");
 
@@ -694,7 +997,59 @@ document
                 .classList.remove("active");
 
 
+            document
+                .getElementById("allBtn")
+                .classList.remove("active");
+
+
             drawYearlyWeight();
+
+        }
+    );
+
+
+
+/* =========================
+   전체 버튼
+========================= */
+
+document
+    .getElementById("allBtn")
+    .addEventListener(
+        "click",
+        function () {
+
+            document
+                .getElementById("monthlyView")
+                .style.display = "none";
+
+
+            document
+                .getElementById("yearlyView")
+                .style.display = "none";
+
+
+            document
+                .getElementById("allView")
+                .style.display = "block";
+
+
+            document
+                .getElementById("allBtn")
+                .classList.add("active");
+
+
+            document
+                .getElementById("monthlyBtn")
+                .classList.remove("active");
+
+
+            document
+                .getElementById("yearlyBtn")
+                .classList.remove("active");
+
+
+            drawAllWeight();
 
         }
     );
