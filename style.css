@@ -760,4 +760,45 @@ button:hover {
 
 }
 
+/* 체중 월간 / 연간 탭 */
+
+.view-tabs {
+    display: flex;
+    justify-content: center;
+    margin: 15px auto 20px;
+}
+
+.view-tab {
+    width: 110px;
+    height: 42px;
+
+    border: 1px solid #ddd;
+    background: #fff;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.view-tab:first-child {
+    border-radius: 9px 0 0 9px;
+}
+
+.view-tab:last-child {
+    border-radius: 0 9px 9px 0;
+}
+
+.view-tab.active {
+    background: #f1f1f1;
+    border-color: #bbb;
+    font-weight: bold;
+}
+
+.view-tab:active {
+    transform: scale(0.97);
+}
+
 

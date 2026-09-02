@@ -634,6 +634,16 @@ document
                 .style.display = "none";
 
 
+            document
+                .getElementById("monthlyBtn")
+                .classList.add("active");
+
+
+            document
+                .getElementById("yearlyBtn")
+                .classList.remove("active");
+
+
         }
     );
 
@@ -658,6 +668,16 @@ document
             document
                 .getElementById("yearlyView")
                 .style.display = "block";
+
+
+            document
+                .getElementById("yearlyBtn")
+                .classList.add("active");
+
+
+            document
+                .getElementById("monthlyBtn")
+                .classList.remove("active");
 
 
             drawYearlyWeight();
