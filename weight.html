@@ -11,9 +11,7 @@
 
 <link rel="stylesheet" href="style.css">
 
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
 </head>
 
@@ -37,37 +35,97 @@
 
 
 
+<!-- 월간 / 연간 선택 -->
 
 <div class="section">
 
     <div class="calendar-header">
-        <button id="prevMonth">
-            ◀ 이전
+
+        <button id="monthlyBtn">
+            📅 월간
         </button>
 
-        <h2 id="monthTitle"></h2>
-
-        <button id="nextMonth">
-            다음 ▶
+        <button id="yearlyBtn">
+            📊 연간
         </button>
+
     </div>
 
-    <canvas id="weightChart"></canvas>
+</div>
+
+
+
+<!-- 월간 -->
+
+<div id="monthlyView">
+
+
+    <div class="section">
+
+        <div class="calendar-header">
+
+            <button id="prevMonth">
+                ◀ 이전
+            </button>
+
+            <h2 id="monthTitle"></h2>
+
+            <button id="nextMonth">
+                다음 ▶
+            </button>
+
+        </div>
+
+
+        <canvas id="weightChart"></canvas>
+
+
+    </div>
+
+
+
+    <div class="section">
+
+        <h2>📋 체중 기록</h2>
+
+        <ul id="weightList"></ul>
+
+    </div>
 
 
 </div>
 
 
-<div class="section">
 
-    <h2>📋 체중 기록</h2>
+<!-- 연간 -->
 
-    <ul id="weightList"></ul>
+<div id="yearlyView" style="display:none;">
+
+
+    <div class="section">
+
+        <div class="calendar-header">
+
+            <button id="prevYear">
+                ◀ 이전
+            </button>
+
+            <h2 id="yearTitle"></h2>
+
+            <button id="nextYear">
+                다음 ▶
+            </button>
+
+        </div>
+
+
+        <canvas id="yearWeightChart"></canvas>
+
+
+    </div>
+
 
 </div>
-
-
-
 
 
 
