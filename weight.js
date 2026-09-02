@@ -603,7 +603,7 @@ function drawYearlyWeight() {
 
                     {
 
-                        label: "월평균 체중",
+                        label: "월 평균 체중",
 
                         data: monthlyAverages,
 
