@@ -46,6 +46,9 @@ const yearTitle =
 const yearCtx =
     document.getElementById("yearWeightChart");
 
+const yearWeightList =
+    document.getElementById("yearWeightList");
+
 
 
 /* =========================
@@ -137,7 +140,6 @@ const averageLabelPlugin = {
 
 async function loadRecords() {
 
-
     const snapshot =
         await getDocs(
             collection(db, "records")
@@ -157,7 +159,7 @@ async function loadRecords() {
     records.sort(function (a, b) {
 
         return new Date(a.date) -
-               new Date(b.date);
+            new Date(b.date);
 
     });
 
@@ -174,11 +176,10 @@ async function loadRecords() {
 
 function drawWeight() {
 
-
     records.sort(function (a, b) {
 
         return new Date(a.date) -
-               new Date(b.date);
+            new Date(b.date);
 
     });
 
@@ -196,7 +197,6 @@ function drawWeight() {
         "년 " +
         (month + 1) +
         "월";
-
 
 
     const labels = [];
@@ -251,7 +251,6 @@ function drawWeight() {
 
     if (weightValues.length > 0) {
 
-
         averageWeight =
             weightValues.reduce(
                 function (sum, weight) {
@@ -282,7 +281,6 @@ function drawWeight() {
     /* 체중 기록 */
 
     monthWeights.forEach(function (record) {
-
 
         const recordDate =
             new Date(record.date);
@@ -368,11 +366,9 @@ function drawWeight() {
 
             type: "line",
 
-
             data: {
 
                 labels: labels,
-
 
                 datasets: [
 
@@ -416,7 +412,6 @@ function drawWeight() {
 
                 responsive: true,
 
-
                 scales: {
 
                     y: {
@@ -446,10 +441,8 @@ function drawWeight() {
 
 function drawYearlyWeight() {
 
-
     yearTitle.innerText =
         currentYear + "년";
-
 
 
     const labels = [
@@ -470,8 +463,12 @@ function drawYearlyWeight() {
     ];
 
 
-
     const monthlyAverages = [];
+
+
+    /* 기존 월 평균 기록 삭제 */
+
+    yearWeightList.innerHTML = "";
 
 
 
@@ -482,7 +479,6 @@ function drawYearlyWeight() {
         month < 12;
         month++
     ) {
-
 
         const monthWeights =
             records.filter(function (record) {
@@ -499,10 +495,10 @@ function drawYearlyWeight() {
                 return (
 
                     recordDate.getFullYear() ===
-                        currentYear &&
+                    currentYear &&
 
                     recordDate.getMonth() ===
-                        month
+                    month
 
                 );
 
@@ -540,9 +536,30 @@ function drawYearlyWeight() {
             total / monthWeights.length;
 
 
+        const averageValue =
+            Number(average.toFixed(1));
+
+
         monthlyAverages.push(
-            Number(average.toFixed(1))
+            averageValue
         );
+
+
+
+        /* 월 평균 기록 표시 */
+
+        const li =
+            document.createElement("li");
+
+
+        li.innerText =
+            (month + 1) +
+            "월 : " +
+            averageValue.toFixed(1) +
+            "kg";
+
+
+        yearWeightList.appendChild(li);
 
     }
 
@@ -623,7 +640,6 @@ document
         "click",
         function () {
 
-
             document
                 .getElementById("monthlyView")
                 .style.display = "block";
@@ -643,7 +659,6 @@ document
                 .getElementById("yearlyBtn")
                 .classList.remove("active");
 
-
         }
     );
 
@@ -658,7 +673,6 @@ document
     .addEventListener(
         "click",
         function () {
-
 
             document
                 .getElementById("monthlyView")
@@ -682,7 +696,6 @@ document
 
             drawYearlyWeight();
 
-
         }
     );
 
@@ -697,7 +710,6 @@ document
     .addEventListener(
         "click",
         function () {
-
 
             currentDate.setMonth(
                 currentDate.getMonth() - 1
@@ -721,7 +733,6 @@ document
         "click",
         function () {
 
-
             currentDate.setMonth(
                 currentDate.getMonth() + 1
             );
@@ -744,7 +755,6 @@ document
         "click",
         function () {
 
-
             currentYear--;
 
             drawYearlyWeight();
@@ -763,7 +773,6 @@ document
     .addEventListener(
         "click",
         function () {
-
 
             currentYear++;
 
