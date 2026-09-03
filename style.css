@@ -890,11 +890,3 @@ html, body {
   list-style: none;
 }
 
-/* 스마트폰 화면에서만 그래프 높이를 더 크게 고정 */
-@media (max-width: 600px) {
-    #weightChart,
-    #yearWeightChart,
-    #allWeightChart {
-        height: 280px !important; /* 원하시는 높이로 숫자를 조절하세요 (예: 300px, 320px) */
-    }
-}
