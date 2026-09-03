@@ -3,9 +3,6 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 
 const db = getFirestore(app);
 
-// 모바일 환경 체크 (화면 너비 600px 이하)
-const isMobile = window.innerWidth <= 600;
-
 // 상태 변수
 let records = [];
 let chart = null;
@@ -80,7 +77,7 @@ const averageLabelPlugin = {
     const { ctx, chartArea } = chart;
 
     ctx.save();
-    ctx.font = `${isMobile ? 11 : 12}px sans-serif`;
+    ctx.font = "12px sans-serif";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillText(`평균 ${Number(value).toFixed(1)}kg`, chartArea.left + 5, point.y);
@@ -176,28 +173,17 @@ function drawWeight() {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: !isMobile, // PC에서는 비율 유지(원래 형태), 모바일에서만 비율 해제
-      aspectRatio: 1.8,               // PC에서 사용할 원래 비율
+      maintainAspectRatio: true, // PC 비율 유지
+      aspectRatio: 1.8,
       animation: ANIMATION_CONFIG,
-      plugins: {
-        legend: {
-          labels: {
-            font: { size: isMobile ? 12 : 14 }
-          }
-        }
-      },
       scales: {
         x: {
-          ticks: {
-            font: { size: isMobile ? 11 : 13 }
-          }
+          ticks: { font: { size: 11 } } // 모바일 기준 폰트 고정
         },
         y: {
           beginAtZero: false,
           grace: '10%',
-          ticks: {
-            font: { size: isMobile ? 11 : 13 }
-          }
+          ticks: { font: { size: 11 } }
         }
       }
     },
@@ -253,28 +239,17 @@ function drawYearlyWeight() {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: !isMobile,
+      maintainAspectRatio: true,
       aspectRatio: 1.8,
       animation: ANIMATION_CONFIG,
-      plugins: {
-        legend: {
-          labels: {
-            font: { size: isMobile ? 12 : 14 }
-          }
-        }
-      },
       scales: {
         x: {
-          ticks: {
-            font: { size: isMobile ? 11 : 13 }
-          }
+          ticks: { font: { size: 11 } }
         },
         y: {
           beginAtZero: false,
           grace: '10%',
-          ticks: {
-            font: { size: isMobile ? 11 : 13 }
-          }
+          ticks: { font: { size: 11 } }
         }
       }
     }
@@ -356,29 +331,18 @@ function drawAllWeight() {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: !isMobile,
+      maintainAspectRatio: true,
       aspectRatio: 1.8,
       animation: ANIMATION_CONFIG,
       interaction: { mode: "index", intersect: false },
-      plugins: {
-        legend: {
-          labels: {
-            font: { size: isMobile ? 12 : 14 }
-          }
-        }
-      },
       scales: {
         x: {
-          ticks: {
-            font: { size: isMobile ? 11 : 13 }
-          }
+          ticks: { font: { size: 11 } }
         },
         y: {
           beginAtZero: false,
           grace: '10%',
-          ticks: {
-            font: { size: isMobile ? 11 : 13 }
-          }
+          ticks: { font: { size: 11 } }
         }
       }
     }
