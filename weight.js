@@ -44,7 +44,7 @@ const COMMON_CHART_OPTIONS = {
   layout: {
     padding: {
       left: 0,
-      right: 5, // ★ 기존 20에서 5로 줄여서 그래프를 우측으로 시원하게 확장 (0도 가능)
+      right: 5,
       top: 10,
       bottom: 0
     }
@@ -137,7 +137,7 @@ async function loadRecords() {
 }
 
 /* =========================
-   월간 그래프 & 리스트
+   월간 그래프 & 리스트 (수정)
 ========================= */
 function drawWeight() {
   const year = currentDate.getFullYear();
@@ -172,19 +172,25 @@ function drawWeight() {
     labels.push([record.date.substring(8, 10), dayOfWeek]);
     weights.push(numWeight);
 
-    let text = `${record.date.substring(5, 10)} (${dayOfWeek}) : ${numWeight.toFixed(1)}kg`;
-
+    let badgeText = "";
     if (numWeight === maxWeight && !maxShown) {
-      text += " (최고)";
+      badgeText = " (최고)";
       maxShown = true;
-    }
-    if (numWeight === minWeight && !minShown) {
-      text += " (최저)";
+    } else if (numWeight === minWeight && !minShown) {
+      badgeText = " (최저)";
       minShown = true;
     }
 
+    const formattedDate = `${record.date.substring(5, 10)} (${dayOfWeek})`;
+
     const li = document.createElement("li");
-    li.innerText = text;
+    // record-value에는 수치와 kg만 넣고, badge는 별도 스팬으로 분리
+    li.innerHTML = `
+      <span class="record-date">${formattedDate}</span>
+      <span class="record-colon">:</span>
+      <span class="record-value">${numWeight.toFixed(1)}kg</span>
+      <span class="record-badge">${badgeText}</span>
+    `;
     elements.weightList.appendChild(li);
   });
 
@@ -240,7 +246,11 @@ function drawYearlyWeight() {
     monthlyAverages.push(averageValue);
 
     const li = document.createElement("li");
-    li.innerText = `${month + 1}월 : ${averageValue.toFixed(1)}kg`;
+    li.innerHTML = `
+      <span class="record-date">${month + 1}월</span>
+      <span class="record-colon">:</span>
+      <span class="record-value">${averageValue.toFixed(1)}kg</span>
+    `;
     elements.yearWeightList.appendChild(li);
   }
 
@@ -264,10 +274,7 @@ function drawYearlyWeight() {
 }
 
 /* =========================
-   전체 그래프 & 리스트 (원복 깔끔 정리)
-========================= */
-/* =========================
-   전체 그래프 & 리스트 (2줄 라벨 표기)
+   전체 그래프 & 리스트 (연도별 그룹 구분)
 ========================= */
 function drawAllWeight() {
   elements.allWeightList.innerHTML = "";
@@ -288,6 +295,7 @@ function drawAllWeight() {
 
   let year = startYear;
   let month = startMonth;
+  let currentYearTracker = null;
 
   while (year < endYear || (year === endYear && month <= endMonth)) {
     const monthRecords = validRecords.filter((record) => {
@@ -301,11 +309,15 @@ function drawAllWeight() {
       average = Number((total / monthRecords.length).toFixed(1));
     }
 
-    // ★ 월간 차트처럼 [윗줄(월), 아랫줄(연도)] 2줄 배열 구조로 생성
     const monthStr = `${month + 1}월`;
-    const yearStr = `${String(year).slice(2)}년`;
+    
+    let yearStr = "";
+    if (currentYearTracker !== year) {
+      yearStr = `${String(year).slice(2)}년`;
+      currentYearTracker = year;
+    }
 
-    labels.push([monthStr, yearStr]); // Chart.js에서 자동으로 2줄 표기됨
+    labels.push([monthStr, yearStr]);
     monthlyData.push(average);
     monthlyRecords.push({ year, month, average });
 
@@ -316,13 +328,28 @@ function drawAllWeight() {
     }
   }
 
+  // ★ 하단 리스트 생성 (연도별 그룹 타이틀 구조 적용)
+  let listYearTracker = null;
+
   monthlyRecords.forEach((item) => {
     if (item.average === null) return;
 
+    // 연도가 바뀌면 연도 타이틀(헤더) 행 추가
+    if (listYearTracker !== item.year) {
+      listYearTracker = item.year;
+      const yearHeader = document.createElement("li");
+      yearHeader.className = "record-year-header";
+      yearHeader.innerText = `${item.year}년`;
+      elements.allWeightList.appendChild(yearHeader);
+    }
+
+    // 연간 기록처럼 "10월 : 68.5kg" 형식으로 생성
     const li = document.createElement("li");
-    // 기존: 25.10 -> 변경: 25년 10월
-    const formattedDate = `${String(item.year).slice(2)}년 ${item.month + 1}월`;
-    li.innerText = `${formattedDate} : ${item.average}kg`;
+    li.innerHTML = `
+      <span class="record-date">${item.month + 1}월</span>
+      <span class="record-colon">:</span>
+      <span class="record-value">${item.average.toFixed(1)}kg</span>
+    `;
     elements.allWeightList.appendChild(li);
   });
 

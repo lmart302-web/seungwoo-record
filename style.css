@@ -819,3 +819,66 @@ html, body {
   text-size-adjust: 100%;
 }
 
+/* 연간/전체 체중 기록 (3열 Grid) */
+#yearWeightList li,
+#allWeightList li {
+  display: grid;
+  grid-template-columns: 60px 15px 70px;
+  justify-content: start;
+  align-items: center;
+  padding: 6px 0;
+}
+
+/* 월간 체중 기록 (4열 Grid - 최고/최저 뱃지 전용 열 추가) */
+#weightList li {
+  display: grid;
+  /* [날짜 100px] [콜론 15px] [체중 65px] [뱃지 auto] */
+  grid-template-columns: 100px 15px 65px auto;
+  justify-content: start;
+  align-items: center;
+  padding: 6px 0;
+}
+
+/* 1열: 날짜 */
+#weightList .record-date,
+#yearWeightList .record-date,
+#allWeightList .record-date {
+  text-align: right;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 2열: 콜론 */
+#weightList .record-colon,
+#yearWeightList .record-colon,
+#allWeightList .record-colon {
+  text-align: center;
+  color: #888;
+}
+
+/* 3열: 체중 (kg 기준으로 오하열 일직선 고정) */
+#weightList .record-value,
+#yearWeightList .record-value,
+#allWeightList .record-value {
+  text-align: right;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: #2b6cb0;
+}
+
+/* 4열: 최고/최저 뱃지 스타일 */
+#weightList .record-badge {
+  padding-left: 4px;
+  font-size: 0.85em;
+  font-weight: normal;
+  color: #e53e3e; /* 강조용 레드 계열 (원하는 색상으로 변경 가능) */
+  white-space: nowrap;
+}
+
+/* 리스트 컨테이너 기본 여백 제거 */
+#weightList, 
+#yearWeightList, 
+#allWeightList {
+  padding-left: 0;
+  list-style: none;
+}
