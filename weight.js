@@ -44,23 +44,34 @@ const COMMON_CHART_OPTIONS = {
   maintainAspectRatio: true,
   aspectRatio: 1.8,
   animation: ANIMATION_CONFIG,
+  layout: {
+    padding: {
+      left: 0,   // 왼쪽 여백 삭제 (축에 딱 붙게)
+      right: 15, // 오른쪽 글자 잘림 방지용 최소 여백만 유지
+      top: 0,
+      bottom: 0
+    }
+  },
   scales: {
     x: {
+      bounds: 'ticks',
+      offset: false, // 양쪽 쓸데없는 양옆 공백 제거
       ticks: {
-        font: { size: 10 }, // 스마트폰 화면 기준 폰트 크기 강제 고정
-        maxRotation: 0,     // 글자 회전 방지
-        autoSkip: true      // 글자 겹침 방지
+        font: { size: 10 },
+        maxRotation: 0,
+        autoSkip: true
       }
     },
     y: {
       beginAtZero: false,
       grace: '10%',
       ticks: {
-        font: { size: 10 }  // Y축 폰트 크기 강제 고정
+        font: { size: 10 }
       }
     }
   }
 };
+     
 
 // DOM 요소 참조
 const elements = {
@@ -330,9 +341,7 @@ function drawAllWeight() {
     },
     options: {
       ...COMMON_CHART_OPTIONS,
-      interaction: { mode: "index", intersect: false },
-      // ★ 바깥쪽 격자와 점이 잘리지 않도록 영역 제한 해제
-      clip: false
+      interaction: { mode: "index", intersect: false }
     }
   });
 }
