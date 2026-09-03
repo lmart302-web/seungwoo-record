@@ -11,50 +11,46 @@ let allChart = null;
 
 const WEEK_DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-// PC에서도 확실히 인지할 수 있는 애니메이션 설정 (0.8초 동안 아래에서 위로/좌에서 우로 차례로 등장)
-// 애니메이션 설정: 왼쪽에서 오른쪽으로 선이 그려지면서 데이터 포인트가 등장
+// 애니메이션 옵션
 const ANIMATION_CONFIG = {
   x: {
     type: 'number',
     easing: 'linear',
-    duration: 1500, // 전체 선이 그려지는 시간 (1.5초)
-    from: NaN, // 시작 지점
+    duration: 2000,
+    from: NaN,
     delay(ctx) {
       if (ctx.type !== 'data' || ctx.xStarted) {
         return 0;
       }
       ctx.xStarted = true;
-      // 인덱스에 따라 약간의 딜레이를 주어 순차적으로 그려지도록 설정
-      return ctx.index * 150; 
+      return ctx.index * 120;
     }
   },
   y: {
     type: 'number',
     easing: 'easeOutQuart',
-    duration: 800
+    duration: 1200
   }
 };
+
 // DOM 요소 참조
 const elements = {
-    // 월간
-    monthTitle: document.getElementById("monthTitle"),
-    monthCtx: document.getElementById("weightChart"),
-    weightList: document.getElementById("weightList"),
-    monthlyView: document.getElementById("monthlyView"),
-    monthlyBtn: document.getElementById("monthlyBtn"),
+  monthTitle: document.getElementById("monthTitle"),
+  monthCtx: document.getElementById("weightChart"),
+  weightList: document.getElementById("weightList"),
+  monthlyView: document.getElementById("monthlyView"),
+  monthlyBtn: document.getElementById("monthlyBtn"),
+  
+  yearTitle: document.getElementById("yearTitle"),
+  yearCtx: document.getElementById("yearWeightChart"),
+  yearWeightList: document.getElementById("yearWeightList"),
+  yearlyView: document.getElementById("yearlyView"),
+  yearlyBtn: document.getElementById("yearlyBtn"),
 
-    // 연간
-    yearTitle: document.getElementById("yearTitle"),
-    yearCtx: document.getElementById("yearWeightChart"),
-    yearWeightList: document.getElementById("yearWeightList"),
-    yearlyView: document.getElementById("yearlyView"),
-    yearlyBtn: document.getElementById("yearlyBtn"),
-
-    // 전체
-    allCtx: document.getElementById("allWeightChart"),
-    allWeightList: document.getElementById("allWeightList"),
-    allView: document.getElementById("allView"),
-    allBtn: document.getElementById("allBtn")
+  allCtx: document.getElementById("allWeightChart"),
+  allWeightList: document.getElementById("allWeightList"),
+  allView: document.getElementById("allView"),
+  allBtn: document.getElementById("allBtn")
 };
 
 // 현재 날짜 상태
@@ -68,273 +64,294 @@ let currentYear = currentDate.getFullYear();
    Chart.js 플러그인
 ========================= */
 const averageLabelPlugin = {
-    id: "averageLabel",
-    afterDatasetsDraw(chart) {
-        const dataset = chart.data.datasets[1];
-        if (!dataset || !dataset.data.length) return;
+  id: "averageLabel",
+  afterDatasetsDraw(chart) {
+    const dataset = chart.data.datasets[1];
+    if (!dataset || !dataset.data.length) return;
 
-        const meta = chart.getDatasetMeta(1);
-        const point = meta.data[meta.data.length - 1];
-        if (!point) return;
+    const meta = chart.getDatasetMeta(1);
+    const point = meta.data[meta.data.length - 1];
+    if (!point) return;
 
-        const value = dataset.data[dataset.data.length - 1];
-        const { ctx, chartArea } = chart;
+    const value = dataset.data[dataset.data.length - 1];
+    const { ctx, chartArea } = chart;
 
-        ctx.save();
-        ctx.font = "12px sans-serif";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-        ctx.fillText(`평균 ${Number(value).toFixed(1)}kg`, chartArea.left + 5, point.y);
-        ctx.restore();
-    }
+    ctx.save();
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(`평균 ${Number(value).toFixed(1)}kg`, chartArea.left + 5, point.y);
+    ctx.restore();
+  }
 };
 
 /* =========================
    데이터 로드
 ========================= */
 async function loadRecords() {
-    const snapshot = await getDocs(collection(db, "records"));
+  const snapshot = await getDocs(collection(db, "records"));
+  
+  records = [];
+  snapshot.forEach((doc) => records.push(doc.data()));
+  
+  records.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    records = [];
-    snapshot.forEach((doc) => records.push(doc.data()));
-
-    records.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    drawWeight();
+  drawWeight();
 }
 
 /* =========================
    월간 그래프 & 리스트
 ========================= */
 function drawWeight() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
-    elements.monthTitle.innerText = `${year}년 ${month + 1}월`;
-    elements.weightList.innerHTML = "";
+  elements.monthTitle.innerText = `${year}년 ${month + 1}월`;
+  elements.weightList.innerHTML = "";
 
-    const monthWeights = records.filter((record) => {
-        const recordDate = new Date(record.date);
-        return recordDate.getFullYear() === year && recordDate.getMonth() === month && record.weight;
-    });
+  const monthWeights = records.filter((record) => {
+    const recordDate = new Date(record.date);
+    return recordDate.getFullYear() === year && recordDate.getMonth() === month && record.weight;
+  });
 
-    const weightValues = monthWeights.map((record) => Number(record.weight));
+  const weightValues = monthWeights.map((record) => Number(record.weight));
+  
+  const averageWeight = weightValues.length
+    ? weightValues.reduce((sum, w) => sum + w, 0) / weightValues.length
+    : 0;
+  const maxWeight = weightValues.length ? Math.max(...weightValues) : 0;
+  const minWeight = weightValues.length ? Math.min(...weightValues) : 0;
 
-    const averageWeight = weightValues.length
-        ? weightValues.reduce((sum, w) => sum + w, 0) / weightValues.length
-        : 0;
-    const maxWeight = weightValues.length ? Math.max(...weightValues) : 0;
-    const minWeight = weightValues.length ? Math.min(...weightValues) : 0;
+  const labels = [];
+  const weights = [];
+  let maxShown = false;
+  let minShown = false;
 
-    const labels = [];
-    const weights = [];
-    let maxShown = false;
-    let minShown = false;
+  monthWeights.forEach((record) => {
+    const recordDate = new Date(record.date);
+    const dayOfWeek = WEEK_DAYS[recordDate.getDay()];
+    const numWeight = Number(record.weight);
 
-    monthWeights.forEach((record) => {
-        const recordDate = new Date(record.date);
-        const dayOfWeek = WEEK_DAYS[recordDate.getDay()];
-        const numWeight = Number(record.weight);
+    labels.push([record.date.substring(8, 10), dayOfWeek]);
+    weights.push(numWeight);
 
-        labels.push([record.date.substring(8, 10), dayOfWeek]);
-        weights.push(numWeight);
+    let text = `${record.date.substring(5, 10)} (${dayOfWeek}) : ${numWeight.toFixed(1)}kg`;
 
-        let text = `${record.date.substring(5, 10)} (${dayOfWeek}) : ${numWeight.toFixed(1)}kg`;
+    if (numWeight === maxWeight && !maxShown) {
+      text += " (최고)";
+      maxShown = true;
+    }
+    if (numWeight === minWeight && !minShown) {
+      text += " (최저)";
+      minShown = true;
+    }
 
-        if (numWeight === maxWeight && !maxShown) {
-            text += " (최고)";
-            maxShown = true;
-        }
-        if (numWeight === minWeight && !minShown) {
-            text += " (최저)";
-            minShown = true;
-        }
+    const li = document.createElement("li");
+    li.innerText = text;
+    elements.weightList.appendChild(li);
+  });
 
-        const li = document.createElement("li");
-        li.innerText = text;
-        elements.weightList.appendChild(li);
-    });
+  if (chart) chart.destroy();
 
-    if (chart) chart.destroy();
-
-    chart = new Chart(elements.monthCtx, {
-        type: "line",
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: "체중(kg)",
-                    data: weights,
-                    pointRadius: 5
-                },
-                {
-                    label: "평균 체중",
-                    data: weights.map(() => Number(averageWeight.toFixed(1))),
-                    borderDash: [5, 5],
-                    pointRadius: 0
-                }
-            ]
+  chart = new Chart(elements.monthCtx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "체중(kg)",
+          data: weights,
+          pointRadius: 5
         },
-        options: {
-            responsive: true,
-            animation: ANIMATION_CONFIG,
-            scales: { y: { beginAtZero: false } }
-        },
-        plugins: [averageLabelPlugin]
-    });
+        {
+          label: "평균 체중",
+          data: weights.map(() => Number(averageWeight.toFixed(1))),
+          borderDash: [5, 5],
+          pointRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1.8, // 세로 높이 적절하게 조정
+      animation: ANIMATION_CONFIG,
+      scales: {
+        y: {
+          beginAtZero: false,
+          grace: '10%'
+        }
+      }
+    },
+    plugins: [averageLabelPlugin]
+  });
 }
 
 /* =========================
    연간 그래프 & 리스트
 ========================= */
 function drawYearlyWeight() {
-    elements.yearTitle.innerText = `${currentYear}년`;
-    elements.yearWeightList.innerHTML = "";
+  elements.yearTitle.innerText = `${currentYear}년`;
+  elements.yearWeightList.innerHTML = "";
 
-    const labels = Array.from({ length: 12 }, (_, i) => `${i + 1}월`);
-    const monthlyAverages = [];
+  const labels = Array.from({ length: 12 }, (_, i) => `${i + 1}월`);
+  const monthlyAverages = [];
 
-    for (let month = 0; month < 12; month++) {
-        const monthWeights = records.filter((record) => {
-            if (!record.weight) return false;
-            const recordDate = new Date(record.date);
-            return recordDate.getFullYear() === currentYear && recordDate.getMonth() === month;
-        });
+  for (let month = 0; month < 12; month++) {
+    const monthWeights = records.filter((record) => {
+      if (!record.weight) return false;
+      const recordDate = new Date(record.date);
+      return recordDate.getFullYear() === currentYear && recordDate.getMonth() === month;
+    });
 
-        if (!monthWeights.length) {
-            monthlyAverages.push(null);
-            continue;
-        }
-
-        const total = monthWeights.reduce((sum, r) => sum + Number(r.weight), 0);
-        const averageValue = Number((total / monthWeights.length).toFixed(1));
-        monthlyAverages.push(averageValue);
-
-        const li = document.createElement("li");
-        li.innerText = `${month + 1}월 : ${averageValue.toFixed(1)}kg`;
-        elements.yearWeightList.appendChild(li);
+    if (!monthWeights.length) {
+      monthlyAverages.push(null);
+      continue;
     }
 
-    if (yearChart) yearChart.destroy();
+    const total = monthWeights.reduce((sum, r) => sum + Number(r.weight), 0);
+    const averageValue = Number((total / monthWeights.length).toFixed(1));
+    monthlyAverages.push(averageValue);
 
-    yearChart = new Chart(elements.yearCtx, {
-        type: "line",
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: "월 평균 체중",
-                    data: monthlyAverages,
-                    pointRadius: 5,
-                    spanGaps: false
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            animation: ANIMATION_CONFIG,
-            scales: { y: { beginAtZero: false } }
+    const li = document.createElement("li");
+    li.innerText = `${month + 1}월 : ${averageValue.toFixed(1)}kg`;
+    elements.yearWeightList.appendChild(li);
+  }
+
+  if (yearChart) yearChart.destroy();
+
+  yearChart = new Chart(elements.yearCtx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "월 평균 체중",
+          data: monthlyAverages,
+          pointRadius: 5,
+          spanGaps: false
         }
-    });
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1.8,
+      animation: ANIMATION_CONFIG,
+      scales: {
+        y: {
+          beginAtZero: false,
+          grace: '10%'
+        }
+      }
+    }
+  });
 }
 
 /* =========================
    전체 그래프 & 리스트
 ========================= */
 function drawAllWeight() {
-    elements.allWeightList.innerHTML = "";
+  elements.allWeightList.innerHTML = "";
 
-    const validRecords = records.filter((record) => record.weight && record.date);
-    if (!validRecords.length) return;
+  const validRecords = records.filter((record) => record.weight && record.date);
+  if (!validRecords.length) return;
 
-    const dates = validRecords.map((r) => new Date(r.date)).sort((a, b) => a - b);
+  const dates = validRecords.map((r) => new Date(r.date)).sort((a, b) => a - b);
 
-    const startYear = dates[0].getFullYear();
-    const startMonth = dates[0].getMonth();
-    const endYear = dates[dates.length - 1].getFullYear();
-    const endMonth = dates[dates.length - 1].getMonth();
+  const startYear = dates[0].getFullYear();
+  const startMonth = dates[0].getMonth();
+  const endYear = dates[dates.length - 1].getFullYear();
+  const endMonth = dates[dates.length - 1].getMonth();
 
-    const labels = [];
-    const monthlyData = [];
-    const monthlyRecords = [];
+  const labels = [];
+  const monthlyData = [];
+  const monthlyRecords = [];
 
-    let year = startYear;
-    let month = startMonth;
+  let year = startYear;
+  let month = startMonth;
 
-    while (year < endYear || (year === endYear && month <= endMonth)) {
-        const monthRecords = validRecords.filter((record) => {
-            const recordDate = new Date(record.date);
-            return recordDate.getFullYear() === year && recordDate.getMonth() === month;
-        });
+  while (year < endYear || (year === endYear && month <= endMonth)) {
+    const monthRecords = validRecords.filter((record) => {
+      const recordDate = new Date(record.date);
+      return recordDate.getFullYear() === year && recordDate.getMonth() === month;
+    });
 
-        let average = null;
-        if (monthRecords.length) {
-            const total = monthRecords.reduce((sum, r) => sum + Number(r.weight), 0);
-            average = Number((total / monthRecords.length).toFixed(1));
-        }
-
-        const formattedLabel = `${String(year).slice(2)}.${String(month + 1).padStart(2, "0")}`;
-        labels.push(formattedLabel);
-        monthlyData.push(average);
-        monthlyRecords.push({ year, month, average });
-
-        month++;
-        if (month === 12) {
-            month = 0;
-            year++;
-        }
+    let average = null;
+    if (monthRecords.length) {
+      const total = monthRecords.reduce((sum, r) => sum + Number(r.weight), 0);
+      average = Number((total / monthRecords.length).toFixed(1));
     }
 
-    monthlyRecords.forEach((item) => {
-        if (item.average === null) return;
+    const formattedLabel = `${String(year).slice(2)}.${String(month + 1).padStart(2, "0")}`;
+    labels.push(formattedLabel);
+    monthlyData.push(average);
+    monthlyRecords.push({ year, month, average });
 
-        const li = document.createElement("li");
-        const formattedDate = `${String(item.year).slice(2)}.${String(item.month + 1).padStart(2, "0")}`;
-        li.innerText = `${formattedDate} : ${item.average}kg`;
-        elements.allWeightList.appendChild(li);
-    });
+    month++;
+    if (month === 12) {
+      month = 0;
+      year++;
+    }
+  }
 
-    if (allChart) allChart.destroy();
+  monthlyRecords.forEach((item) => {
+    if (item.average === null) return;
 
-    allChart = new Chart(elements.allCtx, {
-        type: "line",
-        data: {
-            labels,
-            datasets: [
-                {
-                    label: "월 평균 체중",
-                    data: monthlyData,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    spanGaps: true,
-                    tension: 0.2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            animation: ANIMATION_CONFIG,
-            interaction: { mode: "index", intersect: false },
-            scales: { y: { beginAtZero: false } }
+    const li = document.createElement("li");
+    const formattedDate = `${String(item.year).slice(2)}.${String(item.month + 1).padStart(2, "0")}`;
+    li.innerText = `${formattedDate} : ${item.average}kg`;
+    elements.allWeightList.appendChild(li);
+  });
+
+  if (allChart) allChart.destroy();
+
+  allChart = new Chart(elements.allCtx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "월 평균 체중",
+          data: monthlyData,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          spanGaps: true,
+          tension: 0.2
         }
-    });
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1.8,
+      animation: ANIMATION_CONFIG,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        y: {
+          beginAtZero: false,
+          grace: '10%'
+        }
+      }
+    }
+  });
 }
 
 /* =========================
    UI 뷰 전환 공통 함수
 ========================= */
 function switchView(activeType) {
-    const views = {
-        monthly: { view: elements.monthlyView, btn: elements.monthlyBtn },
-        yearly: { view: elements.yearlyView, btn: elements.yearlyBtn },
-        all: { view: elements.allView, btn: elements.allBtn }
-    };
+  const views = {
+    monthly: { view: elements.monthlyView, btn: elements.monthlyBtn },
+    yearly: { view: elements.yearlyView, btn: elements.yearlyBtn },
+    all: { view: elements.allView, btn: elements.allBtn }
+  };
 
-    Object.keys(views).forEach((type) => {
-        const isTarget = type === activeType;
-        views[type].view.style.display = isTarget ? "block" : "none";
-        views[type].btn.classList.toggle("active", isTarget);
-    });
+  Object.keys(views).forEach((type) => {
+    const isTarget = type === activeType;
+    views[type].view.style.display = isTarget ? "block" : "none";
+    views[type].btn.classList.toggle("active", isTarget);
+  });
 }
 
 /* =========================
@@ -343,33 +360,33 @@ function switchView(activeType) {
 elements.monthlyBtn.addEventListener("click", () => switchView("monthly"));
 
 elements.yearlyBtn.addEventListener("click", () => {
-    switchView("yearly");
-    drawYearlyWeight();
+  switchView("yearly");
+  drawYearlyWeight();
 });
 
 elements.allBtn.addEventListener("click", () => {
-    switchView("all");
-    drawAllWeight();
+  switchView("all");
+  drawAllWeight();
 });
 
 document.getElementById("prevMonth").addEventListener("click", () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    drawWeight();
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  drawWeight();
 });
 
 document.getElementById("nextMonth").addEventListener("click", () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    drawWeight();
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  drawWeight();
 });
 
 document.getElementById("prevYear").addEventListener("click", () => {
-    currentYear--;
-    drawYearlyWeight();
+  currentYear--;
+  drawYearlyWeight();
 });
 
 document.getElementById("nextYear").addEventListener("click", () => {
-    currentYear++;
-    drawYearlyWeight();
+  currentYear++;
+  drawYearlyWeight();
 });
 
 // 실행
