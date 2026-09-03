@@ -3,6 +3,9 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 
 const db = getFirestore(app);
 
+// 모바일 환경 체크 (화면 너비 600px 이하)
+const isMobile = window.innerWidth <= 600;
+
 // 상태 변수
 let records = [];
 let chart = null;
@@ -77,7 +80,7 @@ const averageLabelPlugin = {
     const { ctx, chartArea } = chart;
 
     ctx.save();
-    ctx.font = "12px sans-serif";
+    ctx.font = `${isMobile ? 11 : 12}px sans-serif`;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     ctx.fillText(`평균 ${Number(value).toFixed(1)}kg`, chartArea.left + 5, point.y);
@@ -173,13 +176,28 @@ function drawWeight() {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1.8, // 세로 높이 적절하게 조정
+      maintainAspectRatio: !isMobile, // PC에서는 비율 유지(원래 형태), 모바일에서만 비율 해제
+      aspectRatio: 1.8,               // PC에서 사용할 원래 비율
       animation: ANIMATION_CONFIG,
+      plugins: {
+        legend: {
+          labels: {
+            font: { size: isMobile ? 12 : 14 }
+          }
+        }
+      },
       scales: {
+        x: {
+          ticks: {
+            font: { size: isMobile ? 11 : 13 }
+          }
+        },
         y: {
           beginAtZero: false,
-          grace: '10%'
+          grace: '10%',
+          ticks: {
+            font: { size: isMobile ? 11 : 13 }
+          }
         }
       }
     },
@@ -235,13 +253,28 @@ function drawYearlyWeight() {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: !isMobile,
       aspectRatio: 1.8,
       animation: ANIMATION_CONFIG,
+      plugins: {
+        legend: {
+          labels: {
+            font: { size: isMobile ? 12 : 14 }
+          }
+        }
+      },
       scales: {
+        x: {
+          ticks: {
+            font: { size: isMobile ? 11 : 13 }
+          }
+        },
         y: {
           beginAtZero: false,
-          grace: '10%'
+          grace: '10%',
+          ticks: {
+            font: { size: isMobile ? 11 : 13 }
+          }
         }
       }
     }
@@ -323,14 +356,29 @@ function drawAllWeight() {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: !isMobile,
       aspectRatio: 1.8,
       animation: ANIMATION_CONFIG,
       interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: {
+          labels: {
+            font: { size: isMobile ? 12 : 14 }
+          }
+        }
+      },
       scales: {
+        x: {
+          ticks: {
+            font: { size: isMobile ? 11 : 13 }
+          }
+        },
         y: {
           beginAtZero: false,
-          grace: '10%'
+          grace: '10%',
+          ticks: {
+            font: { size: isMobile ? 11 : 13 }
+          }
         }
       }
     }

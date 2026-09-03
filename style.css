@@ -636,7 +636,7 @@ button:hover {
 
     /* 모바일 환경에서 차트 높이 확장 (세로축 시원하게 보이기) */
     canvas {
-        min-height: 280px !important;
+        min-height: 320px !important;
     }
 
     nav a {
