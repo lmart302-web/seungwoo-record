@@ -47,7 +47,7 @@ const COMMON_CHART_OPTIONS = {
   layout: {
     padding: {
       left: 0,   // 왼쪽 여백 삭제 (축에 딱 붙게)
-      right: 15, // 오른쪽 글자 잘림 방지용 최소 여백만 유지
+      right: 35, // 오른쪽 글자 잘림 방지용 최소 여백만 유지
       top: 0,
       bottom: 0
     }
