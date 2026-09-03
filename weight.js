@@ -330,7 +330,9 @@ function drawAllWeight() {
     },
     options: {
       ...COMMON_CHART_OPTIONS,
-      interaction: { mode: "index", intersect: false }
+      interaction: { mode: "index", intersect: false },
+      // ★ 바깥쪽 격자와 점이 잘리지 않도록 영역 제한 해제
+      clip: false
     }
   });
 }
