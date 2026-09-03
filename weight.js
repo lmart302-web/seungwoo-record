@@ -44,21 +44,24 @@ const ANIMATION_CONFIG = {
 /* =========================================================
    공통 차트 옵션
 ========================================================= */
+const isMobile = window.innerWidth <= 600;
+
 const COMMON_CHART_OPTIONS = {
   responsive: true,
   maintainAspectRatio: true,
-  aspectRatio: window.innerWidth <= 600 ? 1.1 : 1.8,
+  aspectRatio: isMobile ? 1.1 : 1.8,
   animation: ANIMATION_CONFIG,
   layout: {
     padding: {
-      left: 0,
-      right: 15,
+      left: isMobile ? 4 : 0,    // 모바일: 체중 숫자 안 깨지게 최소 4px 확보 (PC: 기존 0 유지)
+      right: isMobile ? 2 : 15,  // 모바일: 오른쪽 여백 2px로 축소하여 가로 확장 (PC: 기존 15 유지)
       top: 10,
       bottom: 0
     }
   },
   scales: {
     x: {
+      offset: false, // X축 양 끝 공백 제거하여 차트를 좌우로 더 꽉 채움
       grid: {
         drawBorder: false
       },
