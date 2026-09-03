@@ -818,3 +818,13 @@ html, body {
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
+
+/* 차트를 감싸는 컨테이너 및 캔버스 잘림 방지 */
+.chart-container, 
+div:has(> canvas),
+canvas {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: visible !important; /* 영역 바깥으로 살짝 나가는 격자/라벨이 잘리지 않게 설정 */
+}
