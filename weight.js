@@ -35,9 +35,6 @@ const ANIMATION_CONFIG = {
 
 /* =========================================================
    모바일 글씨 크기 고정용 공통 차트 옵션
-   - maintainAspectRatio: true 로 설정하되,
-   - font.size: 10 으로 모바일 폰트 크기를 강제 고정하고
-   - maxRotation: 0 으로 글자가 회전하며 커지는 것을 방지합니다.
 ========================================================= */
 const COMMON_CHART_OPTIONS = {
   responsive: true,
@@ -47,7 +44,7 @@ const COMMON_CHART_OPTIONS = {
   layout: {
     padding: {
       left: 0,
-      right: 20, // 우측 라벨/격자 공간 확보를 위한 깔끔한 20px
+      right: 20, // 우측 라벨/격자 공간 확보용 20px
       top: 10,
       bottom: 0
     }
@@ -72,7 +69,6 @@ const COMMON_CHART_OPTIONS = {
     }
   }
 };
-     
 
 // DOM 요소 참조
 const elements = {
@@ -268,7 +264,10 @@ function drawYearlyWeight() {
 }
 
 /* =========================
-   전체 그래프 & 리스트
+   전체 그래프 & 리스트 (원복 깔끔 정리)
+========================= */
+/* =========================
+   전체 그래프 & 리스트 (2줄 라벨 표기)
 ========================= */
 function drawAllWeight() {
   elements.allWeightList.innerHTML = "";
@@ -302,8 +301,11 @@ function drawAllWeight() {
       average = Number((total / monthRecords.length).toFixed(1));
     }
 
-    const formattedLabel = `${String(year).slice(2)}.${String(month + 1).padStart(2, "0")}`;
-    labels.push(formattedLabel);
+    // ★ 월간 차트처럼 [윗줄(월), 아랫줄(연도)] 2줄 배열 구조로 생성
+    const monthStr = `${month + 1}월`;
+    const yearStr = `${String(year).slice(2)}년`;
+
+    labels.push([monthStr, yearStr]); // Chart.js에서 자동으로 2줄 표기됨
     monthlyData.push(average);
     monthlyRecords.push({ year, month, average });
 
@@ -342,18 +344,7 @@ function drawAllWeight() {
     },
     options: {
       ...COMMON_CHART_OPTIONS,
-      interaction: { mode: "index", intersect: false },
-      scales: {
-        x: {
-          bounds: 'ticks', // ★ 마지막 포인트를 캔버스 테두리 끝에 강제 고정하지 않음
-          ticks: {
-            font: { size: 10 },
-            maxRotation: 0,
-            autoSkip: true
-          }
-        },
-        y: COMMON_CHART_OPTIONS.scales.y
-      }
+      interaction: { mode: "index", intersect: false }
     }
   });
 }
