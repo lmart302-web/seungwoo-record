@@ -342,7 +342,17 @@ function drawAllWeight() {
     },
     options: {
       ...COMMON_CHART_OPTIONS,
-      interaction: { mode: "index", intersect: false }
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        ...COMMON_CHART_OPTIONS.scales,
+        x: {
+          ...COMMON_CHART_OPTIONS.scales.x,
+          // ★ 전체 그래프의 X축 오른쪽 끝에만 강제로 15px 여백을 부여하여 격자선 잘림 방지
+          afterFit: (axis) => {
+            axis.paddingRight = 15;
+          }
+        }
+      }
     }
   });
 }
