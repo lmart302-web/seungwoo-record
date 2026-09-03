@@ -611,7 +611,7 @@ button:hover {
 }
 
 .difficult-link {
-    display: block;
+    display block;
     margin-top: 15px;
     padding: 12px;
     text-align: center;
@@ -632,11 +632,6 @@ button:hover {
 
     h1 {
         font-size: 24px;
-    }
-
-    /* 모바일 환경에서 차트 높이 확장 (세로축 시원하게 보이기) */
-    canvas {
-        min-height: 320px !important;
     }
 
     nav a {
@@ -819,36 +814,50 @@ html, body {
   text-size-adjust: 100%;
 }
 
-/* 연간/전체 체중 기록 (3열 Grid) */
+/* ==========================================================================
+   11. Weight Records List Layout
+   ========================================================================== */
 #yearWeightList li,
 #allWeightList li {
   display: grid;
-  grid-template-columns: 60px 15px 70px;
+  grid-template-columns: max-content 15px 65px;
   justify-content: start;
   align-items: center;
   padding: 6px 0;
 }
 
-/* 월간 체중 기록 (4열 Grid - 최고/최저 뱃지 전용 열 추가) */
 #weightList li {
   display: grid;
-  /* [날짜 100px] [콜론 15px] [체중 65px] [뱃지 auto] */
-  grid-template-columns: 100px 15px 65px auto;
+  grid-template-columns: max-content 15px 65px auto;
   justify-content: start;
   align-items: center;
   padding: 6px 0;
 }
 
-/* 1열: 날짜 */
+#allWeightList .record-year-header {
+  display: block;
+  grid-column: 1 / -1;
+  font-size: 1.05em;
+  font-weight: bold;
+  color: #1a202c;
+  padding: 12px 0 4px 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+#allWeightList .record-year-header:first-child {
+  padding-top: 0;
+}
+
 #weightList .record-date,
 #yearWeightList .record-date,
 #allWeightList .record-date {
-  text-align: right;
+  text-align: left;
   font-weight: 500;
   color: #333;
 }
 
-/* 2열: 콜론 */
 #weightList .record-colon,
 #yearWeightList .record-colon,
 #allWeightList .record-colon {
@@ -856,7 +865,6 @@ html, body {
   color: #888;
 }
 
-/* 3열: 체중 (kg 기준으로 오하열 일직선 고정) */
 #weightList .record-value,
 #yearWeightList .record-value,
 #allWeightList .record-value {
@@ -866,19 +874,18 @@ html, body {
   color: #2b6cb0;
 }
 
-/* 4열: 최고/최저 뱃지 스타일 */
 #weightList .record-badge {
   padding-left: 4px;
   font-size: 0.85em;
   font-weight: normal;
-  color: #e53e3e; /* 강조용 레드 계열 (원하는 색상으로 변경 가능) */
+  color: #e53e3e;
   white-space: nowrap;
 }
 
-/* 리스트 컨테이너 기본 여백 제거 */
 #weightList, 
 #yearWeightList, 
 #allWeightList {
-  padding-left: 0;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
   list-style: none;
 }
