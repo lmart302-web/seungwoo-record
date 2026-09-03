@@ -891,3 +891,18 @@ html, body {
   white-space: nowrap;
 }
 
+/* 스마트폰(600px 이하) 전용: 컨테이너 좌우 여백을 미세하게 축소 */
+@media (max-width: 600px) {
+  /* 차트 감싸는 컨테이너 여백 축소 */
+  .chart-container,
+  .section {
+    padding-left: 4px !important;  /* 기존 12~16px에서 4px로 축소 */
+    padding-right: 4px !important;
+  }
+
+  /* 캔버스 자체 여백 제거 */
+  canvas {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
