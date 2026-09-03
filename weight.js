@@ -33,6 +33,35 @@ const ANIMATION_CONFIG = {
   }
 };
 
+/* =========================================================
+   모바일 글씨 크기 고정용 공통 차트 옵션
+   - maintainAspectRatio: true 로 설정하되,
+   - font.size: 10 으로 모바일 폰트 크기를 강제 고정하고
+   - maxRotation: 0 으로 글자가 회전하며 커지는 것을 방지합니다.
+========================================================= */
+const COMMON_CHART_OPTIONS = {
+  responsive: true,
+  maintainAspectRatio: true,
+  aspectRatio: 1.8,
+  animation: ANIMATION_CONFIG,
+  scales: {
+    x: {
+      ticks: {
+        font: { size: 10 }, // 스마트폰 화면 기준 폰트 크기 강제 고정
+        maxRotation: 0,     // 글자 회전 방지
+        autoSkip: true      // 글자 겹침 방지
+      }
+    },
+    y: {
+      beginAtZero: false,
+      grace: '10%',
+      ticks: {
+        font: { size: 10 }  // Y축 폰트 크기 강제 고정
+      }
+    }
+  }
+};
+
 // DOM 요소 참조
 const elements = {
   monthTitle: document.getElementById("monthTitle"),
@@ -171,22 +200,7 @@ function drawWeight() {
         }
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true, // PC 비율 유지
-      aspectRatio: 1.8,
-      animation: ANIMATION_CONFIG,
-      scales: {
-        x: {
-          ticks: { font: { size: 11 } } // 모바일 기준 폰트 고정
-        },
-        y: {
-          beginAtZero: false,
-          grace: '10%',
-          ticks: { font: { size: 11 } }
-        }
-      }
-    },
+    options: COMMON_CHART_OPTIONS,
     plugins: [averageLabelPlugin]
   });
 }
@@ -237,22 +251,7 @@ function drawYearlyWeight() {
         }
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1.8,
-      animation: ANIMATION_CONFIG,
-      scales: {
-        x: {
-          ticks: { font: { size: 11 } }
-        },
-        y: {
-          beginAtZero: false,
-          grace: '10%',
-          ticks: { font: { size: 11 } }
-        }
-      }
-    }
+    options: COMMON_CHART_OPTIONS
   });
 }
 
@@ -330,21 +329,8 @@ function drawAllWeight() {
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1.8,
-      animation: ANIMATION_CONFIG,
-      interaction: { mode: "index", intersect: false },
-      scales: {
-        x: {
-          ticks: { font: { size: 11 } }
-        },
-        y: {
-          beginAtZero: false,
-          grace: '10%',
-          ticks: { font: { size: 11 } }
-        }
-      }
+      ...COMMON_CHART_OPTIONS,
+      interaction: { mode: "index", intersect: false }
     }
   });
 }
