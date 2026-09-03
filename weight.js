@@ -44,7 +44,7 @@ const COMMON_CHART_OPTIONS = {
   layout: {
     padding: {
       left: 0,
-      right: 20, // 우측 라벨/격자 공간 확보용 20px
+      right: 5, // ★ 기존 20에서 5로 줄여서 그래프를 우측으로 시원하게 확장 (0도 가능)
       top: 10,
       bottom: 0
     }
@@ -320,7 +320,8 @@ function drawAllWeight() {
     if (item.average === null) return;
 
     const li = document.createElement("li");
-    const formattedDate = `${String(item.year).slice(2)}.${String(item.month + 1).padStart(2, "0")}`;
+    // 기존: 25.10 -> 변경: 25년 10월
+    const formattedDate = `${String(item.year).slice(2)}년 ${item.month + 1}월`;
     li.innerText = `${formattedDate} : ${item.average}kg`;
     elements.allWeightList.appendChild(li);
   });
