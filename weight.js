@@ -44,25 +44,23 @@ const COMMON_CHART_OPTIONS = {
   maintainAspectRatio: true,
   aspectRatio: 1.8,
   animation: ANIMATION_CONFIG,
-  // 차트 테두리 외부로 나가는 요소 잘림 방지
-  clip: false,
   layout: {
     padding: {
-      left: 5,
-      right: 25, // 모든 그래프 오른쪽에 25px 안전 여백 확보 (잘림 완전 방지)
+      left: 0,
+      right: 20, // 우측 라벨/격자 공간 확보를 위한 깔끔한 20px
       top: 10,
       bottom: 0
     }
   },
   scales: {
     x: {
-      bounds: 'data',
+      grid: {
+        drawBorder: false
+      },
       ticks: {
         font: { size: 10 },
         maxRotation: 0,
-        autoSkip: true,
-        // 마지막 라벨이 테두리 밖으로 넘어가지 않도록 안쪽으로 정렬
-        align: 'inner'
+        autoSkip: true
       }
     },
     y: {
