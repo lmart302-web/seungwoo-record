@@ -39,7 +39,7 @@ const ANIMATION_CONFIG = {
 const COMMON_CHART_OPTIONS = {
   responsive: true,
   maintainAspectRatio: true, // 원래대로 true 유지 (PC 무한 늘어남 방지)
-  aspectRatio: window.innerWidth <= 600 ? 1.2 : 1.8, // 스마트폰(600px 이하)은 1.2 (세로로 길어짐), PC는 1.8 유지
+  aspectRatio: window.innerWidth <= 600 ? 1.1 : 1.8, // 스마트폰(600px 이하)은 1.2 (세로로 길어짐), PC는 1.8 유지
   animation: ANIMATION_CONFIG,
   layout: {
     padding: {
