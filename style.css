@@ -611,7 +611,7 @@ button:hover {
 }
 
 .difficult-link {
-    display block;
+    display: block;
     margin-top: 15px;
     padding: 12px;
     text-align: center;
