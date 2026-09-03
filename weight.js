@@ -326,39 +326,36 @@ function drawAllWeight() {
   if (allChart) allChart.destroy();
 
   allChart = new Chart(elements.allCtx, {
-  type: "line",
-  data: {
-    labels,
-    datasets: [
-      {
-        label: "월 평균 체중",
-        data: monthlyData,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        spanGaps: true,
-        tension: 0.2
-      }
-    ]
-  },
-
-  options: {
-    ...COMMON_CHART_OPTIONS,
-
-    interaction: {
-      mode: "index",
-      intersect: false
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "월 평균 체중",
+          data: monthlyData,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          spanGaps: true,
+          tension: 0.2
+        }
+      ]
     },
-
-    scales: {
-      ...COMMON_CHART_OPTIONS.scales,
-
-      x: {
-        ...COMMON_CHART_OPTIONS.scales.x,
-        offset: true
+    options: {
+      ...COMMON_CHART_OPTIONS,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        x: {
+          bounds: 'ticks', // ★ 마지막 포인트를 캔버스 테두리 끝에 강제 고정하지 않음
+          ticks: {
+            font: { size: 10 },
+            maxRotation: 0,
+            autoSkip: true
+          }
+        },
+        y: COMMON_CHART_OPTIONS.scales.y
       }
     }
-  }
-});
+  });
 }
 
 /* =========================
