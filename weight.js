@@ -326,45 +326,39 @@ function drawAllWeight() {
   if (allChart) allChart.destroy();
 
   allChart = new Chart(elements.allCtx, {
-    type: "line",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "월 평균 체중",
-          data: monthlyData,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          spanGaps: true,
-          tension: 0.2
-        }
-      ]
+  type: "line",
+  data: {
+    labels,
+    datasets: [
+      {
+        label: "월 평균 체중",
+        data: monthlyData,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        spanGaps: true,
+        tension: 0.2
+      }
+    ]
+  },
+
+  options: {
+    ...COMMON_CHART_OPTIONS,
+
+    interaction: {
+      mode: "index",
+      intersect: false
     },
-    options: {
-  ...COMMON_CHART_OPTIONS,
 
-  interaction: {
-    mode: "index",
-    intersect: false
-  },
+    scales: {
+      ...COMMON_CHART_OPTIONS.scales,
 
-  layout: {
-    ...COMMON_CHART_OPTIONS.layout,
-    padding: {
-      ...COMMON_CHART_OPTIONS.layout.padding,
-      right: 30
-    }
-  },
-
-  scales: {
-    ...COMMON_CHART_OPTIONS.scales,
-
-    x: {
-      ...COMMON_CHART_OPTIONS.scales.x
+      x: {
+        ...COMMON_CHART_OPTIONS.scales.x,
+        offset: true
+      }
     }
   }
-}
-  });
+});
 }
 
 /* =========================
