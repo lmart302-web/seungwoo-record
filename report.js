@@ -314,42 +314,6 @@ monthRecords.forEach(function (record) {
 });
 
 
-if (runningCount) {
-
-    const goalRate =
-        Math.round((goalCount / runningCount) * 100);
-
-    document.getElementById("runningSummary").innerText =
-
-        "🎯 20분 목표 달성 : " +
-        goalCount + " / " +
-        runningCount + "일 (" +
-        goalRate + "%)\n\n" +
-
-        "💦 총 운동시간 : " +
-        runningTotal + "분";
-
-}
-
-else {
-
-    document.getElementById("runningSummary").innerText =
-
-        "기록 없음";
-
-}
-
-
-    
-
-
-
-
-
-
-
-
-
     // 행동
 
 

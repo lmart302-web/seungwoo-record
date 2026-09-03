@@ -817,23 +817,27 @@ html, body {
 /* ==========================================================================
    11. Weight Records List Layout
    ========================================================================== */
-#yearWeightList li,
-#allWeightList li {
-  display: grid;
-  grid-template-columns: max-content 15px 65px;
-  justify-content: start;
-  align-items: center;
-  padding: 6px 0;
+#weightList, 
+#yearWeightList, 
+#allWeightList {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  list-style: none;
 }
 
-#weightList li {
+/* 리스트 항목 한 줄 유지 및 줄바꿈 방지 */
+#weightList li, 
+#yearWeightList li, 
+#allWeightList li {
   display: grid;
   grid-template-columns: max-content 15px 65px auto;
   justify-content: start;
   align-items: center;
   padding: 6px 0;
+  white-space: nowrap; /* 자동 줄바꿈 금지 */
 }
 
+/* 전체 뷰 연도 헤더 */
 #allWeightList .record-year-header {
   display: block;
   grid-column: 1 / -1;
@@ -850,6 +854,7 @@ html, body {
   padding-top: 0;
 }
 
+/* 날짜, 콜론, 값 스타일 (월간/연간/전체 동일) */
 #weightList .record-date,
 #yearWeightList .record-date,
 #allWeightList .record-date {
@@ -874,19 +879,14 @@ html, body {
   color: #2b6cb0;
 }
 
-#weightList .record-badge {
-  padding-left: 4px;
+/* 뱃지 스타일 (통일 적용) */
+#weightList .record-badge,
+#yearWeightList .record-badge,
+#allWeightList .record-badge,
+.record-badge {
+  padding-left: 6px;
   font-size: 0.85em;
-  font-weight: normal;
-  color: #e53e3e;
+  font-weight: bold;
+  color: #e53e3e; /* 최고/최저 강조 빨간색 */
   white-space: nowrap;
 }
-
-#weightList, 
-#yearWeightList, 
-#allWeightList {
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-  list-style: none;
-}
-
