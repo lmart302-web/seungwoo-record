@@ -936,25 +936,24 @@ html, body {
 #allWeightList .record-date {
   text-align: left;
   font-weight: 500;
-  color: #333;
+  color: #666666;
 }
 
 #weightList .record-colon,
 #yearWeightList .record-colon,
 #allWeightList .record-colon {
   text-align: center;
-  color: #888;
+  color: #888888;
 }
 
 /* 수치 및 폰트 스타일 강제 통일 */
 #weightList .record-value,
 #yearWeightList .record-value,
-#allWeightList .record-value,
-#allWeightList li {
+#allWeightList .record-value {
   text-align: right;
-  font-weight: bold;
-  font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 유지를 위한 설정 */
-  color: #2b6cb0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #222222;
 }
 
 /* 뱃지 스타일 (통일 적용) */
@@ -1108,17 +1107,5 @@ html, body {
     box-sizing: border-box;
 }
 
-/* 전체/연간 뷰 폰트 및 색상 강제 통일 */
-#allWeightList li,
-#yearWeightList li,
-#allWeightList .record-value,
-#yearWeightList .record-value {
-  font-family: inherit !important;
-  color: #222222 !important;
-  font-weight: 600 !important;
-}
 
-#allWeightList .record-date,
-#yearWeightList .record-date {
-  color: #666666 !important;
-}
+
