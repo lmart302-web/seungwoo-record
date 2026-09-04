@@ -280,15 +280,15 @@ button:hover {
     text-indent: -1.4em;
 }
 
-/* 2. 점심 영역 (왼쪽 밀착 음영 박스) */
-.calendar-day div:nth-of-type(2) {
+/* 2. 점심 영역 (내용이 있을 때만 음영 적용) */
+.calendar-day div:nth-of-type(2):not(:empty) {
     background-color: #fff8f0;
-    margin-left: -8px;       /* 좌측 테두리에 딱 밀착 */
-    margin-right: -8px;      /* 우측 테두리까지 가득 채움 */
-    padding: 2px 8px;        /* 안쪽 텍스트 여백 */
+    margin-left: -8px;
+    margin-right: -8px;
+    padding: 2px 8px;
     font-size: 10.5px;
     text-indent: 0;
-    border-radius: 0;        /* 테두리에 맞게 사각형 유지 */
+    border-radius: 0;
 }
 
 /* 3. 오후 영역 (이모지 아래 내어쓰기) */
@@ -301,16 +301,16 @@ button:hover {
     text-indent: -1.4em;
 }
 
-/* 4. 런닝 영역 (왼쪽 밀착 음영 박스) */
-.calendar-day div:nth-of-type(4) {
+/* 4. 런닝 영역 (내용이 있을 때만 음영 적용) */
+.calendar-day div:nth-of-type(4):not(:empty) {
     background-color: #f0f7ff;
-    margin-left: -8px;       /* 좌측 테두리에 딱 밀착 */
-    margin-right: -8px;      /* 우측 테두리까지 가득 채움 */
-    padding: 2px 8px;        /* 안쪽 텍스트 여백 */
+    margin-left: -8px;
+    margin-right: -8px;
+    padding: 2px 8px;
     font-weight: 600;
     color: #1e40af;
     text-indent: 0;
-    border-radius: 0;        /* 테두리에 맞게 사각형 유지 */
+    border-radius: 0;
 }
 
 
