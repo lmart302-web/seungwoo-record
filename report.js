@@ -1,643 +1,259 @@
 console.log("report.js 실행됨");
 
-
 import { app } from "./firebase.js";
 
 import {
     getFirestore,
     collection,
     getDocs
-}
-    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const db = getFirestore(app);
 
-
 let records = [];
 
-
-const monthTitle =
-    document.getElementById("monthTitle");
-
+const monthTitle = document.getElementById("monthTitle");
 
 let currentDate = new Date();
 
-
-
-
-
 async function loadRecords() {
-
-
     const snapshot = await getDocs(
-
         collection(db, "records")
-
     );
-
-
 
     records = [];
 
-
-
     snapshot.forEach(function (doc) {
-
-
         records.push(doc.data());
-
-
     });
-
-
-
 
     records.sort(function (a, b) {
-
-
         return new Date(a.date) - new Date(b.date);
-
-
     });
 
-
-
-
     drawReport();
-
-
 }
 
-
-
-
-
-
-
-
-
 function drawReport() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-
-
-    const year =
-        currentDate.getFullYear();
-
-
-
-    const month =
-        currentDate.getMonth();
-
-
-
-
-
-    monthTitle.innerText =
-
-        year + "년 " + (month + 1) + "월";
-
+    monthTitle.innerText = year + "년 " + (month + 1) + "월";
 
     const runningLink = document.querySelector(".running-link");
-
     if (runningLink) {
-
-        const monthValue =
-            year + "-" + String(month + 1).padStart(2, "0");
-
-        runningLink.href =
-            "running.html?month=" + monthValue;
-
+        const monthValue = year + "-" + String(month + 1).padStart(2, "0");
+        runningLink.href = "running.html?month=" + monthValue;
     }
 
-
     const weightLink = document.querySelector(".weight-link");
-
     if (weightLink) {
-
-        const monthValue =
-            year + "-" + String(month + 1).padStart(2, "0");
-
-        weightLink.href =
-            "weight.html?month=" + monthValue;
-
+        const monthValue = year + "-" + String(month + 1).padStart(2, "0");
+        weightLink.href = "weight.html?month=" + monthValue;
     }
 
     const monthRecords = records.filter(function (record) {
-
-
-
-        const recordDate =
-
-            new Date(record.date);
-
-
-
-
+        const recordDate = new Date(record.date);
         return (
-
             recordDate.getFullYear() === year &&
-
             recordDate.getMonth() === month
-
         );
-
-
-
     });
 
-
-
-
-
-
-
-
-
-    // 체중
-
-
+    // ==========================================
+    // 체중 리포트 및 스펙트럼 바 렌더링
+    // ==========================================
     const weightRecords = monthRecords.filter(function (record) {
-
-
-
         return record.weight;
-
-
-
     });
-
-
-
-
 
     if (weightRecords.length) {
+        const first = Number(weightRecords[0].weight);
+        const last = Number(weightRecords[weightRecords.length - 1].weight);
+        const diff = (last - first).toFixed(1);
 
-
-
-        const first =
-
-            Number(weightRecords[0].weight);
-
-
-
-
-
-        const last =
-
-            Number(weightRecords[weightRecords.length - 1].weight);
-
-
-
-
-
-        const diff =
-
-            (last - first).toFixed(1);
-
-
-
-
-
-        let result =
-
-            first + "kg → " + last + "kg";
-
+        // 변화량 텍스트 생성
+        let changeText = first + "kg → " + last + "kg";
         if (diff > 0) {
-
-            result += " (+" + diff + "kg)";
-
-        }
-        else if (diff < 0) {
-
-            result += " (" + diff + "kg)";
-
-        }
-        else {
-
-            result += " (변화 없음)";
-
+            changeText += " (+" + diff + "kg)";
+        } else if (diff < 0) {
+            changeText += " (" + diff + "kg)";
+        } else {
+            changeText += " (변화 없음)";
         }
 
- // 평균 체중 계산
-        const averageWeight =
+        // 평균 체중 계산
+        const averageWeight = weightRecords.reduce(function (sum, record) {
+            return sum + Number(record.weight);
+        }, 0) / weightRecords.length;
 
-    weightRecords.reduce(function (sum, record) {
+        // 최고 / 최저 체중 계산 및 진폭 계산
+        const maxWeight = Math.max(...weightRecords.map(r => Number(r.weight)));
+        const minWeight = Math.min(...weightRecords.map(r => Number(r.weight)));
+        const amplitude = (maxWeight - minWeight).toFixed(1);
 
-        return sum + Number(record.weight);
+        // 평균 위치 비율(%) 계산 (최저~최고 구간)
+        let avgPercent = 50;
+        if (maxWeight > minWeight) {
+            avgPercent = ((averageWeight - minWeight) / (maxWeight - minWeight)) * 100;
+        }
 
-    }, 0) / weightRecords.length;
+        // HTML 스펙트럼 바 레이아웃 생성
+        const spectrumHtml = `
+            <div class="weight-summary-header">
+                ${changeText}
+            </div>
+            
+            <div class="spectrum-container">
+                <div class="spectrum-labels">
+                    <span class="label-min">⬇ 최저 ${minWeight.toFixed(1)}kg</span>
+                    <span class="label-max">⬆ 최고 ${maxWeight.toFixed(1)}kg</span>
+                </div>
+                
+                <div class="spectrum-bar-wrapper">
+                    <div class="spectrum-bar"></div>
+                    <div class="spectrum-pointer" style="left: ${avgPercent}%;">
+                        <span class="pointer-tooltip">평균 ${averageWeight.toFixed(1)}kg</span>
+                    </div>
+                </div>
 
-        // 최고 / 최저 체중 계산
-        const maxWeight =
+                <div class="spectrum-footer">
+                    ↕️ 변동 진폭: <strong>${amplitude} kg</strong> (${minWeight.toFixed(1)} ~ ${maxWeight.toFixed(1)} kg)
+                </div>
+            </div>
+        `;
 
-            Math.max(...weightRecords.map(function (record) {
-
-                return Number(record.weight);
-
-            }));
-
-
-        const minWeight =
-
-            Math.min(...weightRecords.map(function (record) {
-
-                return Number(record.weight);
-
-            }));
-
-
-        result +=
-
-    "\n\n⬆ 최고 : " + maxWeight + "kg" +    
-
-    "\n📊 평균 : " + averageWeight.toFixed(1) + "kg" +
-
-    "\n⬇ 최저 : " + minWeight + "kg" ;
-
-
-        document.getElementById("weightSummary").innerText =
-
-            result;
-
-
-
+        document.getElementById("weightSummary").innerHTML = spectrumHtml;
+    } else {
+        document.getElementById("weightSummary").innerText = "기록 없음";
     }
 
-    else {
-
-
-
-        document.getElementById("weightSummary").innerText =
-
-            "기록 없음";
-
-
-
-    }
-
-
-
-
-
-
-
-
-
-   // 운동 기록
-
-let runningTotal = 0;
-
-let runningCount = 0;
-
-let goalCount = 0;
-
-
-monthRecords.forEach(function (record) {
-
-    if (record.running) {
-
-        const time = Number(record.running);
-
-        runningTotal += time;
-
-        runningCount++;
-
-        if (time >= 20) {
-
-            goalCount++;
-
-        }
-
-    }
-
-});
-
-
-    // 행동
-
-
-    let good = 0;
-
-
-    let normal = 0;
-
-
-    let hard = 0;
-
-
-
-
-
-
+    // 운동 기록
+    let runningTotal = 0;
+    let runningCount = 0;
+    let goalCount = 0;
 
     monthRecords.forEach(function (record) {
-
-
-
-        if (record.behavior === "good") good++;
-
-
-        if (record.behavior === "normal") normal++;
-
-
-        if (record.behavior === "hard") hard++;
-
-
-
+        if (record.running) {
+            const time = Number(record.running);
+            runningTotal += time;
+            runningCount++;
+            if (time >= 20) {
+                goalCount++;
+            }
+        }
     });
 
+    // 행동
+    let good = 0;
+    let normal = 0;
+    let hard = 0;
 
-
-
-
-
+    monthRecords.forEach(function (record) {
+        if (record.behavior === "good") good++;
+        if (record.behavior === "normal") normal++;
+        if (record.behavior === "hard") hard++;
+    });
 
     document.getElementById("goodCount").innerText = good;
-
-
     document.getElementById("normalCount").innerText = normal;
-
-
     document.getElementById("hardCount").innerText = hard;
 
-
     // ===== 행동 미니 달력 =====
-
-    const miniCalendar =
-        document.getElementById("behaviorMiniCalendar");
-
+    const miniCalendar = document.getElementById("behaviorMiniCalendar");
     miniCalendar.innerHTML = "";
 
     // 요일 제목
     ["월", "화", "수", "목", "금"].forEach(function (day) {
-
-        const header =
-            document.createElement("div");
-
+        const header = document.createElement("div");
         header.className = "mini-header";
-
         header.innerText = day;
-
         miniCalendar.appendChild(header);
-
     });
 
     // 이번 달 첫날
-    const firstDay =
-        new Date(year, month, 1);
+    const firstDay = new Date(year, month, 1);
 
     // 월요일 기준 시작 위치
-    let start =
-        firstDay.getDay();
-
+    let start = firstDay.getDay();
     if (start === 0) {
         start = 6;
-    }
-    else {
+    } else {
         start--;
     }
 
     // 첫 주 빈칸
     for (let i = 0; i < start; i++) {
-
-        const empty =
-            document.createElement("div");
-
-        empty.className =
-            "mini-empty";
-
+        const empty = document.createElement("div");
+        empty.className = "mini-empty";
         miniCalendar.appendChild(empty);
-
     }
 
     // 날짜 출력
     monthRecords.forEach(function (record) {
-
-        const recordDate =
-            new Date(record.date);
-
-        const day =
-            recordDate.getDay();
+        const recordDate = new Date(record.date);
+        const day = recordDate.getDay();
 
         // 토,일은 표시 안함
         if (day === 0 || day === 6) {
-
             return;
-
         }
 
-        const cell =
-            document.createElement("div");
-
-        cell.className =
-            "mini-day";
+        const cell = document.createElement("div");
+        cell.className = "mini-day";
 
         if (record.behavior === "good") {
-
             cell.classList.add("mini-good");
-
-        }
-
-        else if (record.behavior === "normal") {
-
+        } else if (record.behavior === "normal") {
             cell.classList.add("mini-normal");
-
-        }
-
-        else if (record.behavior === "hard") {
-
+        } else if (record.behavior === "hard") {
             cell.classList.add("mini-hard");
-
         }
 
         cell.title = record.date;
-
         miniCalendar.appendChild(cell);
-
     });
-
-
-
-
-
 
     // 점심 TOP1
-
-
     const lunchMap = {};
 
-
-
-
-
-
     monthRecords.forEach(function (record) {
-
-
-
         if (!record.lunch) return;
 
-
-
-
-
         if (!lunchMap[record.lunch]) {
-
-
             lunchMap[record.lunch] = 0;
-
-
         }
-
-
-
 
         lunchMap[record.lunch]++;
-
-
-
     });
-
-
-
-
-
-
 
     let topLunch = "기록 없음";
-
-
     let topCount = 0;
 
-
-
-
-
-
-
-
     for (const lunch in lunchMap) {
-
-
-
         if (lunchMap[lunch] > topCount) {
-
-
-
             topCount = lunchMap[lunch];
-
-
             topLunch = lunch;
-
-
-
         }
-
-
-
     }
-
-
-
-
-
-
 
     if (topCount) {
-
-
-
         document.getElementById("topLunch").innerText =
-
             topLunch + " (" + topCount + "회)";
-
-
-
-    }
-
-    else {
-
-
-
+    } else {
         document.getElementById("topLunch").innerText =
-
             "기록 없음";
-
-
-
     }
-
-
-
 }
 
+document.getElementById("prevMonth").addEventListener("click", function () {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    drawReport();
+});
 
-
-
-
-
-
-
-
-document
-
-    .getElementById("prevMonth")
-
-    .addEventListener("click", function () {
-
-
-
-        currentDate.setMonth(
-
-            currentDate.getMonth() - 1
-
-        );
-
-
-
-        drawReport();
-
-
-
-    });
-
-
-
-
-
-
-
-
-
-document
-
-    .getElementById("nextMonth")
-
-    .addEventListener("click", function () {
-
-
-
-        currentDate.setMonth(
-
-            currentDate.getMonth() + 1
-
-        );
-
-
-
-        drawReport();
-
-
-
-    });
-
-
-
-
-
-
-
-
+document.getElementById("nextMonth").addEventListener("click", function () {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    drawReport();
+});
 
 loadRecords();

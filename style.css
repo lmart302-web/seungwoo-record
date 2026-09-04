@@ -906,3 +906,99 @@ html, body {
     padding-right: 0 !important;
   }
 }
+
+/* 체중 요약 상단 텍스트 */
+.weight-summary-header {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+/* 스펙트럼 카드 전체 */
+.spectrum-container {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 6px;
+}
+
+/* 최저 / 최고 라벨 */
+.spectrum-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.label-min { color: #2563eb; } /* 파란색 계열 */
+.label-max { color: #dc2626; } /* 빨간색 계열 */
+
+/* 스펙트럼 막대 래퍼 */
+.spectrum-bar-wrapper {
+    position: relative;
+    height: 10px;
+    margin: 28px 0 16px 0;
+}
+
+/* 그라데이션 트랙 */
+.spectrum-bar {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 50%, #ef4444 100%);
+}
+
+/* 평균 포인터 */
+.spectrum-pointer {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background-color: #ffffff;
+    border: 3px solid #1e293b;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* 평균 툴팁 (말풍선) */
+.pointer-tooltip {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: #1e293b;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.pointer-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: #1e293b transparent transparent transparent;
+}
+
+/* 하단 진폭 안내 */
+.spectrum-footer {
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+    border-top: 1px dashed #dee2e6;
+    padding-top: 10px;
+    margin-top: 8px;
+}
+
+.spectrum-footer strong {
+    color: #0f172a;
+}
