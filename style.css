@@ -891,7 +891,7 @@ html, body {
 }
 
 /* ==========================================================================
-   11. Weight Records List Layout
+   11. Weight Records List Layout (월간 / 연간 / 전체 통일)
    ========================================================================== */
 #weightList, 
 #yearWeightList, 
@@ -910,7 +910,7 @@ html, body {
   justify-content: start;
   align-items: center;
   padding: 6px 0;
-  white-space: nowrap; /* 자동 줄바꿈 금지 */
+  white-space: nowrap;
 }
 
 /* 전체 뷰 연도 헤더 */
@@ -930,7 +930,7 @@ html, body {
   padding-top: 0;
 }
 
-/* 날짜, 콜론, 값 스타일 (월간/연간/전체 동일) */
+/* 날짜, 콜론, 값 스타일 (월간/연간/전체 폰트 통일) */
 #weightList .record-date,
 #yearWeightList .record-date,
 #allWeightList .record-date {
@@ -946,12 +946,14 @@ html, body {
   color: #888;
 }
 
+/* 수치 및 폰트 스타일 강제 통일 */
 #weightList .record-value,
 #yearWeightList .record-value,
-#allWeightList .record-value {
+#allWeightList .record-value,
+#allWeightList li {
   text-align: right;
   font-weight: bold;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 유지를 위한 설정 */
   color: #2b6cb0;
 }
 
@@ -963,7 +965,7 @@ html, body {
   padding-left: 6px;
   font-size: 0.85em;
   font-weight: bold;
-  color: #e53e3e; /* 최고/최저 강조 빨간색 */
+  color: #e53e3e;
   white-space: nowrap;
 }
 
@@ -1104,4 +1106,19 @@ html, body {
     font-weight: bold;
     color: #e65100;
     box-sizing: border-box;
+}
+
+/* 전체/연간 뷰 폰트 및 색상 강제 통일 */
+#allWeightList li,
+#yearWeightList li,
+#allWeightList .record-value,
+#yearWeightList .record-value {
+  font-family: inherit !important;
+  color: #222222 !important;
+  font-weight: 600 !important;
+}
+
+#allWeightList .record-date,
+#yearWeightList .record-date {
+  color: #666666 !important;
 }
