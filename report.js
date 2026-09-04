@@ -215,64 +215,41 @@ function drawReport() {
     }
 
     // ==========================================
-    // ==========================================
-    // 행동 미니 달력 (평일 월~금 기준)
+    // 행동 미니 달력 (기록이 채워진 날만 가변 공간 확보)
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
 
     if (miniCalendar) {
         miniCalendar.innerHTML = "";
 
-        // 요일 제목
-        ["월", "화", "수", "목", "금"].forEach(function (day) {
-            const header = document.createElement("div");
-            header.className = "mini-header";
-            header.innerText = day;
-            miniCalendar.appendChild(header);
-        });
-
-        // 1일부터 마지막 날까지 루프 생성
-        const lastDay = new Date(year, month + 1, 0).getDate();
-
-        // 날짜별 record 맵 생성
-        const recordMap = {};
-        monthRecords.forEach(function (r) {
+        // 이번 달 기록 중 행동(behavior) 데이터가 존재하는 날짜만 필터링
+        const activeRecords = monthRecords.filter(function (r) {
             const rd = parseDate(r.date);
-            if (rd) {
-                recordMap[rd.getDate()] = r;
-            }
+            if (!rd) return false;
+            
+            // 평일(월~금)이면서 행동 기록이 있는 경우만 포함
+            const dayOfWeek = rd.getDay();
+            return dayOfWeek !== 0 && dayOfWeek !== 6 && r.behavior;
         });
 
-        // 1일의 요일 확인 (0: 일, 1: 월 ... 6: 토)
-        const firstDayObj = new Date(year, month, 1);
-        let startDay = firstDayObj.getDay();
+        // 날짜순 오름차순 정렬
+        activeRecords.sort(function (a, b) {
+            return parseDate(a.date) - parseDate(b.date);
+        });
 
-        // 월요일 기준 첫 주 빈칸 계산
-        let emptyCount = 0;
-        if (startDay === 0 || startDay === 6) emptyCount = 0; 
-        else emptyCount = startDay - 1; 
+        if (activeRecords.length === 0) {
+            // 기록이 아예 없는 경우 안내 문구 (선택 사항)
+            const emptyNotice = document.createElement("div");
+            emptyNotice.style.cssText = "color: #a0aec0; font-size: 0.85rem; padding: 8px 0;";
+            emptyNotice.innerText = "기록된 행동이 없습니다.";
+            miniCalendar.appendChild(emptyNotice);
+        } else {
+            // 기록이 있는 날만 요소를 생성해서 추가
+            activeRecords.forEach(function (record) {
+                const rd = parseDate(record.date);
+                const cell = document.createElement("div");
+                cell.className = "mini-day";
 
-        for (let i = 0; i < emptyCount; i++) {
-            const empty = document.createElement("div");
-            empty.className = "mini-empty";
-            miniCalendar.appendChild(empty);
-        }
-
-        // 날짜 출력 (평일만)
-        for (let dayNum = 1; dayNum <= lastDay; dayNum++) {
-            const dateObj = new Date(year, month, dayNum);
-            const dayOfWeek = dateObj.getDay();
-
-            // 주말(토, 일) 제외
-            if (dayOfWeek === 0 || dayOfWeek === 6) continue;
-
-            const cell = document.createElement("div");
-            cell.className = "mini-day";
-
-            const record = recordMap[dayNum];
-
-            // 💡 데이터가 존재하고 행동(behavior) 값이 있을 때만 상태 클래스 적용
-            if (record && record.behavior) {
                 if (record.behavior === "good") {
                     cell.classList.add("mini-good");
                 } else if (record.behavior === "normal") {
@@ -280,14 +257,10 @@ function drawReport() {
                 } else if (record.behavior === "hard") {
                     cell.classList.add("mini-hard");
                 }
-                cell.title = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-            } else {
-                // 데이터가 없는 날은 회색 음영 제거 (기본 투명/흰색 스타일 유지)
-                cell.style.backgroundColor = "transparent";
-                cell.style.border = "none";
-            }
 
-            miniCalendar.appendChild(cell);
+                cell.title = `${rd.getFullYear()}-${String(rd.getMonth() + 1).padStart(2, '0')}-${String(rd.getDate()).padStart(2, '0')}`;
+                miniCalendar.appendChild(cell);
+            });
         }
     }
 
