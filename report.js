@@ -215,7 +215,7 @@ function drawReport() {
     }
 
     // ==========================================
-    // ===== 행동 미니 달력 (원본 로직 복원) =====
+    // ===== 행동 미니 달력 (행동 기록이 있을 때만 표시) =====
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
 
@@ -248,8 +248,11 @@ function drawReport() {
             miniCalendar.appendChild(empty);
         }
 
-        // 날짜 출력
+        // 날짜 출력 (행동 데이터가 있는 기록만 표시)
         monthRecords.forEach(function (record) {
+            // 💡 핵심: 체중만 있고 행동(behavior) 기록이 없으면 달력 칸을 만들지 않고 건너뜀
+            if (!record.behavior) return;
+
             const recordDate = parseDate(record.date);
             if (!recordDate) return;
 
