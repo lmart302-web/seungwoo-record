@@ -274,12 +274,20 @@ button:hover {
     height: 32px; /* 오전 2줄 */
     white-space: pre-line;
     overflow: hidden;
+
+    /* 👇 이모지 아래를 비워주는 내어쓰기 설정 (추가) */
+    padding-left: 1.4em;  /* 둘째 줄부터 들어갈 여백 */
+    text-indent: -1.4em;   /* 첫째 줄(이모지)만 왼쪽으로 당김 */
 }
 
 .calendar-day div:nth-of-type(3) {
     height: 32px; /* 오후 3줄 */
     white-space: pre-line;
     overflow: hidden;
+
+    /* 👇 이모지 아래를 비워주는 내어쓰기 설정 (추가) */
+    padding-left: 1.4em;  /* 둘째 줄부터 들어갈 여백 */
+    text-indent: -1.4em;   /* 첫째 줄(이모지)만 왼쪽으로 당김 */
 }
 
 .sunday strong {
