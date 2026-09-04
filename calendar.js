@@ -400,7 +400,7 @@ function drawCalendar() {
 
                 html +=
 
-                    "<div class='record-line'>🌙 " +
+                    "<div class='record-line'>⛅ " +
 
                     (record.afternoon || "") +
 
