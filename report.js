@@ -16,11 +16,11 @@ const monthTitle = document.getElementById("monthTitle");
 
 let currentDate = new Date();
 
-// 💡 안전한 날짜 파싱 함수 (시차 버그 방지)
+// 안전한 날짜 파싱 함수 (시차 방지)
 function parseDate(dateStr) {
     if (!dateStr) return null;
     if (typeof dateStr === "object" && dateStr.toDate) {
-        return dateStr.toDate(); // Firestore Timestamp 대응
+        return dateStr.toDate();
     }
     const parts = String(dateStr).split("-");
     if (parts.length >= 3) {
@@ -86,7 +86,7 @@ function drawReport() {
     // 체중 리포트 및 스펙트럼 바 렌더링
     // ==========================================
     const weightRecords = monthRecords.filter(function (record) {
-        return record.weight !== undefined && record.weight !== null && record.weight !== "";
+        return record.weight;
     });
 
     const weightSummaryEl = document.getElementById("weightSummary");
@@ -154,7 +154,7 @@ function drawReport() {
         }
     }
 
-    // 운동 기록 계산
+    // 운동 기록
     let runningTotal = 0;
     let runningCount = 0;
     let goalCount = 0;
@@ -170,7 +170,7 @@ function drawReport() {
         }
     });
 
-    // 행동 통계 계산
+    // 행동
     let good = 0;
     let normal = 0;
     let hard = 0;
@@ -215,57 +215,69 @@ function drawReport() {
     }
 
     // ==========================================
-    // 행동 미니 달력 (기록이 채워진 날만 가변 공간 확보)
+    // ===== 행동 미니 달력 (원본 로직 복원) =====
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
 
     if (miniCalendar) {
         miniCalendar.innerHTML = "";
 
-        // 이번 달 기록 중 행동(behavior) 데이터가 존재하는 날짜만 필터링
-        const activeRecords = monthRecords.filter(function (r) {
-            const rd = parseDate(r.date);
-            if (!rd) return false;
-            
-            // 평일(월~금)이면서 행동 기록이 있는 경우만 포함
-            const dayOfWeek = rd.getDay();
-            return dayOfWeek !== 0 && dayOfWeek !== 6 && r.behavior;
+        // 요일 제목
+        ["월", "화", "수", "목", "금"].forEach(function (day) {
+            const header = document.createElement("div");
+            header.className = "mini-header";
+            header.innerText = day;
+            miniCalendar.appendChild(header);
         });
 
-        // 날짜순 오름차순 정렬
-        activeRecords.sort(function (a, b) {
-            return parseDate(a.date) - parseDate(b.date);
-        });
+        // 이번 달 첫날
+        const firstDay = new Date(year, month, 1);
 
-        if (activeRecords.length === 0) {
-            // 기록이 아예 없는 경우 안내 문구 (선택 사항)
-            const emptyNotice = document.createElement("div");
-            emptyNotice.style.cssText = "color: #a0aec0; font-size: 0.85rem; padding: 8px 0;";
-            emptyNotice.innerText = "기록된 행동이 없습니다.";
-            miniCalendar.appendChild(emptyNotice);
+        // 월요일 기준 시작 위치
+        let start = firstDay.getDay();
+        if (start === 0) {
+            start = 6;
         } else {
-            // 기록이 있는 날만 요소를 생성해서 추가
-            activeRecords.forEach(function (record) {
-                const rd = parseDate(record.date);
-                const cell = document.createElement("div");
-                cell.className = "mini-day";
-
-                if (record.behavior === "good") {
-                    cell.classList.add("mini-good");
-                } else if (record.behavior === "normal") {
-                    cell.classList.add("mini-normal");
-                } else if (record.behavior === "hard") {
-                    cell.classList.add("mini-hard");
-                }
-
-                cell.title = `${rd.getFullYear()}-${String(rd.getMonth() + 1).padStart(2, '0')}-${String(rd.getDate()).padStart(2, '0')}`;
-                miniCalendar.appendChild(cell);
-            });
+            start--;
         }
+
+        // 첫 주 빈칸
+        for (let i = 0; i < start; i++) {
+            const empty = document.createElement("div");
+            empty.className = "mini-empty";
+            miniCalendar.appendChild(empty);
+        }
+
+        // 날짜 출력
+        monthRecords.forEach(function (record) {
+            const recordDate = parseDate(record.date);
+            if (!recordDate) return;
+
+            const day = recordDate.getDay();
+
+            // 토,일은 표시 안함
+            if (day === 0 || day === 6) {
+                return;
+            }
+
+            const cell = document.createElement("div");
+            cell.className = "mini-day";
+
+            if (record.behavior === "good") {
+                cell.classList.add("mini-good");
+            } else if (record.behavior === "normal") {
+                cell.classList.add("mini-normal");
+            } else if (record.behavior === "hard") {
+                cell.classList.add("mini-hard");
+            }
+
+            cell.title = record.date;
+            miniCalendar.appendChild(cell);
+        });
     }
 
     // ==========================================
-    // 점심 TOP 1 (공동 1위 처리)
+    // 점심 TOP1 (공동 1위 처리 보완)
     // ==========================================
     const lunchMap = {};
 
@@ -310,7 +322,6 @@ function drawReport() {
     }
 }
 
-// 이벤트 리스너 등록
 const prevBtn = document.getElementById("prevMonth");
 if (prevBtn) {
     prevBtn.addEventListener("click", function () {
