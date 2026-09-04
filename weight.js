@@ -51,6 +51,12 @@ const COMMON_CHART_OPTIONS = {
   maintainAspectRatio: true,
   aspectRatio: isMobile ? 1.1 : 1.8,
   animation: ANIMATION_CONFIG,
+  plugins: {
+    legend: {
+      position: 'top', // 상단 위치
+      align: 'end'     // 오른쪽 정렬
+    }
+  },
   layout: {
     padding: {
       left: isMobile ? 4 : 0,    // 모바일: 체중 숫자 안 깨지게 최소 4px 확보 (PC: 기존 0 유지)
@@ -335,7 +341,7 @@ function drawYearlyWeight() {
       labels,
       datasets: [
         {
-          label: "월 평균 체중",
+          label: "월 평균 체중(kg)",
           data: monthlyAverages,
           pointRadius: 5,
           spanGaps: false
@@ -462,7 +468,7 @@ function drawAllWeight() {
       labels,
       datasets: [
         {
-          label: "월 평균 체중",
+          label: "월 평균 체중(kg)",
           data: monthlyData,
           pointRadius: 5,
           pointHoverRadius: 7,
