@@ -1,5 +1,5 @@
 import { app } from "./firebase.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const db = getFirestore(app);
 
@@ -11,7 +11,7 @@ let allChart = null;
 
 const WEEK_DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-// 날짜 안전 파싱 (시차 오류 방지)
+// 날짜 안전 파싱 (시차 및 문자열 파싱 보완)
 function parseDate(dateStr) {
   if (!dateStr) return null;
   const parts = dateStr.split("-");
@@ -53,24 +53,22 @@ const COMMON_CHART_OPTIONS = {
   animation: ANIMATION_CONFIG,
   plugins: {
     legend: {
-      position: 'top', // 상단 위치
-      align: 'end'     // 오른쪽 정렬
+      position: 'top',
+      align: 'end'
     }
   },
   layout: {
     padding: {
-      left: isMobile ? 4 : 0,    // 모바일: 체중 숫자 안 깨지게 최소 4px 확보 (PC: 기존 0 유지)
-      right: isMobile ? 2 : 15,  // 모바일: 오른쪽 여백 2px로 축소하여 가로 확장 (PC: 기존 15 유지)
+      left: isMobile ? 4 : 0,
+      right: isMobile ? 2 : 15,
       top: 10,
       bottom: 0
     }
   },
   scales: {
     x: {
-      offset: false, // X축 양 끝 공백 제거하여 차트를 좌우로 더 꽉 채움
-      grid: {
-        drawBorder: false
-      },
+      offset: false,
+      grid: { drawBorder: false },
       ticks: {
         font: { size: 10 },
         maxRotation: 0,
@@ -80,9 +78,7 @@ const COMMON_CHART_OPTIONS = {
     y: {
       beginAtZero: false,
       grace: '10%',
-      ticks: {
-        font: { size: 10 }
-      }
+      ticks: { font: { size: 10 } }
     }
   }
 };
@@ -144,16 +140,16 @@ const averageLabelPlugin = {
 };
 
 /* =========================
-   데이터 로드
+   데이터 로드 (DB 쿼리 정렬 적용)
 ========================= */
 async function loadRecords() {
   try {
-    const snapshot = await getDocs(collection(db, "records"));
+    // Firestore 쿼리 수준에서 date 기준 오름차순 정렬
+    const q = query(collection(db, "records"), orderBy("date", "asc"));
+    const snapshot = await getDocs(q);
     
     records = [];
     snapshot.forEach((doc) => records.push(doc.data()));
-    
-    records.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     // 기본 월간 뷰 그리기
     drawWeight();
@@ -190,7 +186,6 @@ function drawWeight() {
     ? weightValues.reduce((sum, w) => sum + w, 0) / weightValues.length
     : 0;
 
-  // 최고 / 최저 값 구하기
   const maxWeight = weightValues.length ? Math.max(...weightValues) : null;
   const minWeight = weightValues.length ? Math.min(...weightValues) : null;
 
@@ -207,13 +202,17 @@ function drawWeight() {
     labels.push([record.date.substring(8, 10), dayOfWeek]);
     weights.push(numWeight);
 
-    // 최고/최저 뱃지 분기 조건
+    // 최초 1회만 최고/최저 뱃지 표시 (최고: 빨강, 최저: 파랑)
     let badgeText = "";
+    let badgeColor = "";
+
     if (maxWeight !== null && numWeight === maxWeight && !maxShown) {
       badgeText = " (최고)";
+      badgeColor = "#ff4d4f"; // 빨간색
       maxShown = true;
     } else if (minWeight !== null && numWeight === minWeight && !minShown) {
       badgeText = " (최저)";
+      badgeColor = "#0052CC"; // 파란색
       minShown = true;
     }
 
@@ -222,20 +221,17 @@ function drawWeight() {
     if (elements.weightList) {
       const li = document.createElement("li");
       li.innerHTML = `
-        <span class="record-date">${formattedDate}</span>
-        <span class="record-colon">:</span>
-        <span class="record-value">${numWeight.toFixed(1)}kg</span>
-        <span class="record-badge" style="font-weight: bold; color: #ff4d4f; margin-left: 4px;">${badgeText}</span>
+        <span class="record-date" style="color: #666666;">${formattedDate}</span>
+  <span class="record-colon">:</span>
+  <span class="record-value" style="color: #222222; font-weight: 600;">${numWeight.toFixed(1)}kg</span>
+  <span class="record-badge" style="font-weight: bold; color: ${badgeColor}; margin-left: 4px;">${badgeText}</span>
       `;
       elements.weightList.appendChild(li);
     }
   });
 
-  // 기존 차트 파괴
-  if (chart) {
-    chart.destroy();
-    chart = null;
-  }
+  // 기존 차트 확실한 파괴 처리
+  if (chart) chart.destroy();
   const existingChart = Chart.getChart(elements.monthCtx);
   if (existingChart) existingChart.destroy();
 
@@ -295,7 +291,6 @@ function drawYearlyWeight() {
     monthlyAverages.push(averageValue);
   }
 
-  // 연간 평균 체중 최고/최저 계산
   const validAverages = monthlyAverages.filter((val) => val !== null);
   const maxAvg = validAverages.length ? Math.max(...validAverages) : null;
   const minAvg = validAverages.length ? Math.min(...validAverages) : null;
@@ -307,11 +302,15 @@ function drawYearlyWeight() {
     if (averageValue === null) continue;
 
     let badgeText = "";
+    let badgeColor = "";
+
     if (maxAvg !== null && averageValue === maxAvg && !maxShown) {
       badgeText = " (최고)";
+      badgeColor = "#ff4d4f"; // 빨간색
       maxShown = true;
     } else if (minAvg !== null && averageValue === minAvg && !minShown) {
       badgeText = " (최저)";
+      badgeColor = "#0052CC"; // 파란색
       minShown = true;
     }
 
@@ -321,17 +320,13 @@ function drawYearlyWeight() {
         <span class="record-date">${month + 1}월</span>
         <span class="record-colon">:</span>
         <span class="record-value">${averageValue.toFixed(1)}kg</span>
-        <span class="record-badge" style="font-weight: bold; color: #ff4d4f; margin-left: 4px;">${badgeText}</span>
+        <span class="record-badge" style="font-weight: bold; color: ${badgeColor}; margin-left: 4px;">${badgeText}</span>
       `;
       elements.yearWeightList.appendChild(li);
     }
   }
 
-  // 기존 차트 파괴
-  if (yearChart) {
-    yearChart.destroy();
-    yearChart = null;
-  }
+  if (yearChart) yearChart.destroy();
   const existingChart = Chart.getChart(elements.yearCtx);
   if (existingChart) existingChart.destroy();
 
@@ -410,7 +405,6 @@ function drawAllWeight() {
     }
   }
 
-  // 전체 최고/최저 계산
   const validMonthlyAverages = monthlyRecords
     .map((item) => item.average)
     .filter((avg) => avg !== null);
@@ -435,11 +429,15 @@ function drawAllWeight() {
       }
 
       let badgeText = "";
+      let badgeColor = "";
+
       if (maxAvg !== null && item.average === maxAvg && !maxShown) {
         badgeText = " (최고)";
+        badgeColor = "#ff4d4f"; // 빨간색
         maxShown = true;
       } else if (minAvg !== null && item.average === minAvg && !minShown) {
         badgeText = " (최저)";
+        badgeColor = "#0052CC"; // 파란색
         minShown = true;
       }
 
@@ -448,17 +446,13 @@ function drawAllWeight() {
         <span class="record-date">${item.month + 1}월</span>
         <span class="record-colon">:</span>
         <span class="record-value">${item.average.toFixed(1)}kg</span>
-        <span class="record-badge" style="font-weight: bold; color: #ff4d4f; margin-left: 4px;">${badgeText}</span>
+        <span class="record-badge" style="font-weight: bold; color: ${badgeColor}; margin-left: 4px;">${badgeText}</span>
       `;
       elements.allWeightList.appendChild(li);
     }
   });
 
-  // 기존 차트 파괴
-  if (allChart) {
-    allChart.destroy();
-    allChart = null;
-  }
+  if (allChart) allChart.destroy();
   const existingChart = Chart.getChart(elements.allCtx);
   if (existingChart) existingChart.destroy();
 
@@ -504,10 +498,8 @@ function switchView(activeType) {
     }
   });
 
-  // 해당 뷰 다시 그리기
   views[activeType].draw();
 
-  // 화면 전환 시 차트 크기 조정
   requestAnimationFrame(() => {
     setTimeout(() => {
       const activeChart = views[activeType].getChart();
@@ -525,9 +517,9 @@ if (elements.monthlyBtn) {
   elements.monthlyBtn.addEventListener("click", () => switchView("monthly"));
 }
 
-// if (elements.yearlyBtn) {
-//   elements.yearlyBtn.addEventListener("click", () => switchView("yearly"));
-// }
+if (elements.yearlyBtn) {
+  elements.yearlyBtn.addEventListener("click", () => switchView("yearly"));
+}
 
 if (elements.allBtn) {
   elements.allBtn.addEventListener("click", () => switchView("all"));
@@ -536,6 +528,7 @@ if (elements.allBtn) {
 const prevMonthBtn = document.getElementById("prevMonth");
 if (prevMonthBtn) {
   prevMonthBtn.addEventListener("click", () => {
+    currentDate.setDate(1); // 달 변경 전 1일로 변경하여 월 이탈(예: 31일 문제) 방지
     currentDate.setMonth(currentDate.getMonth() - 1);
     drawWeight();
   });
@@ -544,6 +537,7 @@ if (prevMonthBtn) {
 const nextMonthBtn = document.getElementById("nextMonth");
 if (nextMonthBtn) {
   nextMonthBtn.addEventListener("click", () => {
+    currentDate.setDate(1); // 달 변경 전 1일로 변경하여 월 이탈 방지
     currentDate.setMonth(currentDate.getMonth() + 1);
     drawWeight();
   });
