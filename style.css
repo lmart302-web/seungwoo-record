@@ -270,25 +270,50 @@ button:hover {
     text-overflow: ellipsis;
 }
 
+/* 1. 오전 영역 (이모지 아래 내어쓰기) */
 .calendar-day div:first-of-type {
-    height: 32px; /* 오전 2줄 */
+    height: 32px; /* 오전 3줄 */
     white-space: pre-line;
     overflow: hidden;
 
-    /* 👇 이모지 아래를 비워주는 내어쓰기 설정 (추가) */
-    padding-left: 1.4em;  /* 둘째 줄부터 들어갈 여백 */
-    text-indent: -1.4em;   /* 첫째 줄(이모지)만 왼쪽으로 당김 */
+    padding-left: 1.4em;
+    text-indent: -1.4em;
 }
 
+/* 2. 점심 영역 (왼쪽 밀착 음영 박스) */
+.calendar-day div:nth-of-type(2) {
+    background-color: #fff8f0;
+    margin-left: -8px;       /* 좌측 테두리에 딱 밀착 */
+    margin-right: -8px;      /* 우측 테두리까지 가득 채움 */
+    padding: 2px 8px;        /* 안쪽 텍스트 여백 */
+    font-size: 10.5px;
+    text-indent: 0;
+    border-radius: 0;        /* 테두리에 맞게 사각형 유지 */
+}
+
+/* 3. 오후 영역 (이모지 아래 내어쓰기) */
 .calendar-day div:nth-of-type(3) {
     height: 32px; /* 오후 3줄 */
     white-space: pre-line;
     overflow: hidden;
 
-    /* 👇 이모지 아래를 비워주는 내어쓰기 설정 (추가) */
-    padding-left: 1.4em;  /* 둘째 줄부터 들어갈 여백 */
-    text-indent: -1.4em;   /* 첫째 줄(이모지)만 왼쪽으로 당김 */
+    padding-left: 1.4em;
+    text-indent: -1.4em;
 }
+
+/* 4. 런닝 영역 (왼쪽 밀착 음영 박스) */
+.calendar-day div:nth-of-type(4) {
+    background-color: #f0f7ff;
+    margin-left: -8px;       /* 좌측 테두리에 딱 밀착 */
+    margin-right: -8px;      /* 우측 테두리까지 가득 채움 */
+    padding: 2px 8px;        /* 안쪽 텍스트 여백 */
+    font-weight: 600;
+    color: #1e40af;
+    text-indent: 0;
+    border-radius: 0;        /* 테두리에 맞게 사각형 유지 */
+}
+
+
 
 .sunday strong {
     color: red;
