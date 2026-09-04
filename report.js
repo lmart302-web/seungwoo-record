@@ -249,11 +249,11 @@ function drawReport() {
 
         result +=
 
-    "\n\n⬆ 최고 : " + maxWeight + "kg" +
+    "\n\n⬆ 최고 : " + maxWeight + "kg" +    
 
-    "\n⬇ 최저 : " + minWeight + "kg" +
+    "\n📊 평균 : " + averageWeight.toFixed(1) + "kg" +
 
-    "\n📊 평균 : " + averageWeight.toFixed(1) + "kg";
+    "\n⬇ 최저 : " + minWeight + "kg" ;
 
 
         document.getElementById("weightSummary").innerText =
