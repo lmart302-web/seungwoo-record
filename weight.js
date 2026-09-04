@@ -519,9 +519,9 @@ if (elements.monthlyBtn) {
   elements.monthlyBtn.addEventListener("click", () => switchView("monthly"));
 }
 
-if (elements.yearlyBtn) {
-  elements.yearlyBtn.addEventListener("click", () => switchView("yearly"));
-}
+// if (elements.yearlyBtn) {
+//   elements.yearlyBtn.addEventListener("click", () => switchView("yearly"));
+// }
 
 if (elements.allBtn) {
   elements.allBtn.addEventListener("click", () => switchView("all"));
