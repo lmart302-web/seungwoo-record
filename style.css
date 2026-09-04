@@ -1016,3 +1016,16 @@ html, body {
     box-sizing: border-box;
     line-height: 1.4;
 }
+
+/* 점심 TOP 1 강조 박스 */
+.top-lunch-box {
+    margin-top: 10px;
+    padding: 12px 16px;
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #e65100;
+    box-sizing: border-box;
+}

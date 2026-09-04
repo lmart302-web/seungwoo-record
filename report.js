@@ -239,35 +239,45 @@ function drawReport() {
         miniCalendar.appendChild(cell);
     });
 
-    // 점심 TOP1
+    // 점심 TOP1 (공동 1위 처리 보완)
     const lunchMap = {};
 
     monthRecords.forEach(function (record) {
         if (!record.lunch) return;
 
-        if (!lunchMap[record.lunch]) {
-            lunchMap[record.lunch] = 0;
-        }
+        const lunchName = record.lunch.trim();
+        if (!lunchName) return;
 
-        lunchMap[record.lunch]++;
+        if (!lunchMap[lunchName]) {
+            lunchMap[lunchName] = 0;
+        }
+        lunchMap[lunchName]++;
     });
 
-    let topLunch = "기록 없음";
-    let topCount = 0;
-
+    let maxCount = 0;
     for (const lunch in lunchMap) {
-        if (lunchMap[lunch] > topCount) {
-            topCount = lunchMap[lunch];
-            topLunch = lunch;
+        if (lunchMap[lunch] > maxCount) {
+            maxCount = lunchMap[lunch];
         }
     }
 
-    if (topCount) {
-        document.getElementById("topLunch").innerText =
-            topLunch + " (" + topCount + "회)";
+    const topLunchEl = document.getElementById("topLunch");
+
+    if (maxCount > 0) {
+        const topLunches = [];
+        for (const lunch in lunchMap) {
+            if (lunchMap[lunch] === maxCount) {
+                topLunches.push(lunch);
+            }
+        }
+
+        if (topLunches.length > 1) {
+            topLunchEl.innerText = topLunches.join(", ") + " (각 " + maxCount + "회)";
+        } else {
+            topLunchEl.innerText = topLunches[0] + " (" + maxCount + "회)";
+        }
     } else {
-        document.getElementById("topLunch").innerText =
-            "기록 없음";
+        topLunchEl.innerText = "기록 없음";
     }
 }
 
