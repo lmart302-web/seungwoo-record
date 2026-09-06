@@ -17,15 +17,25 @@ const monthTitle = document.getElementById("monthTitle");
 let currentDate = new Date();
 
 // 안전한 날짜 파싱 함수 (시차 방지)
+// 시차(Timezone) 버그를 완벽하게 방지하는 날짜 파싱 함수
 function parseDate(dateStr) {
     if (!dateStr) return null;
-    if (typeof dateStr === "object" && dateStr.toDate) {
+    
+    // Firestore Timestamp 객체인 경우
+    if (typeof dateStr === "object" && typeof dateStr.toDate === "function") {
         return dateStr.toDate();
     }
-    const parts = String(dateStr).split("-");
-    if (parts.length >= 3) {
-        return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2].slice(0, 2)));
+
+    // "YYYY-MM-DD" 또는 "YYYY-MM-DDTHH:mm:ss" 형태의 문자열 파싱
+    if (typeof dateStr === "string") {
+        const cleanStr = dateStr.split("T")[0]; // 시간 정보 제외
+        const parts = cleanStr.split("-");
+        if (parts.length >= 3) {
+            // Month는 0부터 시작하므로 -1
+            return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        }
     }
+
     return new Date(dateStr);
 }
 
@@ -191,15 +201,15 @@ function drawReport() {
 
     
 
-    // ==========================================
-    // ===== 행동 미니 달력 (행동 기록이 있을 때만 표시) =====
+   // ==========================================
+    // ===== 행동 미니 달력 (주말 위치 완전 보정) =====
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
 
     if (miniCalendar) {
         miniCalendar.innerHTML = "";
 
-        // 요일 제목
+        // 요일 헤더 (월, 화, 수, 목, 금)
         ["월", "화", "수", "목", "금"].forEach(function (day) {
             const header = document.createElement("div");
             header.className = "mini-header";
@@ -207,53 +217,68 @@ function drawReport() {
             miniCalendar.appendChild(header);
         });
 
-        // 이번 달 첫날
-        const firstDay = new Date(year, month, 1);
+        // 이번 달 마지막 날짜(일수) 구하기
+        const lastDayNum = new Date(year, month + 1, 0).getDate();
 
-        // 월요일 기준 시작 위치
-        let start = firstDay.getDay();
-        if (start === 0) {
-            start = 6;
-        } else {
-            start--;
-        }
+        // 날짜별 record 맵 생성 (일자 숫자를 키로 저장)
+        const recordMap = {};
+        monthRecords.forEach(function (r) {
+            const rd = parseDate(r.date);
+            if (rd) {
+                recordMap[rd.getDate()] = r;
+            }
+        });
 
-        // 첫 주 빈칸
-        for (let i = 0; i < start; i++) {
+        // 1일의 요일 확인 (0: 일, 1: 월, 2: 화, 3: 수, 4: 목, 5: 금, 6: 토)
+        const firstDayObj = new Date(year, month, 1);
+        const startDayOfWeek = firstDayObj.getDay();
+
+        // 1일 이전의 빈칸(오프셋) 계산 (월요일 기준)
+        let offset = 0;
+        if (startDayOfWeek === 0) offset = 0;      // 일요일 시작
+        else if (startDayOfWeek === 6) offset = 0; // 토요일 시작
+        else offset = startDayOfWeek - 1;          // 월(1)->0, 화(2)->1, 수(3)->2 ...
+
+        // 1일 전 빈 칸 추가
+        for (let i = 0; i < offset; i++) {
             const empty = document.createElement("div");
             empty.className = "mini-empty";
             miniCalendar.appendChild(empty);
         }
 
-        // 날짜 출력 (행동 데이터가 있는 기록만 표시)
-        monthRecords.forEach(function (record) {
-            // 💡 핵심: 체중만 있고 행동(behavior) 기록이 없으면 달력 칸을 만들지 않고 건너뜀
-            if (!record.behavior) return;
+        // 1일부터 마지막 날까지 탐색
+        for (let dayNum = 1; dayNum <= lastDayNum; dayNum++) {
+            const dateObj = new Date(year, month, dayNum);
+            const dayOfWeek = dateObj.getDay();
 
-            const recordDate = parseDate(record.date);
-            if (!recordDate) return;
+            // 💡 핵심: 토요일(6), 일요일(0)은 달력에 그리지를 않고 완전히 건너뜁니다!
+            if (dayOfWeek === 0 || dayOfWeek === 6) continue;
 
-            const day = recordDate.getDay();
+            const record = recordMap[dayNum];
 
-            // 토,일은 표시 안함
-            if (day === 0 || day === 6) {
-                return;
+            // 행동(behavior) 데이터가 있는 평일만 박스 표시
+            if (record && record.behavior) {
+                const cell = document.createElement("div");
+                cell.className = "mini-day";
+
+                if (record.behavior === "good") {
+                    cell.classList.add("mini-good");
+                } else if (record.behavior === "normal") {
+                    cell.classList.add("mini-normal");
+                } else if (record.behavior === "hard") {
+                    cell.classList.add("mini-hard");
+                }
+
+                cell.title = record.date;
+                miniCalendar.appendChild(cell);
+            } else {
+                // 기록이 없는 평일(휴강 등)은 투명한 가짜 셀을 생성하여 요일 위치가 밀리지 않도록 고정
+                const emptyCell = document.createElement("div");
+                emptyCell.className = "mini-day";
+                emptyCell.style.visibility = "hidden";
+                miniCalendar.appendChild(emptyCell);
             }
-
-            const cell = document.createElement("div");
-            cell.className = "mini-day";
-
-            if (record.behavior === "good") {
-                cell.classList.add("mini-good");
-            } else if (record.behavior === "normal") {
-                cell.classList.add("mini-normal");
-            } else if (record.behavior === "hard") {
-                cell.classList.add("mini-hard");
-            }
-
-            cell.title = record.date;
-            miniCalendar.appendChild(cell);
-        });
+        }
     }
 
     // ==========================================
