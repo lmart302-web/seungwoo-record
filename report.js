@@ -17,7 +17,6 @@ const monthTitle = document.getElementById("monthTitle");
 let currentDate = new Date();
 
 // 안전한 날짜 파싱 함수 (시차 방지)
-// 시차(Timezone) 버그를 완벽하게 방지하는 날짜 파싱 함수
 function parseDate(dateStr) {
     if (!dateStr) return null;
     
@@ -31,7 +30,6 @@ function parseDate(dateStr) {
         const cleanStr = dateStr.split("T")[0]; // 시간 정보 제외
         const parts = cleanStr.split("-");
         if (parts.length >= 3) {
-            // Month는 0부터 시작하므로 -1
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
         }
     }
@@ -107,7 +105,6 @@ function drawReport() {
             const last = Number(weightRecords[weightRecords.length - 1].weight);
             const diff = (last - first).toFixed(1);
 
-            // 변화량 텍스트 생성
             let changeText = first + "kg → " + last + "kg";
             if (diff > 0) {
                 changeText += " (+" + diff + "kg)";
@@ -117,23 +114,19 @@ function drawReport() {
                 changeText += " (변화 없음)";
             }
 
-            // 평균 체중 계산
             const averageWeight = weightRecords.reduce(function (sum, record) {
                 return sum + Number(record.weight);
             }, 0) / weightRecords.length;
 
-            // 최고 / 최저 체중 계산 및 진폭 계산
             const maxWeight = Math.max(...weightRecords.map(r => Number(r.weight)));
             const minWeight = Math.min(...weightRecords.map(r => Number(r.weight)));
             const amplitude = (maxWeight - minWeight).toFixed(1);
 
-            // 평균 위치 비율(%) 계산 (최저~최고 구간)
             let avgPercent = 50;
             if (maxWeight > minWeight) {
                 avgPercent = ((averageWeight - minWeight) / (maxWeight - minWeight)) * 100;
             }
 
-            // HTML 스펙트럼 바 레이아웃 생성
             const spectrumHtml = `
                 <div class="weight-summary-header">
                     ${changeText}
@@ -159,8 +152,11 @@ function drawReport() {
             `;
 
             weightSummaryEl.innerHTML = spectrumHtml;
+            weightSummaryEl.style.margin = ""; 
         } else {
             weightSummaryEl.innerText = "기록 없음";
+            weightSummaryEl.style.marginTop = "16px";
+            weightSummaryEl.style.marginBottom = "0px";
         }
     }
 
@@ -200,18 +196,16 @@ function drawReport() {
     if (hardCountEl) hardCountEl.innerText = hard;
 
     // ==========================================
-    // ===== 행동 영역 (기록 없음 좌측 정렬) =====
+    // ===== 행동 영역 (간격 및 하단 여백 최적화) =====
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
     const behaviorSummaryEl = document.querySelector(".behavior-summary");
 
-    // 1. 해당 월에 행동(behavior) 기록 존재 여부 확인
     const hasBehaviorData = monthRecords.some(function (r) {
         return r.behavior;
     });
 
     if (!hasBehaviorData) {
-        // 1. 요약 카운트 영역 숨김
         if (behaviorSummaryEl) {
             behaviorSummaryEl.style.display = "none";
         }
@@ -220,28 +214,26 @@ function drawReport() {
             miniCalendar.innerHTML = "";
             miniCalendar.style.display = "block";
             
-            // 기존 달력에 들어있던 갭/마진 영향 제거
-            miniCalendar.style.marginTop = "0px";
-            miniCalendar.style.paddingTop = "0px";
+            // 여백 초기화 및 체중 영역과 완전히 동일하게 세팅
+            miniCalendar.style.marginTop = "16px";
+            miniCalendar.style.marginBottom = "0px";
+            miniCalendar.style.padding = "0px";
+            miniCalendar.style.minHeight = "0px";
 
-            // 체중 카드 간격과 완전히 동일하게 고정 (margin-top: 16px)
             const noDataEl = document.createElement("div");
             noDataEl.innerText = "기록 없음";
-            noDataEl.style.marginTop = "16px";
-            noDataEl.style.lineHeight = "1.5";
+            noDataEl.style.margin = "0";
+            noDataEl.style.padding = "0";
+            noDataEl.style.lineHeight = "1";
             
             miniCalendar.appendChild(noDataEl);
         }
 
     } else {
-        // ------------------------------------------
-        // [B] 기록이 있는 경우: 기존 달력 그리드 복원 및 렌더링
-        // ------------------------------------------
         if (behaviorSummaryEl) {
             behaviorSummaryEl.style.display = "block";
         }
 
-        // 카운트 계산 및 화면 출력
         let good = 0, normal = 0, hard = 0;
         monthRecords.forEach(function (r) {
             if (r.behavior === "good") good++;
@@ -257,15 +249,14 @@ function drawReport() {
         if (normalCountEl) normalCountEl.innerText = normal;
         if (hardCountEl) hardCountEl.innerText = hard;
 
-        // 미니 달력 출력
         if (miniCalendar) {
             miniCalendar.innerHTML = "";
             
-            // 달력 모드일 때는 기존 grid 레이아웃으로 복원
             miniCalendar.style.display = "grid";
             miniCalendar.style.textAlign = "initial";
+            miniCalendar.style.marginTop = "";
+            miniCalendar.style.marginBottom = "";
 
-            // 요일 헤더 (월~금)
             ["월", "화", "수", "목", "금"].forEach(function (day) {
                 const header = document.createElement("div");
                 header.className = "mini-header";
@@ -289,19 +280,17 @@ function drawReport() {
                 offset = startDayOfWeek - 1;
             }
 
-            // 1일 이전 오프셋 (투명 공간)
             for (let i = 0; i < offset; i++) {
                 const empty = document.createElement("div");
                 empty.style.visibility = "hidden";
                 miniCalendar.appendChild(empty);
             }
 
-            // 1일 ~ 마지막 날 달력 렌더링
             for (let dayNum = 1; dayNum <= lastDayNum; dayNum++) {
                 const dateObj = new Date(year, month, dayNum);
                 const dayOfWeek = dateObj.getDay();
 
-                if (dayOfWeek === 0 || dayOfWeek === 6) continue; // 주말 제외
+                if (dayOfWeek === 0 || dayOfWeek === 6) continue;
 
                 const record = recordMap[dayNum];
 
@@ -324,8 +313,8 @@ function drawReport() {
         }
     }
 
-    // ==========================================
-    // 점심 TOP1 (공동 1위 처리 보완)
+  // ==========================================
+    // 점심 TOP1
     // ==========================================
     const lunchMap = {};
 
@@ -351,6 +340,9 @@ function drawReport() {
     const topLunchEl = document.getElementById("topLunch");
 
     if (topLunchEl) {
+        // 이전 인라인 스타일 초기화
+        topLunchEl.style.cssText = "";
+
         if (maxCount > 0) {
             const topLunches = [];
             for (const lunch in lunchMap) {
@@ -364,8 +356,16 @@ function drawReport() {
             } else {
                 topLunchEl.innerText = topLunches[0] + " (" + maxCount + "회)";
             }
+
+            // [기록 있음] 주황색 상자 클래스 추가
+            topLunchEl.classList.add("top-lunch-box");
         } else {
             topLunchEl.innerText = "기록 없음";
+
+            // [기록 없음] 주황색 클래스 제거 및 위 카드들과 간격/위치 정렬
+            topLunchEl.classList.remove("top-lunch-box");
+            topLunchEl.style.marginTop = "16px";
+            topLunchEl.style.color = "#6c757d";
         }
     }
 }

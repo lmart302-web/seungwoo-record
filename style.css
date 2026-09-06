@@ -53,12 +53,11 @@ nav a.active {
 
 .section {
     background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 20px 20px 12px 20px;  /* ← [상, 우, 하, 좌] 순서대로 지정 (하단만 12px로 축소) */
+    margin-bottom: 20px;          /* ← 카드와 카드 사이 간격도 약간 줄이고 싶다면 15px로 조절 */
     border-radius: 15px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
 }
-
 /* ==========================================================================
    3. Start Screen & Profile & Menu Cards
    ========================================================================== */
