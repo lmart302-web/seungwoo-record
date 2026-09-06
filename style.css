@@ -1106,5 +1106,7 @@ html, body {
     box-sizing: border-box;
 }
 
-
-
+/* 리포트 상단 바 흰색 카드의 내부 아래 여백을 줄임 */
+.report-month-bar {
+    padding-bottom: 1.3px; /* 기본값(보통 20px 등)에서 원하는 만큼 줄여보세요 (예: 6px, 8px, 10px) */
+}

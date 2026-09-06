@@ -373,7 +373,7 @@ function drawReport() {
             }
 
             topLunchEl.classList.add("top-lunch-box");
-            if (lunchSection) lunchSection.style.paddingBottom = "24px";
+            if (lunchSection) lunchSection.style.paddingBottom = "16px";
         } else {
             topLunchEl.innerText = "기록 없음";
 
