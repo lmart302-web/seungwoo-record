@@ -202,7 +202,7 @@ function drawReport() {
     
 
    // ==========================================
-    // ===== 행동 미니 달력 (주말 위치 완전 보정) =====
+    // ===== 행동 미니 달력 (고정 위치 + 기록된 날만 박스 표시) =====
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
 
@@ -217,10 +217,10 @@ function drawReport() {
             miniCalendar.appendChild(header);
         });
 
-        // 이번 달 마지막 날짜(일수) 구하기
+        // 이번 달 마지막 날짜 구하기
         const lastDayNum = new Date(year, month + 1, 0).getDate();
 
-        // 날짜별 record 맵 생성 (일자 숫자를 키로 저장)
+        // 날짜별 record 맵 생성
         const recordMap = {};
         monthRecords.forEach(function (r) {
             const rd = parseDate(r.date);
@@ -229,34 +229,35 @@ function drawReport() {
             }
         });
 
-        // 1일의 요일 확인 (0: 일, 1: 월, 2: 화, 3: 수, 4: 목, 5: 금, 6: 토)
+        // 1일의 요일 위치 계산 (월요일 기준)
         const firstDayObj = new Date(year, month, 1);
         const startDayOfWeek = firstDayObj.getDay();
 
-        // 1일 이전의 빈칸(오프셋) 계산 (월요일 기준)
         let offset = 0;
-        if (startDayOfWeek === 0) offset = 0;      // 일요일 시작
-        else if (startDayOfWeek === 6) offset = 0; // 토요일 시작
-        else offset = startDayOfWeek - 1;          // 월(1)->0, 화(2)->1, 수(3)->2 ...
+        if (startDayOfWeek === 0 || startDayOfWeek === 6) {
+            offset = 0; // 주말 시작
+        } else {
+            offset = startDayOfWeek - 1; // 월(1)->0, 화(2)->1, 수(3)->2 ...
+        }
 
-        // 1일 전 빈 칸 추가
+        // 1일 시작 전 빈 칸 (투명 공간으로 위치만 보정)
         for (let i = 0; i < offset; i++) {
             const empty = document.createElement("div");
-            empty.className = "mini-empty";
+            empty.style.visibility = "hidden";
             miniCalendar.appendChild(empty);
         }
 
-        // 1일부터 마지막 날까지 탐색
+        // 1일부터 그 달의 마지막 날까지 탐색
         for (let dayNum = 1; dayNum <= lastDayNum; dayNum++) {
             const dateObj = new Date(year, month, dayNum);
             const dayOfWeek = dateObj.getDay();
 
-            // 💡 핵심: 토요일(6), 일요일(0)은 달력에 그리지를 않고 완전히 건너뜁니다!
+            // 주말(토, 일)은 무시
             if (dayOfWeek === 0 || dayOfWeek === 6) continue;
 
             const record = recordMap[dayNum];
 
-            // 행동(behavior) 데이터가 있는 평일만 박스 표시
+            // 💡 행동(behavior) 기록이 존재하는 날만 실제 박스(mini-day) 생성
             if (record && record.behavior) {
                 const cell = document.createElement("div");
                 cell.className = "mini-day";
@@ -272,9 +273,8 @@ function drawReport() {
                 cell.title = record.date;
                 miniCalendar.appendChild(cell);
             } else {
-                // 기록이 없는 평일(휴강 등)은 투명한 가짜 셀을 생성하여 요일 위치가 밀리지 않도록 고정
+                // 기록이 없는 날은 회색 박스 없이 '투명한 위치 보정용 공간'만 남김
                 const emptyCell = document.createElement("div");
-                emptyCell.className = "mini-day";
                 emptyCell.style.visibility = "hidden";
                 miniCalendar.appendChild(emptyCell);
             }
