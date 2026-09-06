@@ -157,7 +157,7 @@ function drawReport() {
             weightSummaryEl.style.margin = ""; 
 
             // [기록 있음] 체중 카드 하단 여백 최대로 줄임 (6px)
-            if (weightSection) weightSection.style.paddingBottom = "2px";
+            if (weightSection) weightSection.style.paddingBottom = "1.3px";
         } else {
             weightSummaryEl.innerText = "기록 없음";
             weightSummaryEl.style.marginTop = "16px";
@@ -246,7 +246,7 @@ function drawReport() {
         }
 
         // [기록 있음] 행동통계 카드 하단 여백 최대로 줄임 (6px)
-        if (behaviorSection) behaviorSection.style.paddingBottom = "0px";
+        if (behaviorSection) behaviorSection.style.paddingBottom = "20px";
 
         let good = 0, normal = 0, hard = 0;
         monthRecords.forEach(function (r) {
@@ -373,7 +373,7 @@ function drawReport() {
             }
 
             topLunchEl.classList.add("top-lunch-box");
-            if (lunchSection) lunchSection.style.paddingBottom = "16px";
+            if (lunchSection) lunchSection.style.paddingBottom = "20px";
         } else {
             topLunchEl.innerText = "기록 없음";
 
