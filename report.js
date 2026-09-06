@@ -100,6 +100,8 @@ function drawReport() {
     const weightSummaryEl = document.getElementById("weightSummary");
 
     if (weightSummaryEl) {
+        const weightSection = weightSummaryEl.closest(".section");
+
         if (weightRecords.length) {
             const first = Number(weightRecords[0].weight);
             const last = Number(weightRecords[weightRecords.length - 1].weight);
@@ -153,10 +155,16 @@ function drawReport() {
 
             weightSummaryEl.innerHTML = spectrumHtml;
             weightSummaryEl.style.margin = ""; 
+
+            // [기록 있음] 체중 카드 하단 여백 최대로 줄임 (6px)
+            if (weightSection) weightSection.style.paddingBottom = "2px";
         } else {
             weightSummaryEl.innerText = "기록 없음";
             weightSummaryEl.style.marginTop = "16px";
             weightSummaryEl.style.marginBottom = "0px";
+
+            // [기록 없음] 체중 카드 기본 여백 복원
+            if (weightSection) weightSection.style.paddingBottom = "20px";
         }
     }
 
@@ -200,6 +208,7 @@ function drawReport() {
     // ==========================================
     const miniCalendar = document.getElementById("behaviorMiniCalendar");
     const behaviorSummaryEl = document.querySelector(".behavior-summary");
+    const behaviorSection = miniCalendar ? miniCalendar.closest(".section") : null;
 
     const hasBehaviorData = monthRecords.some(function (r) {
         return r.behavior;
@@ -214,7 +223,6 @@ function drawReport() {
             miniCalendar.innerHTML = "";
             miniCalendar.style.display = "block";
             
-            // 여백 초기화 및 체중 영역과 완전히 동일하게 세팅
             miniCalendar.style.marginTop = "16px";
             miniCalendar.style.marginBottom = "0px";
             miniCalendar.style.padding = "0px";
@@ -229,10 +237,16 @@ function drawReport() {
             miniCalendar.appendChild(noDataEl);
         }
 
+        // [기록 없음] 행동통계 카드 기본 여백 복원
+        if (behaviorSection) behaviorSection.style.paddingBottom = "20px";
+
     } else {
         if (behaviorSummaryEl) {
             behaviorSummaryEl.style.display = "block";
         }
+
+        // [기록 있음] 행동통계 카드 하단 여백 최대로 줄임 (6px)
+        if (behaviorSection) behaviorSection.style.paddingBottom = "0px";
 
         let good = 0, normal = 0, hard = 0;
         monthRecords.forEach(function (r) {
@@ -313,7 +327,7 @@ function drawReport() {
         }
     }
 
-  // ==========================================
+    // ==========================================
     // 점심 TOP1
     // ==========================================
     const lunchMap = {};
@@ -340,7 +354,8 @@ function drawReport() {
     const topLunchEl = document.getElementById("topLunch");
 
     if (topLunchEl) {
-        // 이전 인라인 스타일 초기화
+        const lunchSection = topLunchEl.closest(".section");
+
         topLunchEl.style.cssText = "";
 
         if (maxCount > 0) {
@@ -357,15 +372,15 @@ function drawReport() {
                 topLunchEl.innerText = topLunches[0] + " (" + maxCount + "회)";
             }
 
-            // [기록 있음] 주황색 상자 클래스 추가
             topLunchEl.classList.add("top-lunch-box");
+            if (lunchSection) lunchSection.style.paddingBottom = "24px";
         } else {
             topLunchEl.innerText = "기록 없음";
 
-            // [기록 없음] 주황색 클래스 제거 및 위 카드들과 간격/위치 정렬
             topLunchEl.classList.remove("top-lunch-box");
             topLunchEl.style.marginTop = "16px";
             topLunchEl.style.color = "#6c757d";
+            if (lunchSection) lunchSection.style.paddingBottom = "20px";
         }
     }
 }
