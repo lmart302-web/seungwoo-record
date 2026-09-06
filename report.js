@@ -181,38 +181,38 @@ function drawReport() {
         if (record.behavior === "hard") hard++;
     });
 
-    const goodCountEl = document.getElementById("goodCount");
-    const normalCountEl = document.getElementById("normalCount");
-    const hardCountEl = document.getElementById("hardCount");
+    // const goodCountEl = document.getElementById("goodCount");
+    // const normalCountEl = document.getElementById("normalCount");
+    // const hardCountEl = document.getElementById("hardCount");
 
-    if (goodCountEl) goodCountEl.innerText = good;
-    if (normalCountEl) normalCountEl.innerText = normal;
-    if (hardCountEl) hardCountEl.innerText = hard;
+    // if (goodCountEl) goodCountEl.innerText = good;
+    // if (normalCountEl) normalCountEl.innerText = normal;
+    // if (hardCountEl) hardCountEl.innerText = hard;
 
     // ==========================================
     // 행동 달성률(%) 피드백 출력
     // ==========================================
-    const totalDays = good + normal + hard;
-    let feedbackMessage = "이번 달 활동 기록을 채워나가 보세요! 📝";
+    // const totalDays = good + normal + hard;
+    // let feedbackMessage = "이번 달 활동 기록을 채워나가 보세요! 📝";
 
-    if (totalDays > 0) {
-        const goodRatio = Math.round((good / totalDays) * 100);
+    // if (totalDays > 0) {
+    //     const goodRatio = Math.round((good / totalDays) * 100);
 
-        if (goodRatio >= 80) {
-            feedbackMessage = `🏆 Good 달성률 ${goodRatio}%! 완벽에 가까운 한 달이에요`;
-        } else if (goodRatio >= 60) {
-            feedbackMessage = `👏 Good 달성률 ${goodRatio}%! 아주 안정적이고 훌륭해요`;
-        } else if (goodRatio >= 40) {
-            feedbackMessage = `💪 Good 달성률 ${goodRatio}%! 조금만 더 초록빛을 늘려봐요`;
-        } else {
-            feedbackMessage = `🍀 Good 달성률 ${goodRatio}%! 다음 달은 더 성장해봐요`;
-        }
-    }
+    //     if (goodRatio >= 80) {
+    //         feedbackMessage = `🏆 Good 달성률 ${goodRatio}%! 완벽에 가까운 한 달이에요`;
+    //     } else if (goodRatio >= 60) {
+    //         feedbackMessage = `👏 Good 달성률 ${goodRatio}%! 아주 안정적이고 훌륭해요`;
+    //     } else if (goodRatio >= 40) {
+    //         feedbackMessage = `💪 Good 달성률 ${goodRatio}%! 조금만 더 초록빛을 늘려봐요`;
+    //     } else {
+    //         feedbackMessage = `🍀 Good 달성률 ${goodRatio}%! 다음 달은 더 성장해봐요`;
+    //     }
+    // }
 
-    const feedbackEl = document.getElementById("habitFeedback");
-    if (feedbackEl) {
-        feedbackEl.innerText = feedbackMessage;
-    }
+    // const feedbackEl = document.getElementById("habitFeedback");
+    // if (feedbackEl) {
+    //     feedbackEl.innerText = feedbackMessage;
+    // }
 
     // ==========================================
     // ===== 행동 미니 달력 (행동 기록이 있을 때만 표시) =====
