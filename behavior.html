@@ -9,38 +9,39 @@
 
 <title>오늘 행동 상태</title>
 
-
-
 <link rel="stylesheet" href="style.css">
 
-<!-- 모바일 최적화 인라인 스타일 (다른 페이지 영향 0%) -->
+<!-- 모바일 최적화 연한 파스텔 노랑 & 민트 스타일 (다른 페이지 영향 0%) -->
 <style>
   /* 모바일 화면 전체 레이아웃 */
   body.input-page {
     max-width: 480px;
     margin: 0 auto;
     padding: 16px 16px 40px;
-    -webkit-tap-highlight-color: transparent; /* 터치 시 파란 상자 제거 */
+    background-color: #fafaf7; /* 눈이 편안한 따뜻한 우유 빛 배경 */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body.input-page h1 {
     text-align: center;
-    color: #ff7675;
-    font-size: 1.4rem;
+    color: #4a4a4a;
+    font-size: 1.35rem;
+    font-weight: 700;
     margin: 16px 0 20px;
     word-break: keep-all;
   }
 
-  /* 카드 박스 3D 모바일 스타일 */
+  /* 1번 메인 카드 (아주 연하고 부드러운 노란색 테두리) */
   body.input-page .section {
     background: #ffffff;
-    border-radius: 22px;
+    border-radius: 18px;
     padding: 20px 18px;
-    border: 3px solid #ffeaa7;
-    box-shadow: 0 6px 0px #ffeaa7, 0 8px 16px rgba(0, 0, 0, 0.06);
+    border: 2px solid #fef3c7; /* 부드러운 크림 버터 노랑 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 16px;
   }
 
   /* 입력 영역 */
@@ -50,21 +51,22 @@
     gap: 12px;
   }
 
-  /* 모바일 입력창 & 셀렉트 박스 (자동 확대 방지 16px 설정) */
+  /* 날짜 & 행동선택 입력창 (은은한 밀크 버터 톤) */
   body.input-page input[type="date"],
   body.input-page select {
     width: 100%;
-    height: 52px; /* 모바일 엄지 손가락 최적 높이 */
+    height: 52px;
     box-sizing: border-box;
-    border: 2px solid #dfe6e9;
-    border-radius: 14px;
+    border: 1.5px solid #fef08a;
+    border-radius: 12px;
     padding: 0 16px;
-    font-size: 16px; /* 16px 미만일 경우 아이폰 화면 자동 확대됨 */
+    font-size: 16px;
     outline: none;
-    background-color: #fff9f9;
-    color: #2d3436;
+    background-color: #fffbeb; /* 톤다운된 따뜻한 연노랑 */
+    color: #4a4a4a;
     font-family: inherit;
-    appearance: none; /* 모바일 기본 드롭다운 화살표 깔끔하게 교체 준비 */
+    font-weight: 500;
+    appearance: none;
     -webkit-appearance: none;
     transition: all 0.2s ease;
   }
@@ -72,22 +74,22 @@
   body.input-page input[type="date"]:focus,
   body.input-page select:focus {
     background-color: #ffffff;
-    border-color: #ff7675;
-    box-shadow: 0 0 0 3px rgba(255, 118, 117, 0.2);
+    border-color: #fde047;
+    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.2);
   }
 
-  /* 저장 버튼 모바일 터치 스타일 */
+  /* 저장 버튼 (부드러운 파스텔 연노랑 3D) */
   body.input-page .save {
-    background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
-    color: #ffffff;
+    background: #fde047; /* 눈부심 없는 소프트 노랑 */
+    color: #713f12; /* 차분하고 시인성 좋은 브라운 폰트 */
     font-weight: bold;
     border: none;
-    border-radius: 16px;
-    height: 54px;
+    border-radius: 14px;
+    height: 52px;
     width: 100%;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     cursor: pointer;
-    box-shadow: 0 5px 0px #b22222, 0 6px 12px rgba(214, 48, 49, 0.25);
+    box-shadow: 0 3px 0px #eab308;
     transition: all 0.1s ease;
     margin-top: 4px;
     display: flex;
@@ -95,31 +97,39 @@
     justify-content: center;
   }
 
-  /* 스마트폰 손가락 터치 시 누르는 효과 */
   body.input-page .save:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0px #b22222;
+    transform: translateY(2px);
+    box-shadow: 0 1px 0px #eab308;
   }
 
-  /* 행동 게시판 버튼 */
+  /* 2번 행동 게시판 전용 카드 섹션 (부드러운 파스텔 민트 테두리) */
+  body.input-page .board-section {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 16px 18px;
+    border: 2px solid #d1fae5; /* 부드러운 연민트 테두리 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  }
+
+  /* 행동 게시판 링크 버튼 (은은하고 산뜻한 소프트 민트) */
   body.input-page .difficult-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
-    background-color: #f1f2f6;
-    color: #2f3542;
+    height: 50px;
+    background-color: #a7f3d0; /* 부드러운 파스텔 민트 */
+    color: #064e3b; /* 읽기 편한 다크 그린 폰트 */
     font-weight: bold;
     text-decoration: none;
-    border-radius: 14px;
-    border: 2px solid #ced6e0;
+    border-radius: 12px;
     font-size: 0.95rem;
+    box-shadow: 0 3px 0px #34d399;
     transition: all 0.1s ease;
   }
 
   body.input-page .difficult-link:active {
-    background-color: #dfe4ea;
-    transform: scale(0.98);
+    transform: translateY(2px);
+    box-shadow: 0 1px 0px #34d399;
   }
 </style>
 
@@ -142,6 +152,7 @@
 </h1>
 
 
+<!-- 1번 네모 카드: 더 부드러워진 연한 파스텔 노랑 톤 -->
 <div class="section">
 
 <div class="record-row">
@@ -174,9 +185,14 @@ id="saveBtn">
 
 </div>
 
-    <!-- 행동 게시판 버튼 -->
+</div>
+
+
+<!-- 2번 네모 카드: 부드러운 파스텔 민트 영역 -->
+<div class="board-section">
+
     <a href="difficult/difficult.html" class="difficult-link">
-        📋 행동 게시판
+        📋 행동 게시판 바로가기
     </a>
 
 </div>
