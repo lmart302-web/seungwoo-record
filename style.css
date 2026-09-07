@@ -1111,52 +1111,42 @@ html, body {
     padding-bottom: 1.3px; /* 기본값(보통 20px 등)에서 원하는 만큼 줄여보세요 (예: 6px, 8px, 10px) */
 }
 
-/* 1. 이전 / 다음 버튼 기본 스타일 (하얀 배경) */
-.nav-btn, 
-.prev-btn, 
-.next-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: 48px !important;
-  padding: 0 20px !important;
-  background-color: #ffffff !important; /* 깨끗한 하얀 배경 */
-  color: #5b4872 !important; /* 고급스러운 다크 퍼플 텍스트 */
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  border-radius: 14px !important;
-  
-  /* 부드러운 파스텔 보라색 은은한 테두리 & 빛나는 그림자 */
-  border: 2px solid #e9d5ff !important;
-  box-shadow: 0 3px 10px rgba(168, 85, 247, 0.08) !important;
-  
-  cursor: pointer !important;
-  text-decoration: none !important;
+/* ==========================================
+   [이전/다음] 클릭 시 소프트 라벤더 감싸기 (눈이 편안한 약한 버전)
+   ========================================== */
+
+/* 1. 기본 상태: 은은한 하얀 카드 */
+.calendar-card,
+.report-card,
+.navigation-card-container,
+.section {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 20px 18px !important;
+  border: 1.5px solid #eae5d9 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  -webkit-tap-highlight-color: transparent !important;
 }
 
-/* 2. 마우스를 올리거나 손가락으로 누를 때 (보라색이 감싸지는 효과) */
-.nav-btn:hover, 
-.prev-btn:hover, 
-.next-btn:hover,
-.nav-btn:active, 
+/* 2. 클릭/터치 시: 은은하고 차분한 소프트 보라 감싸기 */
+.calendar-card:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
+.report-card:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
+.navigation-card-container:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
+.section:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
+.calendar-card:focus-within,
+.report-card:focus-within,
+.section:focus-within {
+  border-color: #d8b4fe !important; /* 연하고 포근한 퍼플 테두리 */
+  box-shadow: 0 0 0 3px rgba(216, 180, 254, 0.35), 
+              0 4px 12px rgba(168, 85, 247, 0.06) !important; /* 번짐을 대폭 줄인 후광 */
+}
+
+/* 3. 버튼 누를 때 연출 */
 .prev-btn:active, 
-.next-btn:active {
-  background-color: #fcf8ff !important; /* 살짝 밝은 라벤더 빛 우유 배경 */
-  border-color: #c084fc !important; /* 또렷하고 포근한 보라색 테두리 */
+.next-btn:active,
+.nav-btn:active {
+  background-color: #f3e8ff !important;
+  border-color: #d8b4fe !important;
   color: #6b21a8 !important;
-  
-  /* 하얀 배경 주위를 감싸는 보라색 후광(Glow) 효과 */
-  box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.25), 
-              0 4px 12px rgba(168, 85, 247, 0.15) !important;
-  transform: translateY(-1px) !important;
-}
-
-/* 누르고 있는 순간의 쫀득한 터치감 */
-.nav-btn:active, 
-.prev-btn:active, 
-.next-btn:active {
-  transform: translateY(1px) !important;
-  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.3) !important;
+  transform: scale(0.98) !important;
 }
