@@ -1112,41 +1112,39 @@ html, body {
 }
 
 /* ==========================================
-   [이전/다음] 클릭 시 소프트 라벤더 감싸기 (눈이 편안한 약한 버전)
+   체중 페이지 전용: 은은한 보라 테두리 & 누를 때 후광 감싸기
    ========================================== */
 
-/* 1. 기본 상태: 은은한 하얀 카드 */
-.calendar-card,
-.report-card,
-.navigation-card-container,
-.section {
+/* 1. 기본 상태: 은은한 소프트 라벤더 테두리 */
+body.weight-page .section,
+body.weight-page .weight-card,
+body.weight-page .navigation-card-container {
   background: #ffffff !important;
   border-radius: 20px !important;
   padding: 20px 18px !important;
-  border: 1.5px solid #eae5d9 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+  border: 1.5px solid #ebd5ff !important; /* 은은한 파스텔 라벤더 테두리 */
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.03) !important;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* 2. 클릭/터치 시: 은은하고 차분한 소프트 보라 감싸기 */
-.calendar-card:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
-.report-card:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
-.navigation-card-container:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
-.section:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
-.calendar-card:focus-within,
-.report-card:focus-within,
-.section:focus-within {
-  border-color: #d8b4fe !important; /* 연하고 포근한 퍼플 테두리 */
-  box-shadow: 0 0 0 3px rgba(216, 180, 254, 0.35), 
-              0 4px 12px rgba(168, 85, 247, 0.06) !important; /* 번짐을 대폭 줄인 후광 */
+/* 2. [이전/다음] 버튼이나 카드를 누르는 순간: 또렷한 보라 후광 감싸기 */
+body.weight-page .section:has(.prev-btn:active, .next-btn:active, .nav-btn:active, button:active, input:focus),
+body.weight-page .weight-card:has(.prev-btn:active, .next-btn:active, .nav-btn:active, button:active, input:focus),
+body.weight-page .navigation-card-container:has(.prev-btn:active, .next-btn:active, .nav-btn:active),
+body.weight-page .section:focus-within,
+body.weight-page .weight-card:focus-within {
+  border-color: #c084fc !important; /* 또렷해지는 포근한 보라색 */
+  box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.25), 
+              0 6px 16px rgba(168, 85, 247, 0.1) !important; /* 번지는 퍼플 후광 (Glow) */
 }
 
-/* 3. 버튼 누를 때 연출 */
-.prev-btn:active, 
-.next-btn:active,
-.nav-btn:active {
+/* 3. 체중 페이지 내부 버튼 터치감 */
+body.weight-page .prev-btn:active, 
+body.weight-page .next-btn:active,
+body.weight-page .nav-btn:active,
+body.weight-page .save:active {
   background-color: #f3e8ff !important;
-  border-color: #d8b4fe !important;
+  border-color: #c084fc !important;
   color: #6b21a8 !important;
   transform: scale(0.98) !important;
 }
