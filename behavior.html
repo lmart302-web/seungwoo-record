@@ -11,125 +11,131 @@
 
 <link rel="stylesheet" href="style.css">
 
-<!-- 모바일 최적화 연한 파스텔 노랑 & 민트 스타일 (다른 페이지 영향 0%) -->
+<!-- 모바일 최적화 황금 비율 인라인 스타일 -->
 <style>
   /* 모바일 화면 전체 레이아웃 */
   body.input-page {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 16px 16px 40px;
-    background-color: #fafaf7; /* 눈이 편안한 따뜻한 우유 빛 배경 */
+    max-width: 480px !important;
+    margin: 0 auto !important;
+    padding: 16px 16px 40px !important;
+    background-color: #fafaf7 !important;
     -webkit-tap-highlight-color: transparent;
   }
 
   body.input-page h1 {
-    text-align: center;
-    color: #4a4a4a;
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin: 16px 0 20px;
-    word-break: keep-all;
+    text-align: center !important;
+    color: #4a4a4a !important;
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    margin: 16px 0 20px !important;
+    word-break: keep-all !important;
   }
 
-  /* 1번 메인 카드 (아주 연하고 부드러운 노란색 테두리) */
+  /* 1번 메인 카드 (부드러운 크림 버터 노랑) */
   body.input-page .section {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 20px 18px;
-    border: 2px solid #fef3c7; /* 부드러운 크림 버터 노랑 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 16px;
+    background: #ffffff !important;
+    border-radius: 18px !important;
+    padding: 20px 18px !important;
+    border: 2px solid #fef3c7 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    margin-bottom: 16px !important;
   }
 
   /* 입력 영역 */
   body.input-page .record-row {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
   }
 
-  /* 날짜 & 행동선택 입력창 (은은한 밀크 버터 톤) */
+  /* 딱 적당한 비율의 날짜 & 행동선택 입력창 (52px) */
   body.input-page input[type="date"],
   body.input-page select {
-    width: 100%;
-    height: 52px;
-    box-sizing: border-box;
-    border: 1.5px solid #fef08a;
-    border-radius: 12px;
-    padding: 0 16px;
-    font-size: 16px;
-    outline: none;
-    background-color: #fffbeb; /* 톤다운된 따뜻한 연노랑 */
-    color: #4a4a4a;
-    font-family: inherit;
-    font-weight: 500;
-    appearance: none;
-    -webkit-appearance: none;
+    width: 100% !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    max-height: 52px !important;
+    line-height: 52px !important;
+    box-sizing: border-box !important;
+    border: 1.5px solid #fef08a !important;
+    border-radius: 12px !important;
+    padding: 0 16px !important;
+    font-size: 16px !important;
+    outline: none !important;
+    background-color: #fffbeb !important;
+    color: #4a4a4a !important;
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
     transition: all 0.2s ease;
   }
 
   body.input-page input[type="date"]:focus,
   body.input-page select:focus {
-    background-color: #ffffff;
-    border-color: #fde047;
-    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.2);
+    background-color: #ffffff !important;
+    border-color: #fde047 !important;
+    box-shadow: 0 0 0 3px rgba(253, 224, 71, 0.2) !important;
   }
 
-  /* 저장 버튼 (부드러운 파스텔 연노랑 3D) */
+  /* 저장 버튼 (50px) */
   body.input-page .save {
-    background: #fde047; /* 눈부심 없는 소프트 노랑 */
-    color: #713f12; /* 차분하고 시인성 좋은 브라운 폰트 */
-    font-weight: bold;
-    border: none;
-    border-radius: 14px;
-    height: 52px;
-    width: 100%;
-    font-size: 1.05rem;
-    cursor: pointer;
-    box-shadow: 0 3px 0px #eab308;
+    background: #fde047 !important;
+    color: #713f12 !important;
+    font-weight: bold !important;
+    border: none !important;
+    border-radius: 12px !important;
+    height: 50px !important;
+    min-height: 50px !important;
+    width: 100% !important;
+    font-size: 1.05rem !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 0px #eab308 !important;
     transition: all 0.1s ease;
-    margin-top: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   body.input-page .save:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0px #eab308;
+    transform: translateY(2px) !important;
+    box-shadow: 0 1px 0px #eab308 !important;
   }
 
-  /* 2번 행동 게시판 전용 카드 섹션 (부드러운 파스텔 민트 테두리) */
+  /* 2번 행동 게시판 카드 (포근한 크림 초록) */
   body.input-page .board-section {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 16px 18px;
-    border: 2px solid #d1fae5; /* 부드러운 연민트 테두리 */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    background: #ffffff !important;
+    border-radius: 18px !important;
+    padding: 16px 18px !important;
+    border: 2px solid #dcfce7 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02) !important;
   }
 
-  /* 행동 게시판 링크 버튼 (은은하고 산뜻한 소프트 민트) */
+  /* 행동 게시판 링크 버튼 */
   body.input-page .difficult-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    background-color: #a7f3d0; /* 부드러운 파스텔 민트 */
-    color: #064e3b; /* 읽기 편한 다크 그린 폰트 */
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    box-shadow: 0 3px 0px #34d399;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 50px !important;
+    min-height: 50px !important;
+    background-color: #f0fdf4 !important;
+    border: 1.5px solid #bbf7d0 !important;
+    color: #166534 !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    border-radius: 12px !important;
+    font-size: 0.98rem !important;
+    box-shadow: 0 3px 0px #86efac !important;
     transition: all 0.1s ease;
   }
 
   body.input-page .difficult-link:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0px #34d399;
+    transform: translateY(2px) !important;
+    box-shadow: 0 1px 0px #86efac !important;
   }
 </style>
 
@@ -152,7 +158,7 @@
 </h1>
 
 
-<!-- 1번 네모 카드: 더 부드러워진 연한 파스텔 노랑 톤 -->
+<!-- 1번 네모 카드 -->
 <div class="section">
 
 <div class="record-row">
@@ -188,7 +194,7 @@ id="saveBtn">
 </div>
 
 
-<!-- 2번 네모 카드: 부드러운 파스텔 민트 영역 -->
+<!-- 2번 네모 카드 -->
 <div class="board-section">
 
     <a href="difficult/difficult.html" class="difficult-link">
