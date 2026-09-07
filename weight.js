@@ -144,14 +144,12 @@ const averageLabelPlugin = {
 ========================= */
 async function loadRecords() {
   try {
-    // Firestore 쿼리 수준에서 date 기준 오름차순 정렬
     const q = query(collection(db, "records"), orderBy("date", "asc"));
     const snapshot = await getDocs(q);
     
     records = [];
     snapshot.forEach((doc) => records.push(doc.data()));
 
-    // 기본 월간 뷰 그리기
     drawWeight();
   } catch (error) {
     console.error("데이터를 가져오는 중 오류 발생:", error);
@@ -202,17 +200,16 @@ function drawWeight() {
     labels.push([record.date.substring(8, 10), dayOfWeek]);
     weights.push(numWeight);
 
-    // 최초 1회만 최고/최저 뱃지 표시 (최고: 빨강, 최저: 파랑)
     let badgeText = "";
     let badgeColor = "";
 
     if (maxWeight !== null && numWeight === maxWeight && !maxShown) {
       badgeText = " (최고)";
-      badgeColor = "#ff4d4f"; // 빨간색
+      badgeColor = "#ff4d4f";
       maxShown = true;
     } else if (minWeight !== null && numWeight === minWeight && !minShown) {
       badgeText = " (최저)";
-      badgeColor = "#0052CC"; // 파란색
+      badgeColor = "#0052CC";
       minShown = true;
     }
 
@@ -222,15 +219,26 @@ function drawWeight() {
       const li = document.createElement("li");
       li.innerHTML = `
         <span class="record-date" style="color: #666666;">${formattedDate}</span>
-  <span class="record-colon">:</span>
-  <span class="record-value" style="color: #222222; font-weight: 600;">${numWeight.toFixed(1)}kg</span>
-  <span class="record-badge" style="font-weight: bold; color: ${badgeColor}; margin-left: 4px;">${badgeText}</span>
+        <span class="record-colon">:</span>
+        <span class="record-value" style="color: #222222; font-weight: 600;">${numWeight.toFixed(1)}kg</span>
+        <span class="record-badge" style="font-weight: bold; color: ${badgeColor}; margin-left: 4px;">${badgeText}</span>
       `;
       elements.weightList.appendChild(li);
     }
   });
 
-  // 기존 차트 확실한 파괴 처리
+  // 월간 차트 최고/최저 점 색상 및 크기 지정
+  const pointBgColors = weights.map((w) => {
+    if (maxWeight !== null && w === maxWeight) return "#ff4d4f"; // 최고: 빨강
+    if (minWeight !== null && w === minWeight) return "#0052CC"; // 최저: 파랑
+    return "#36A2EB"; // 기본 색상
+  });
+
+  const pointRadii = weights.map((w) => {
+    if ((maxWeight !== null && w === maxWeight) || (minWeight !== null && w === minWeight)) return 6;
+    return 4;
+  });
+
   if (chart) chart.destroy();
   const existingChart = Chart.getChart(elements.monthCtx);
   if (existingChart) existingChart.destroy();
@@ -243,7 +251,9 @@ function drawWeight() {
         {
           label: "체중(kg)",
           data: weights,
-          pointRadius: 5
+          pointRadius: pointRadii,
+          pointBackgroundColor: pointBgColors,
+          pointBorderColor: pointBgColors
         },
         {
           label: "평균 체중",
@@ -306,11 +316,11 @@ function drawYearlyWeight() {
 
     if (maxAvg !== null && averageValue === maxAvg && !maxShown) {
       badgeText = " (최고)";
-      badgeColor = "#ff4d4f"; // 빨간색
+      badgeColor = "#ff4d4f";
       maxShown = true;
     } else if (minAvg !== null && averageValue === minAvg && !minShown) {
       badgeText = " (최저)";
-      badgeColor = "#0052CC"; // 파란색
+      badgeColor = "#0052CC";
       minShown = true;
     }
 
@@ -433,11 +443,11 @@ function drawAllWeight() {
 
       if (maxAvg !== null && item.average === maxAvg && !maxShown) {
         badgeText = " (최고)";
-        badgeColor = "#ff4d4f"; // 빨간색
+        badgeColor = "#ff4d4f";
         maxShown = true;
       } else if (minAvg !== null && item.average === minAvg && !minShown) {
         badgeText = " (최저)";
-        badgeColor = "#0052CC"; // 파란색
+        badgeColor = "#0052CC";
         minShown = true;
       }
 
@@ -452,6 +462,19 @@ function drawAllWeight() {
     }
   });
 
+  // 전체 차트 최고/최저 점 색상 및 크기 지정
+  const pointBgColors = monthlyData.map((val) => {
+    if (val === null) return "#36A2EB";
+    if (maxAvg !== null && val === maxAvg) return "#ff4d4f"; // 최고: 빨강
+    if (minAvg !== null && val === minAvg) return "#0052CC"; // 최저: 파랑
+    return "#36A2EB";
+  });
+
+  const pointRadii = monthlyData.map((val) => {
+    if (val !== null && ((maxAvg !== null && val === maxAvg) || (minAvg !== null && val === minAvg))) return 6;
+    return 4;
+  });
+
   if (allChart) allChart.destroy();
   const existingChart = Chart.getChart(elements.allCtx);
   if (existingChart) existingChart.destroy();
@@ -464,8 +487,10 @@ function drawAllWeight() {
         {
           label: "월 평균 체중(kg)",
           data: monthlyData,
-          pointRadius: 5,
+          pointRadius: pointRadii,
           pointHoverRadius: 7,
+          pointBackgroundColor: pointBgColors,
+          pointBorderColor: pointBgColors,
           spanGaps: true,
           tension: 0.2
         }
@@ -528,7 +553,7 @@ if (elements.allBtn) {
 const prevMonthBtn = document.getElementById("prevMonth");
 if (prevMonthBtn) {
   prevMonthBtn.addEventListener("click", () => {
-    currentDate.setDate(1); // 달 변경 전 1일로 변경하여 월 이탈(예: 31일 문제) 방지
+    currentDate.setDate(1);
     currentDate.setMonth(currentDate.getMonth() - 1);
     drawWeight();
   });
@@ -537,7 +562,7 @@ if (prevMonthBtn) {
 const nextMonthBtn = document.getElementById("nextMonth");
 if (nextMonthBtn) {
   nextMonthBtn.addEventListener("click", () => {
-    currentDate.setDate(1); // 달 변경 전 1일로 변경하여 월 이탈 방지
+    currentDate.setDate(1);
     currentDate.setMonth(currentDate.getMonth() + 1);
     drawWeight();
   });
