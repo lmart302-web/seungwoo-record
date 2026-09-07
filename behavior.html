@@ -5,13 +5,123 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>오늘 행동 상태</title>
 
 
 
 <link rel="stylesheet" href="style.css">
+
+<!-- 모바일 최적화 인라인 스타일 (다른 페이지 영향 0%) -->
+<style>
+  /* 모바일 화면 전체 레이아웃 */
+  body.input-page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 16px 40px;
+    -webkit-tap-highlight-color: transparent; /* 터치 시 파란 상자 제거 */
+  }
+
+  body.input-page h1 {
+    text-align: center;
+    color: #ff7675;
+    font-size: 1.4rem;
+    margin: 16px 0 20px;
+    word-break: keep-all;
+  }
+
+  /* 카드 박스 3D 모바일 스타일 */
+  body.input-page .section {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 20px 18px;
+    border: 3px solid #ffeaa7;
+    box-shadow: 0 6px 0px #ffeaa7, 0 8px 16px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* 입력 영역 */
+  body.input-page .record-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* 모바일 입력창 & 셀렉트 박스 (자동 확대 방지 16px 설정) */
+  body.input-page input[type="date"],
+  body.input-page select {
+    width: 100%;
+    height: 52px; /* 모바일 엄지 손가락 최적 높이 */
+    box-sizing: border-box;
+    border: 2px solid #dfe6e9;
+    border-radius: 14px;
+    padding: 0 16px;
+    font-size: 16px; /* 16px 미만일 경우 아이폰 화면 자동 확대됨 */
+    outline: none;
+    background-color: #fff9f9;
+    color: #2d3436;
+    font-family: inherit;
+    appearance: none; /* 모바일 기본 드롭다운 화살표 깔끔하게 교체 준비 */
+    -webkit-appearance: none;
+    transition: all 0.2s ease;
+  }
+
+  body.input-page input[type="date"]:focus,
+  body.input-page select:focus {
+    background-color: #ffffff;
+    border-color: #ff7675;
+    box-shadow: 0 0 0 3px rgba(255, 118, 117, 0.2);
+  }
+
+  /* 저장 버튼 모바일 터치 스타일 */
+  body.input-page .save {
+    background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+    color: #ffffff;
+    font-weight: bold;
+    border: none;
+    border-radius: 16px;
+    height: 54px;
+    width: 100%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 0px #b22222, 0 6px 12px rgba(214, 48, 49, 0.25);
+    transition: all 0.1s ease;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 스마트폰 손가락 터치 시 누르는 효과 */
+  body.input-page .save:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0px #b22222;
+  }
+
+  /* 행동 게시판 버튼 */
+  body.input-page .difficult-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    background-color: #f1f2f6;
+    color: #2f3542;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 14px;
+    border: 2px solid #ced6e0;
+    font-size: 0.95rem;
+    transition: all 0.1s ease;
+  }
+
+  body.input-page .difficult-link:active {
+    background-color: #dfe4ea;
+    transform: scale(0.98);
+  }
+</style>
 
 </head>
 
@@ -58,7 +168,7 @@
 class="save"
 id="saveBtn">
 
-저장
+💾 저장하기
 
 </button>
 
@@ -70,6 +180,7 @@ id="saveBtn">
     </a>
 
 </div>
+
 <!--
 <div class="section">
 
@@ -80,10 +191,6 @@ id="saveBtn">
 </div>-->
 
 <script type="module" src="behavior.js"></script>
-
-
-
-</div>
 
 </body>
 
