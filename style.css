@@ -1166,5 +1166,5 @@ html, body {
 }
 
 .weight-chart-section.neon-active {
-    animation: weightNeon 5s ease-out;
+    animation: weightNeon 3s ease-in-out;
 }

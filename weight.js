@@ -522,7 +522,7 @@ function playWeightNeon(activeType = "monthly") {
 
   setTimeout(() => {
     section.classList.remove("neon-active");
-  }, 5000);
+  }, 3000);
 }
 
 function switchView(activeType) {
@@ -577,7 +577,7 @@ if (prevMonthBtn) {
   currentDate.setDate(1);
   currentDate.setMonth(currentDate.getMonth() - 1);
   drawWeight();
-  playWeightNeon();
+  playWeightNeon("monthly");
 });
 }
 
@@ -587,7 +587,7 @@ if (nextMonthBtn) {
     currentDate.setDate(1);
     currentDate.setMonth(currentDate.getMonth() + 1);
     drawWeight();
-    playWeightNeon();
+    playWeightNeon("monthly");
   });
 }
 
