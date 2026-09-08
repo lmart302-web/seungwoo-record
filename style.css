@@ -1426,12 +1426,6 @@ html, body {
     color: #dc3545;
 }
 
-.spectrum-min span,
-.spectrum-max span {
-    font-size: 10px;
-    font-weight: 600;
-}
-
 .spectrum-min .point-dot {
     border-color: #0d6efd;
 }

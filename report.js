@@ -157,7 +157,7 @@ function drawReport() {
             let diffClass = "weight-same";
 
             const diffPosition = (firstPercent + lastPercent) / 2;
-            const isDiffClose = Math.abs(firstPercent - lastPercent) < 10;
+            const isDiffClose = Math.abs(firstPercent - lastPercent) < 15;
 
             if (Number(diff) > 0) {
                 diffText = "+" + diff + "kg";
