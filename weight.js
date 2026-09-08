@@ -506,6 +506,25 @@ function drawAllWeight() {
 /* =========================
    UI 뷰 전환 공통 함수
 ========================= */
+function playWeightNeon(activeType = "monthly") {
+  const section = document.querySelector(
+    `#${activeType}View .weight-chart-section`
+  );
+
+  if (!section) return;
+
+  section.classList.remove("neon-active");
+
+  // 애니메이션 재실행
+  void section.offsetWidth;
+
+  section.classList.add("neon-active");
+
+  setTimeout(() => {
+    section.classList.remove("neon-active");
+  }, 3000);
+}
+
 function switchView(activeType) {
   const views = {
     monthly: { view: elements.monthlyView, btn: elements.monthlyBtn, draw: drawWeight, getChart: () => chart },
@@ -524,6 +543,8 @@ function switchView(activeType) {
   });
 
   views[activeType].draw();
+
+playWeightNeon(activeType);
 
   requestAnimationFrame(() => {
     setTimeout(() => {
@@ -553,10 +574,11 @@ if (elements.allBtn) {
 const prevMonthBtn = document.getElementById("prevMonth");
 if (prevMonthBtn) {
   prevMonthBtn.addEventListener("click", () => {
-    currentDate.setDate(1);
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    drawWeight();
-  });
+  currentDate.setDate(1);
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  drawWeight();
+  playWeightNeon();
+});
 }
 
 const nextMonthBtn = document.getElementById("nextMonth");
@@ -565,6 +587,7 @@ if (nextMonthBtn) {
     currentDate.setDate(1);
     currentDate.setMonth(currentDate.getMonth() + 1);
     drawWeight();
+    playWeightNeon();
   });
 }
 
@@ -586,3 +609,4 @@ if (nextYearBtn) {
 
 // 초기 로드 실행
 loadRecords();
+playWeightNeon("monthly");
