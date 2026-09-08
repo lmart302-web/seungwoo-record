@@ -62,6 +62,7 @@ async function loadRecords() {
 }
 
 function drawReport() {
+
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
@@ -84,14 +85,24 @@ function drawReport() {
     const monthRecords = records.filter(function (record) {
         const recordDate = parseDate(record.date);
         if (!recordDate) return false;
+
         return (
             recordDate.getFullYear() === year &&
             recordDate.getMonth() === month
         );
     });
 
+    // 월이 끝났는지 확인
+    const today = new Date();
+
+    const isMonthFinished =
+        year < today.getFullYear() ||
+        (year === today.getFullYear() && month < today.getMonth());
+
+    const currentLabel = isMonthFinished ? "끝" : "현재";
+
     // ==========================================
-    // 체중 리포트 및 스펙트럼 바 렌더링
+    // 체중 리포트 및 통합 스펙트럼 렌더링
     // ==========================================
     const weightRecords = monthRecords.filter(function (record) {
         return record.weight;
@@ -103,71 +114,176 @@ function drawReport() {
         const weightSection = weightSummaryEl.closest(".section");
 
         if (weightRecords.length) {
+
             const first = Number(weightRecords[0].weight);
             const last = Number(weightRecords[weightRecords.length - 1].weight);
-            const diff = (last - first).toFixed(1);
 
-            let rangeText = first + "kg → " + last + "kg";
-            if (diff > 0) {
-                rangeText += " (+" + diff + "kg)";
-            } else if (diff < 0) {
-                rangeText += " (" + diff + "kg)";
-            } else {
-                rangeText += " (변화 없음)";
-            }
+            const averageWeight =
+                weightRecords.reduce(function (sum, record) {
+                    return sum + Number(record.weight);
+                }, 0) / weightRecords.length;
 
-            // opacity를 0.8로 올려 적당히 자연스럽게 연하게 처리
-            let changeText = `<span style="opacity: 0.75;">${rangeText}</span>`;
+            const maxWeight = Math.max(
+                ...weightRecords.map(r => Number(r.weight))
+            );
 
-            const averageWeight = weightRecords.reduce(function (sum, record) {
-                return sum + Number(record.weight);
-            }, 0) / weightRecords.length;
+            const minWeight = Math.min(
+                ...weightRecords.map(r => Number(r.weight))
+            );
 
-            const maxWeight = Math.max(...weightRecords.map(r => Number(r.weight)));
-            const minWeight = Math.min(...weightRecords.map(r => Number(r.weight)));
             const amplitude = (maxWeight - minWeight).toFixed(1);
 
-            let avgPercent = 50;
-            if (maxWeight > minWeight) {
-                avgPercent = ((averageWeight - minWeight) / (maxWeight - minWeight)) * 100;
+            // ------------------------------------------
+            // 스펙트럼 위에서의 실제 위치 계산
+            // ------------------------------------------
+            function getWeightPercent(weight) {
+                if (maxWeight === minWeight) {
+                    return 50;
+                }
+
+                return (
+                    (weight - minWeight) /
+                    (maxWeight - minWeight)
+                ) * 100;
             }
 
+            const firstPercent = getWeightPercent(first);
+            const lastPercent = getWeightPercent(last);
+            const avgPercent = getWeightPercent(averageWeight);
+
+            const diff = (last - first).toFixed(1);
+
+            let diffText = "변화 없음";
+            let diffClass = "weight-same";
+
+            const diffPosition = (firstPercent + lastPercent) / 2;
+            const isDiffClose = Math.abs(firstPercent - lastPercent) < 5;
+
+            if (Number(diff) > 0) {
+                diffText = "+" + diff + "kg";
+                diffClass = "weight-up";
+            } else if (Number(diff) < 0) {
+                diffText = diff + "kg";
+                diffClass = "weight-down";
+            }
+
+            // ------------------------------------------
+            // 시작 → 현재 연결선
+            // ------------------------------------------
+            const arrowDirection = lastPercent < firstPercent
+                ? "arrow-left"
+                : lastPercent > firstPercent
+                    ? "arrow-right"
+                    : "";
+
+            const directionLine = `
+    <div
+        class="weight-direction-line ${diffClass} ${arrowDirection}"
+        style="
+            left: ${Math.min(firstPercent, lastPercent)}%;
+            width: ${Math.abs(firstPercent - lastPercent)}%;
+        ">
+    </div>
+`;
+
             const spectrumHtml = `
-                <div class="weight-summary-header">
-                    ${changeText}
-                </div>
-                
-                <div class="spectrum-container">
-                    <div class="spectrum-labels">
-                        <span class="label-min">⬇ 최저 ${minWeight.toFixed(1)}kg</span>
-                        <span class="label-max">⬆ 최고 ${maxWeight.toFixed(1)}kg</span>
-                    </div>
-                    
-                    <div class="spectrum-bar-wrapper">
-                        <div class="spectrum-bar"></div>
-                        <div class="spectrum-pointer" style="left: ${avgPercent}%;">
-                            <span class="pointer-tooltip">평균 ${averageWeight.toFixed(1)}kg</span>
+            <div class="integrated-weight">
+
+                <!-- 시작 / 현재 변화 영역 -->
+                <div class="weight-journey">
+
+                    <div
+                        class="journey-point journey-start"
+                        style="left: ${firstPercent}%;">
+                        <div class="journey-label">
+                            시작
+                            <strong>${first.toFixed(1)}kg</strong>
                         </div>
+                        <div class="journey-dot"></div>
                     </div>
 
-                    <div class="spectrum-footer">
-                        ↕️ 변동 진폭: <strong>${amplitude} kg</strong> (${minWeight.toFixed(1)} ~ ${maxWeight.toFixed(1)} kg)
+                    <div
+                        class="journey-point journey-current"
+                        style="left: ${lastPercent}%;">
+                        <div class="journey-label">
+    ${currentLabel}
+    <strong>${last.toFixed(1)}kg</strong>
+</div>
+                        <div class="journey-dot"></div>
                     </div>
+
+                    ${directionLine}
+
+                                        <div
+                        class="journey-diff ${diffClass}${isDiffClose ? " diff-close" : ""}"
+                        style="left: ${diffPosition}%;">
+                        ${diffText}
+                    </div>
+
                 </div>
-            `;
+
+                <!-- 스펙트럼 -->
+                <div class="spectrum-container">
+
+                    <div class="spectrum-labels">
+                        <span class="label-min">
+                            ⬇ 최저 ${minWeight.toFixed(1)}kg
+                        </span>
+
+                        <span class="label-max">
+                            ⬆ 최고 ${maxWeight.toFixed(1)}kg
+                        </span>
+                    </div>
+
+
+                    <div class="spectrum-bar-wrapper">
+
+                        <div class="spectrum-bar"></div>
+
+
+                        <!-- 평균 -->
+                        <div
+                            class="spectrum-average"
+                            style="left: ${avgPercent}%;">
+                            <div class="average-dot"></div>
+                            <span>
+                                평균 ${averageWeight.toFixed(1)}kg
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="spectrum-footer">
+                        ↕️ 변동 진폭:
+                        <strong>${amplitude}kg</strong>
+                        <span>
+                            (${minWeight.toFixed(1)} ~
+                            ${maxWeight.toFixed(1)}kg)
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        `;
 
             weightSummaryEl.innerHTML = spectrumHtml;
             weightSummaryEl.style.margin = "";
 
-            // [기록 있음] 체중 카드 하단 여백 최대로 줄임 (6px)
-            if (weightSection) weightSection.style.paddingBottom = "1.3px";
+            if (weightSection) {
+                weightSection.style.paddingBottom = "1.3px";
+            }
+
         } else {
+
             weightSummaryEl.innerText = "기록 없음";
             weightSummaryEl.style.marginTop = "16px";
             weightSummaryEl.style.marginBottom = "0px";
 
-            // [기록 없음] 체중 카드 기본 여백 복원
-            if (weightSection) weightSection.style.paddingBottom = "20px";
+            if (weightSection) {
+                weightSection.style.paddingBottom = "20px";
+            }
         }
     }
 

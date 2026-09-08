@@ -1132,39 +1132,404 @@ html, body {
 }
 
 
-/* =========================
+/* ==========================================
+   체중 변화 - 통합 스펙트럼
+   ========================================== */
+
+.integrated-weight {
+    width: 100%;
+}
+
+
+/* ------------------------------------------
+   시작 → 현재 영역
+   스펙트럼 바의 실제 내부 폭과 정확히 동일
+   ------------------------------------------ */
+
+.weight-journey {
+    position: relative;
+    width: calc(100% - 54px);
+    height: 58px;
+    margin: 2px 27px 8px;
+    box-sizing: border-box;
+}
+
+
+/* 시작 / 현재 포인트 */
+
+.journey-point {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 3;
+}
+
+.journey-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    font-size: 0.7rem;
+    opacity: 0.65;
+}
+
+.journey-label strong {
+    margin-top: 2px;
+    font-size: 1rem;
+    font-weight: 700;
+    opacity: 1;
+}
+
+.journey-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* ------------------------------------------
+   시작 → 현재 연결선
+   ------------------------------------------ */
+
+.weight-direction-line {
+    position: absolute;
+    bottom: 3px;
+    height: 2px;
+    background: currentColor;
+    z-index: 1;
+    opacity: 0.45;
+}
+
+
+/* 감소 : 왼쪽 화살표 */
+.weight-direction-line.arrow-left::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-right: 14px solid currentColor;
+}
+
+
+/* 증가 : 오른쪽 화살표 */
+.weight-direction-line.arrow-right::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-left: 14px solid currentColor;
+}
+
+
+/* ------------------------------------------
+   변화량
+   ------------------------------------------ */
+
+.journey-diff {
+    position: absolute;
+    bottom: 32px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 4;
+    
+}
+.journey-diff.diff-close {
+    bottom: 35px;
+}
+
+.journey-diff:not(.diff-close) {
+    bottom: 16px;
+}
+
+
+
+
+/* 감소 = 초록 */
+
+.weight-down {
+    color: #198754;
+}
+
+
+/* 증가 = 빨강 */
+
+.weight-up {
+    color: #dc3545;
+}
+
+
+/* 동일 */
+
+.weight-same {
+    opacity: 0.6;
+}
+
+
+/* ==========================================
+   체중 스펙트럼 카드
+   ========================================== */
+
+.spectrum-container {
+    width: auto;
+
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+
+    padding: 16px;
+
+    margin: 6px 10px 0;
+
+    box-sizing: border-box;
+}
+
+
+/* ------------------------------------------
+   최저 / 최고 라벨
+   ------------------------------------------ */
+
+.spectrum-labels {
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.label-min {
+    color: #2563eb;
+}
+
+.label-max {
+    color: #dc2626;
+}
+
+
+/* ------------------------------------------
+   스펙트럼 바
+   ------------------------------------------ */
+
+.spectrum-bar-wrapper {
+    position: relative;
+
+    width: 100%;
+    height: 10px;
+
+    margin: 28px 0 16px;
+}
+
+.spectrum-bar {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 5px;
+
+    background: linear-gradient(
+        90deg,
+        #3b82f6 0%,
+        #06b6d4 50%,
+        #ef4444 100%
+    );
+}
+
+
+/* ==========================================
+   평균 표시
+   ========================================== */
+
+.spectrum-average {
+    position: absolute;
+
+    top: 0;
+    transform: translate(-50%, -20%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    z-index: 5;
+    pointer-events: none;
+}
+
+.average-dot {
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+    border: 3px solid #1e293b;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.spectrum-average span {
+    position: absolute;
+
+    bottom: 18px;
+
+    white-space: nowrap;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #1e293b;
+
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+/* ==========================================
+   변동 진폭
+   ========================================== */
+
+.spectrum-footer {
+    text-align: center;
+
+    font-size: 13px;
+    color: #64748b;
+
+    border-top: 1px dashed #dee2e6;
+
+    padding-top: 10px;
+    margin-top: 8px;
+}
+
+.spectrum-footer strong {
+    color: #0f172a;
+}
+
+
+/* ==========================================
+   기존 스펙트럼 포인터
+   현재 JS에서 사용하지 않아도
+   다른 화면 영향 방지를 위해 유지
+   ========================================== */
+
+.spectrum-pointer {
+    position: absolute;
+
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 16px;
+    height: 16px;
+
+    background-color: #ffffff;
+
+    border: 3px solid #1e293b;
+
+    border-radius: 50%;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.pointer-tooltip {
+    position: absolute;
+
+    bottom: 22px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    white-space: nowrap;
+
+    background: #1e293b;
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    padding: 3px 8px;
+
+    border-radius: 6px;
+}
+
+.pointer-tooltip::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: -5px;
+
+    transform: translateX(-50%);
+
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #1e293b;
+}
+
+/* ==========================================
    체중 그래프 네온 효과
-========================= */
+   ========================================== */
 
-@keyframes weightNeon {
-
+@keyframes weightChartNeon {
     0% {
-        border-color: inherit;
-        box-shadow: none;
+        box-shadow:
+            0 3px 8px rgba(0, 0, 0, .1);
     }
 
     15% {
-        border-color: #A855F7;
         box-shadow:
-            0 0 3px #A855F7,
-            0 0 8px #A855F7,
-            0 0 16px #A855F7;
+            0 0 6px rgba(54, 162, 235, 0.9),
+            0 0 14px rgba(54, 162, 235, 0.7),
+            0 0 25px rgba(54, 162, 235, 0.45);
     }
 
     35% {
-        border-color: #A855F7;
         box-shadow:
-            0 0 4px #A855F7,
-            0 0 10px #A855F7,
-            0 0 22px #A855F7;
+            0 0 8px rgba(54, 162, 235, 1),
+            0 0 18px rgba(54, 162, 235, 0.8),
+            0 0 30px rgba(54, 162, 235, 0.5);
+    }
+
+    55% {
+        box-shadow:
+            0 0 6px rgba(54, 162, 235, 0.9),
+            0 0 15px rgba(54, 162, 235, 0.7),
+            0 0 25px rgba(54, 162, 235, 0.4);
+    }
+
+    75% {
+        box-shadow:
+            0 0 4px rgba(54, 162, 235, 0.6),
+            0 0 10px rgba(54, 162, 235, 0.4);
     }
 
     100% {
-        border-color: inherit;
-        box-shadow: none;
+        box-shadow:
+            0 3px 8px rgba(0, 0, 0, .1);
     }
 }
 
 .weight-chart-section.neon-active {
-    animation: weightNeon 2s ease-in-out;
+    animation: weightChartNeon 2s ease-out;
 }
