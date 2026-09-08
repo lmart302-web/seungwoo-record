@@ -44,11 +44,9 @@
 
 </nav>
 
-
-<h1>
+<h1 id="planTitle">
 📅 이번 달 계획
 </h1>
-
 
 <div class="section">
 
@@ -56,6 +54,21 @@
 
 </div>
 
+<script>
+    const image = document.querySelector(".plan-image");
+    const title = document.getElementById("planTitle");
+
+    const fileName = image.src.split("/").pop();
+
+    const match = fileName.match(/^(\d{4})-(\d{2})-plan\.png$/);
+
+    if (match) {
+        const year = match[1];
+        const month = Number(match[2]);
+
+        title.textContent = `📅 ${year}년 ${month}월`;
+    }
+</script>
 
 </body>
 
