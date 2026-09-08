@@ -157,7 +157,7 @@ function drawReport() {
             let diffClass = "weight-same";
 
             const diffPosition = (firstPercent + lastPercent) / 2;
-            const isDiffClose = Math.abs(firstPercent - lastPercent) < 5;
+            const isDiffClose = Math.abs(firstPercent - lastPercent) < 10;
 
             if (Number(diff) > 0) {
                 diffText = "+" + diff + "kg";
@@ -225,33 +225,37 @@ function drawReport() {
                 <!-- 스펙트럼 -->
                 <div class="spectrum-container">
 
-                    <div class="spectrum-labels">
-                        <span class="label-min">
-                            ⬇ 최저 ${minWeight.toFixed(1)}kg
-                        </span>
-
-                        <span class="label-max">
-                            ⬆ 최고 ${maxWeight.toFixed(1)}kg
-                        </span>
-                    </div>
 
 
                     <div class="spectrum-bar-wrapper">
 
-                        <div class="spectrum-bar"></div>
+    <div class="spectrum-bar"></div>
 
+    <!-- 최저 -->
+    <div
+        class="spectrum-point spectrum-min"
+        style="left: 0%;">
+        <div class="point-dot"></div>
+        <span>최저 ${minWeight.toFixed(1)}kg</span>
+    </div>
 
-                        <!-- 평균 -->
-                        <div
-                            class="spectrum-average"
-                            style="left: ${avgPercent}%;">
-                            <div class="average-dot"></div>
-                            <span>
-                                평균 ${averageWeight.toFixed(1)}kg
-                            </span>
-                        </div>
+    <!-- 평균 -->
+    <div
+        class="spectrum-point spectrum-average"
+        style="left: ${avgPercent}%;">
+        <div class="point-dot"></div>
+        <span>평균 ${averageWeight.toFixed(1)}kg</span>
+    </div>
 
-                    </div>
+    <!-- 최고 -->
+    <div
+        class="spectrum-point spectrum-max"
+        style="left: 100%;">
+        <div class="point-dot"></div>
+        <span>최고 ${maxWeight.toFixed(1)}kg</span>
+    </div>
+
+</div>
 
 
                     <div class="spectrum-footer">
