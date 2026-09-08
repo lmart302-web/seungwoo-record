@@ -53,7 +53,7 @@ nav a.active {
 
 .section {
     background: #fff;
-    padding: 20px 20px 12px 20px;  /* ← [상, 우, 하, 좌] 순서대로 지정 (하단만 12px로 축소) */
+    padding: 20px 20px 20px 20px;  /* ← [상, 우, 하, 좌] 순서대로 지정 (하단만 12px로 축소) */
     margin-bottom: 16px;          /* ← 카드와 카드 사이 간격도 약간 줄이고 싶다면 15px로 조절 */
     border-radius: 15px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
@@ -1156,4 +1156,11 @@ body.weight-page .nav-btn:active {
 .top-lunch-box {
   margin-left: 10px;
   margin-right: 10px;
+}
+
+/* 스마트폰 모바일에서 달력 카드의 아래 여백을 좌우(4px)와 동일하게 맞춤 */
+@media (max-width: 600px) {
+  .section:has(#calendar) {
+    padding-bottom: 4px !important;
+  }
 }
