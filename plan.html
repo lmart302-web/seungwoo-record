@@ -11,6 +11,26 @@
 
 <link rel="stylesheet" href="style.css">
 
+<style>
+  /* 1. 카드가 모바일 화면 좌우 꽉 차도록 외부 여백 최소화 */
+  .section {
+    padding: 6px !important; /* 카드 내부 상하좌우 여백을 6px로 극소화 */
+    margin: 0 auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 2. 계획서 이미지를 카드 안에서 최대 크기로 확대 */
+  .plan-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important; /* 이미지 하단 미세 여백 제거 */
+    margin: 0 auto !important;
+    border-radius: 10px; /* 미세한 둥근 모서리 유지 */
+  }
+</style>
+
 </head>
 
 <body>

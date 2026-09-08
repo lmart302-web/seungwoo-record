@@ -19,7 +19,7 @@ let currentDate = new Date();
 // 안전한 날짜 파싱 함수 (시차 방지)
 function parseDate(dateStr) {
     if (!dateStr) return null;
-    
+
     // Firestore Timestamp 객체인 경우
     if (typeof dateStr === "object" && typeof dateStr.toDate === "function") {
         return dateStr.toDate();
@@ -107,14 +107,17 @@ function drawReport() {
             const last = Number(weightRecords[weightRecords.length - 1].weight);
             const diff = (last - first).toFixed(1);
 
-            let changeText = first + "kg → " + last + "kg";
+            let rangeText = first + "kg → " + last + "kg";
             if (diff > 0) {
-                changeText += " (+" + diff + "kg)";
+                rangeText += " (+" + diff + "kg)";
             } else if (diff < 0) {
-                changeText += " (" + diff + "kg)";
+                rangeText += " (" + diff + "kg)";
             } else {
-                changeText += " (변화 없음)";
+                rangeText += " (변화 없음)";
             }
+
+            // opacity를 0.8로 올려 적당히 자연스럽게 연하게 처리
+            let changeText = `<span style="opacity: 0.75;">${rangeText}</span>`;
 
             const averageWeight = weightRecords.reduce(function (sum, record) {
                 return sum + Number(record.weight);
@@ -154,7 +157,7 @@ function drawReport() {
             `;
 
             weightSummaryEl.innerHTML = spectrumHtml;
-            weightSummaryEl.style.margin = ""; 
+            weightSummaryEl.style.margin = "";
 
             // [기록 있음] 체중 카드 하단 여백 최대로 줄임 (6px)
             if (weightSection) weightSection.style.paddingBottom = "1.3px";
@@ -222,7 +225,7 @@ function drawReport() {
         if (miniCalendar) {
             miniCalendar.innerHTML = "";
             miniCalendar.style.display = "block";
-            
+
             miniCalendar.style.marginTop = "16px";
             miniCalendar.style.marginBottom = "0px";
             miniCalendar.style.padding = "0px";
@@ -233,7 +236,7 @@ function drawReport() {
             noDataEl.style.margin = "0";
             noDataEl.style.padding = "0";
             noDataEl.style.lineHeight = "1";
-            
+
             miniCalendar.appendChild(noDataEl);
         }
 
@@ -265,7 +268,7 @@ function drawReport() {
 
         if (miniCalendar) {
             miniCalendar.innerHTML = "";
-            
+
             miniCalendar.style.display = "grid";
             miniCalendar.style.textAlign = "initial";
             miniCalendar.style.marginTop = "";
