@@ -522,7 +522,7 @@ function playWeightNeon(activeType = "monthly") {
 
   setTimeout(() => {
     section.classList.remove("neon-active");
-  }, 3000);
+  }, 5000);
 }
 
 function switchView(activeType) {

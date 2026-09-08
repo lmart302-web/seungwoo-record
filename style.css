@@ -1143,20 +1143,20 @@ html, body {
         box-shadow: none;
     }
 
-    10% {
+    15% {
         border-color: #A855F7;
         box-shadow:
-            0 0 5px #A855F7,
-            0 0 15px #A855F7,
-            0 0 30px #A855F7;
+            0 0 3px #A855F7,
+            0 0 8px #A855F7,
+            0 0 16px #A855F7;
     }
 
-    30% {
+    35% {
         border-color: #A855F7;
         box-shadow:
-            0 0 8px #A855F7,
-            0 0 20px #A855F7,
-            0 0 40px #A855F7;
+            0 0 4px #A855F7,
+            0 0 10px #A855F7,
+            0 0 22px #A855F7;
     }
 
     100% {
@@ -1166,5 +1166,5 @@ html, body {
 }
 
 .weight-chart-section.neon-active {
-    animation: weightNeon 2s ease-out;
+    animation: weightNeon 5s ease-out;
 }
