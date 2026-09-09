@@ -159,8 +159,8 @@ function drawReport() {
 
             const minLabelGap = 75;
 
-let startLabelOffset = 0;
-let currentLabelOffset = 0;
+let startLabelOffset = -10.3;
+let currentLabelOffset = 7.3;
 
 const pixelGap =
     Math.abs(firstPercent - lastPercent) *
@@ -182,7 +182,8 @@ if (pixelGap < minLabelGap) {
     }
 }
 
-            const avgPercent = getVerticalPercent(averageWeight);
+            const averageDisplayWeight = Number(averageWeight.toFixed(1));
+const avgPercent = getVerticalPercent(averageDisplayWeight);
 
             const diff = (last - first).toFixed(1);
 
@@ -238,7 +239,13 @@ const diffTop =
                     <div class="spectrum-vertical">
 
                         <div class="spectrum-bar"></div>
-
+<div
+    class="spectrum-current-fill"
+    style="
+        top: 0;
+height: ${lastPercent}%;
+    "
+></div>
 
                         <!-- 최고 -->
                         <div
@@ -261,7 +268,7 @@ const diffTop =
 
                             <div class="spectrum-average-label">
                                 평균
-                                <strong>${averageWeight.toFixed(1)}</strong>
+                                <strong>${averageDisplayWeight.toFixed(1)}</strong>
                             </div>
                         </div>
 
