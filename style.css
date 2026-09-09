@@ -1388,7 +1388,7 @@ html, body {
 .spectrum-min span,
 .spectrum-max span {
     position: absolute;
-    top: 28px;
+    top: 30px;
 
     white-space: nowrap;
     font-size: 11px;
