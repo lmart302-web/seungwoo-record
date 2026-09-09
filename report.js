@@ -269,7 +269,7 @@ const diffTop =
                             </div>
 
                             <div class="amplitude-label">
-                                <span>변동 진폭</span>
+                                <span>진폭</span>
                                 <strong>${amplitude}</strong>
                             </div>
 
