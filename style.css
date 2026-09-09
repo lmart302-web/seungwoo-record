@@ -1632,7 +1632,7 @@ html, body {
 .journey-diff {
     position: absolute;
 
-    left: calc(50% + 16px);
+    left: calc(50% + 18px);
 
     transform: translateY(-50%);
 
