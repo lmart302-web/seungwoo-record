@@ -1463,7 +1463,7 @@ html, body {
 
     width: 2px;
 
-    background: #374151;
+    background: #64748b;
 
     z-index: 3;
 
@@ -1515,7 +1515,7 @@ html, body {
 /* 현재 */
 
 .journey-current .journey-dot {
-    border-color: #7c3aed;
+    border-color: #f59e0b;
 }
 
 
@@ -1547,7 +1547,7 @@ html, body {
 }
 
 .journey-current .journey-label span {
-    color: #7c3aed;
+    color: #f59e0b;
 }
 
 .journey-label strong {
@@ -1596,7 +1596,7 @@ html, body {
 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 10px solid #374151;
+    border-bottom: 10px solid #64748b;
 
     z-index: 20;
 }
@@ -1619,7 +1619,7 @@ html, body {
 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 10px solid #374151;
+    border-top: 10px solid #64748b;
 
     z-index: 20;
 }
