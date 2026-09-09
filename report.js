@@ -159,8 +159,8 @@ function drawReport() {
 
             const minLabelGap = 75;
 
-let startLabelOffset = -10.3;
-let currentLabelOffset = 7.3;
+let startLabelOffset = -10.25;
+let currentLabelOffset = 7.25;
 
 const pixelGap =
     Math.abs(firstPercent - lastPercent) *

@@ -1417,7 +1417,7 @@ html, body {
 .weight-journey-vertical {
     position: absolute;
 
-    left: 49.9%;
+    left: 49.5%;
 
     width: 2px;
 
@@ -1546,7 +1546,7 @@ html, body {
 
     position: absolute;
 
-    left: 50%;
+    left: calc(50% - 0px);
     top: -1px;
 
     transform: translateX(-50%);
@@ -1569,7 +1569,7 @@ html, body {
 
     position: absolute;
 
-    left: 50%;
+    left: calc(50% - 0px);
     bottom: -1px;
 
     transform: translateX(-50%);
