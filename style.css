@@ -1068,7 +1068,7 @@ html, body {
 /* 하단 진폭 안내 */
 .spectrum-footer {
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     color: #64748b;
     border-top: 1px dashed #dee2e6;
     padding-top: 10px;
@@ -1150,7 +1150,7 @@ html, body {
     position: relative;
     width: calc(100% - 54px);
     height: 58px;
-    margin: 2px 27px 8px;
+    margin: 2px 27px 3px;
     box-sizing: border-box;
 }
 
@@ -1180,7 +1180,7 @@ html, body {
 
 .journey-label strong {
     margin-top: 2px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     opacity: 1;
 }
@@ -1298,7 +1298,7 @@ html, body {
     border: 1px solid #e9ecef;
     border-radius: 12px;
 
-    padding: 16px;
+    padding: 2px 16px 6px; 
 
     margin: 6px 10px 0;
 
@@ -1373,16 +1373,34 @@ html, body {
     pointer-events: none;
 }
 
-.spectrum-point span {
+/* 평균 → 위쪽 */
+.spectrum-average span {
     position: absolute;
     bottom: 18px;
 
     white-space: nowrap;
-
     font-size: 11px;
     font-weight: 600;
-
     color: #1e293b;
+}
+
+/* 최저·최고 → 아래쪽 */
+.spectrum-min span,
+.spectrum-max span {
+    position: absolute;
+    top: 28px;
+
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.spectrum-min span {
+    color: #0d6efd;
+}
+
+.spectrum-max span {
+    color: #dc3545;
 }
 
 .point-dot {
@@ -1420,10 +1438,12 @@ html, body {
 
 .spectrum-min span {
     color: #0d6efd;
+    left: 0px;
 }
 
 .spectrum-max span {
     color: #dc3545;
+    right: 0px;
 }
 
 .spectrum-min .point-dot {
@@ -1439,17 +1459,16 @@ html, body {
    변동 진폭
    ========================================== */
 
-.spectrum-footer {
-    text-align: center;
+.spectrum-footer { 
+    text-align: center; 
 
-    font-size: 13px;
-    color: #64748b;
+    font-size: 13px; 
+    color: #64748b; 
 
-    border-top: 1px dashed #dee2e6;
-
-    padding-top: 10px;
-    margin-top: 8px;
+    padding-top: 0;
+    margin-top: 0px;
 }
+
 
 .spectrum-footer strong {
     color: #0f172a;

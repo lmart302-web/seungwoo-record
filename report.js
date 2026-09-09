@@ -259,13 +259,9 @@ function drawReport() {
 
 
                     <div class="spectrum-footer">
-                        ↕️ 변동 진폭:
-                        <strong>${amplitude}kg</strong>
-                        <span>
-                            (${minWeight.toFixed(1)} ~
-                            ${maxWeight.toFixed(1)}kg)
-                        </span>
-                    </div>
+    ↔ 변동 진폭:
+    <strong>${amplitude}kg</strong>
+</div>
 
                 </div>
 
