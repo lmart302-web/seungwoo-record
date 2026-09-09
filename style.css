@@ -1393,7 +1393,7 @@ html, body {
     font-size: 11px;
     font-weight: 700;
 
-    color: #1e293b;
+    color: #475569;
 }
 
 
@@ -1463,7 +1463,7 @@ html, body {
 
     width: 2px;
 
-    background: #64748b;
+    background: #22c55e;
 
     z-index: 3;
 
@@ -1502,7 +1502,7 @@ html, body {
 
     background: #ffffff;
 
-    border: 3px solid #22c55e;
+    border: 3px solid #ef4444;
     border-radius: 50%;
 
     box-sizing: border-box;
@@ -1515,7 +1515,7 @@ html, body {
 /* 현재 */
 
 .journey-current .journey-dot {
-    border-color: #f59e0b;
+    border-color: #3b82f6;
 }
 
 
@@ -1542,12 +1542,12 @@ html, body {
 
     margin-left: 4px;
 
-    color: #22c55e;
+    color: #ef4444;
     font-weight: 600;
 }
 
 .journey-current .journey-label span {
-    color: #f59e0b;
+    color: #3b82f6;
 }
 
 .journey-label strong {
@@ -1596,7 +1596,7 @@ html, body {
 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 10px solid #64748b;
+    border-bottom: 10px solid #22c55e;
 
     z-index: 20;
 }
@@ -1619,7 +1619,7 @@ html, body {
 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 10px solid #64748b;
+    border-top: 10px solid #22c55e;
 
     z-index: 20;
 }
