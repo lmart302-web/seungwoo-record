@@ -568,10 +568,10 @@ const diffTop =
             }
 
             if (topLunches.length > 1) {
-                topLunchEl.innerText = topLunches.join(", ") + " (각 " + maxCount + "회)";
-            } else {
-                topLunchEl.innerText = topLunches[0] + " (" + maxCount + "회)";
-            }
+    topLunchEl.innerText = topLunches.join(" · ") + " · 각 " + maxCount + "회";
+} else {
+    topLunchEl.innerText = topLunches[0] + " · " + maxCount + "회";
+}
 
             topLunchEl.classList.add("top-lunch-box");
             if (lunchSection) lunchSection.style.paddingBottom = "20px";

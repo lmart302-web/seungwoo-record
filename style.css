@@ -1093,17 +1093,23 @@ html, body {
     line-height: 1.4;
 }
 
-/* 점심 TOP 1 강조 박스 */
+/* ==========================================
+   이번 달 점심 인기 메뉴
+========================================== */
+
 .top-lunch-box {
-    margin-top: 10px;
-    padding: 12px 16px;
-    background-color: #fff3e0;
-    border-left: 4px solid #ff9800;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: bold;
-    color: #e65100;
+    margin: 10px 10px 0;
+    padding: 13px 16px;
+
+    background: #fff7ed;
+    border-left: 3px solid #ff9800;
+    border-radius: 8px;
+
     box-sizing: border-box;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: #e65100;
 }
 
 /* 리포트 상단 바 흰색 카드의 내부 아래 여백을 줄임 */
@@ -1118,11 +1124,7 @@ html, body {
   margin-right: 10px;
 }
 
-/* 점심 TOP 1 주황색 상자와 흰색 카드 테두리 사이 좌우 간격 */
-.top-lunch-box {
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 
 /* 스마트폰 모바일에서 달력 카드의 아래 여백을 좌우(4px)와 동일하게 맞춤 */
 @media (max-width: 600px) {
