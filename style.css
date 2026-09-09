@@ -1603,7 +1603,7 @@ html, body {
     position: absolute;
 
     left: 50%;
-    top: 0px;
+    top: -1px;
 
     transform: translateX(-50%);
 
@@ -1626,7 +1626,7 @@ html, body {
     position: absolute;
 
     left: 50%;
-    bottom: 0px;
+    bottom: -1px;
 
     transform: translateX(-50%);
 
