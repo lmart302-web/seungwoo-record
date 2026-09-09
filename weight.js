@@ -455,7 +455,7 @@ function drawAllWeight() {
       li.innerHTML = `
         <span class="record-date">${item.month + 1}월</span>
         <span class="record-colon">:</span>
-        <span class="record-value">${item.average.toFixed(1)}kg</span>
+        <span class="record-value">${item.average.toFixed(1)}</span>
         <span class="record-badge" style="font-weight: bold; color: ${badgeColor}; margin-left: 4px;">${badgeText}</span>
       `;
       elements.allWeightList.appendChild(li);

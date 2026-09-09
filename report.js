@@ -244,7 +244,7 @@ function drawReport() {
         class="spectrum-point spectrum-average"
         style="left: ${avgPercent}%;">
         <div class="point-dot"></div>
-        <span>평균 ${averageWeight.toFixed(1)}kg</span>
+        <span>평균 ${averageWeight.toFixed(1)}</span>
     </div>
 
     <!-- 최고 -->
