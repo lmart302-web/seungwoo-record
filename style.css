@@ -1256,11 +1256,11 @@ html, body {
     
 }
 .journey-diff.diff-close {
-    bottom: 35px;
+    bottom: 33px;
 }
 
 .journey-diff:not(.diff-close) {
-    bottom: 16px;
+    bottom: 15px;
 }
 
 
