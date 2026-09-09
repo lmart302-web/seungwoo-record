@@ -102,7 +102,7 @@ function drawReport() {
     const currentLabel = isMonthFinished ? "끝" : "현재";
 
     // ==========================================
-    // 체중 리포트 및 통합 스펙트럼 렌더링
+    // 체중 리포트 및 세로형 스펙트럼 렌더링
     // ==========================================
     const weightRecords = monthRecords.filter(function (record) {
         return record.weight;
@@ -111,12 +111,15 @@ function drawReport() {
     const weightSummaryEl = document.getElementById("weightSummary");
 
     if (weightSummaryEl) {
+
         const weightSection = weightSummaryEl.closest(".section");
 
         if (weightRecords.length) {
 
             const first = Number(weightRecords[0].weight);
-            const last = Number(weightRecords[weightRecords.length - 1].weight);
+            const last = Number(
+                weightRecords[weightRecords.length - 1].weight
+            );
 
             const averageWeight =
                 weightRecords.reduce(function (sum, record) {
@@ -134,30 +137,36 @@ function drawReport() {
             const amplitude = (maxWeight - minWeight).toFixed(1);
 
             // ------------------------------------------
-            // 스펙트럼 위에서의 실제 위치 계산
+            // 체중값 → 스펙트럼 위치
+            // 0% = 최고
+            // 100% = 최저
             // ------------------------------------------
-            function getWeightPercent(weight) {
+            function getVerticalPercent(weight) {
+
                 if (maxWeight === minWeight) {
                     return 50;
                 }
 
-                return (
-                    (weight - minWeight) /
-                    (maxWeight - minWeight)
-                ) * 100;
+                const percent =
+                    ((maxWeight - weight) /
+                        (maxWeight - minWeight)) * 100;
+
+                return percent;
             }
 
-            const firstPercent = getWeightPercent(first);
-            const lastPercent = getWeightPercent(last);
-            const avgPercent = getWeightPercent(averageWeight);
+            const firstPercent = getVerticalPercent(first);
+            const lastPercent = getVerticalPercent(last);
+            const avgPercent = getVerticalPercent(averageWeight);
 
             const diff = (last - first).toFixed(1);
 
+            console.log("월:", currentLabel);
+console.log("firstPercent:", firstPercent);
+console.log("lastPercent:", lastPercent);
+console.log("diffTop:", (firstPercent + lastPercent) / 2);
+
             let diffText = "변화 없음";
             let diffClass = "weight-same";
-
-            const diffPosition = (firstPercent + lastPercent) / 2;
-            const isDiffClose = Math.abs(firstPercent - lastPercent) < 15;
 
             if (Number(diff) > 0) {
                 diffText = "+" + diff;
@@ -168,107 +177,179 @@ function drawReport() {
             }
 
             // ------------------------------------------
-            // 시작 → 현재 연결선
+            // 시작 → 현재 방향
             // ------------------------------------------
-            const arrowDirection = lastPercent < firstPercent
-                ? "arrow-left"
-                : lastPercent > firstPercent
-                    ? "arrow-right"
-                    : "";
+            const startCurrentTop =
+                Math.min(firstPercent, lastPercent);
 
-            const directionLine = `
-    <div
-        class="weight-direction-line ${diffClass} ${arrowDirection}"
-        style="
-            left: ${Math.min(firstPercent, lastPercent)}%;
-            width: ${Math.abs(firstPercent - lastPercent)}%;
-        ">
-    </div>
-`;
+            const startCurrentHeight =
+                Math.abs(firstPercent - lastPercent);
 
+            const arrowDirection =
+    lastPercent > firstPercent
+        ? "arrow-down"
+        : lastPercent < firstPercent
+            ? "arrow-up"
+            : "";
+
+const diffTop =
+    (firstPercent + lastPercent) / 2;
+            // ------------------------------------------
+            // 세로 스펙트럼 HTML
+            // ------------------------------------------
             const spectrumHtml = `
-            <div class="integrated-weight">
 
-                <!-- 시작 / 현재 변화 영역 -->
-                <div class="weight-journey">
+            <div class="vertical-weight-spectrum">
 
-                    <div
-                        class="journey-point journey-start"
-                        style="left: ${firstPercent}%;">
-                        <div class="journey-label">
-                            시작
-                            <strong>${first.toFixed(1)}</strong>
+                <div class="vertical-spectrum-area">
+
+                    <!-- ==================================
+                         최고 / 평균 / 최저
+                         ================================== -->
+
+                    <div class="spectrum-vertical">
+
+                        <div class="spectrum-bar"></div>
+
+
+                        <!-- 최고 -->
+                        <div
+                            class="spectrum-point spectrum-max"
+                            style="top: 0%;">
+                            <div class="point-dot"></div>
+
+                            <div class="spectrum-side-label">
+                                <strong>최고</strong>
+                                <span>${maxWeight.toFixed(1)}</span>
+                            </div>
                         </div>
-                        <div class="journey-dot"></div>
+
+
+                        <!-- 평균 -->
+                        <div
+                            class="spectrum-point spectrum-average"
+                            style="top: ${avgPercent}%;">
+                            <div class="point-dot"></div>
+
+                            <div class="spectrum-average-label">
+                                평균
+                                <strong>${averageWeight.toFixed(1)}</strong>
+                            </div>
+                        </div>
+
+
+                        <!-- 최저 -->
+                        <div
+                            class="spectrum-point spectrum-min"
+                            style="top: 100%;">
+                            <div class="point-dot"></div>
+
+                            <div class="spectrum-side-label">
+                                <strong>최저</strong>
+                                <span>${minWeight.toFixed(1)}</span>
+                            </div>
+                        </div>
+
+
+                        <!-- ==================================
+                             변동 진폭
+                             최고 → 최저
+                             ================================== -->
+
+                        <div class="spectrum-amplitude">
+
+                            <div class="amplitude-line"></div>
+
+                            <div class="amplitude-arrow arrow-top">
+                                ▲
+                            </div>
+
+                            <div class="amplitude-arrow arrow-bottom">
+                                ▼
+                            </div>
+
+                            <div class="amplitude-label">
+                                <span>변동 진폭</span>
+                                <strong>${amplitude}</strong>
+                            </div>
+
+                        </div>
+
+
+                        <!-- ==================================
+                             시작 → 현재
+                             실제 체중 위치에 맞춤
+                             ================================== -->
+
+                        <div
+                            class="weight-journey-vertical ${arrowDirection}"
+                            style="
+    top: calc(${startCurrentTop}% + 7px);
+    height: calc(${startCurrentHeight}% - 14px);
+"
+                        >
+
+                            <div class="journey-line"></div>
+
+                            <div
+                                class="journey-arrow ${arrowDirection}">
+                            </div>
+
+                        </div>
+
+
+                        <!-- 시작 -->
+                        <div
+                            class="journey-point journey-start"
+                            style="top: ${firstPercent}%"
+                        >
+
+                            <div class="journey-dot"></div>
+
+                            <div class="journey-label">
+                                <span>시작</span>
+                                <strong>${first.toFixed(1)}</strong>
+                            </div>
+
+                        </div>
+
+
+                        <!-- 현재 -->
+                        <div
+                            class="journey-point journey-current"
+                            style="top: ${lastPercent}%"
+                        >
+
+                            <div class="journey-dot"></div>
+
+                            <div class="journey-label">
+                                <span>${currentLabel}</span>
+                                <strong>${last.toFixed(1)}</strong>
+                            </div>
+
+                        </div>
+
+
+                        <!-- 변화량 -->
+                        <div
+                            class="journey-diff ${diffClass}"
+                            style="
+                                top: ${(firstPercent + lastPercent) / 2}%;
+                            "
+                        >
+                            ${diffText}
+                        </div>
+
                     </div>
-
-                    <div
-                        class="journey-point journey-current"
-                        style="left: ${lastPercent}%;">
-                        <div class="journey-label">
-    ${currentLabel}
-    <strong>${last.toFixed(1)}</strong>
-</div>
-                        <div class="journey-dot"></div>
-                    </div>
-
-                    ${directionLine}
-
-                                        <div
-                        class="journey-diff ${diffClass}${isDiffClose ? " diff-close" : ""}"
-                        style="left: ${diffPosition}%;">
-                        ${diffText}
-                    </div>
-
-                </div>
-
-                <!-- 스펙트럼 -->
-                <div class="spectrum-container">
-
-
-
-                    <div class="spectrum-bar-wrapper">
-
-    <div class="spectrum-bar"></div>
-
-    <!-- 최저 -->
-    <div
-        class="spectrum-point spectrum-min"
-        style="left: 0%;">
-        <div class="point-dot"></div>
-        <span>최저 ${minWeight.toFixed(1)}</span>
-    </div>
-
-    <!-- 평균 -->
-    <div
-        class="spectrum-point spectrum-average"
-        style="left: ${avgPercent}%;">
-        <div class="point-dot"></div>
-        <span>평균 ${averageWeight.toFixed(1)}</span>
-    </div>
-
-    <!-- 최고 -->
-    <div
-        class="spectrum-point spectrum-max"
-        style="left: 100%;">
-        <div class="point-dot"></div>
-        <span>최고 ${maxWeight.toFixed(1)}</span>
-    </div>
-
-</div>
-
-
-                    <div class="spectrum-footer">
-    ↔ 변동 진폭:
-    <strong>${amplitude}</strong>
-</div>
 
                 </div>
 
             </div>
         `;
 
+
             weightSummaryEl.innerHTML = spectrumHtml;
+
             weightSummaryEl.style.margin = "";
 
             if (weightSection) {
@@ -278,6 +359,7 @@ function drawReport() {
         } else {
 
             weightSummaryEl.innerText = "기록 없음";
+
             weightSummaryEl.style.marginTop = "16px";
             weightSummaryEl.style.marginBottom = "0px";
 

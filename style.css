@@ -1141,10 +1141,9 @@ html, body {
 }
 
 
-/* ------------------------------------------
+/* ==========================================
    시작 → 현재 영역
-   스펙트럼 바의 실제 내부 폭과 정확히 동일
-   ------------------------------------------ */
+   ========================================== */
 
 .weight-journey {
     position: relative;
@@ -1155,150 +1154,18 @@ html, body {
 }
 
 
-/* 시작 / 현재 포인트 */
-
-.journey-point {
-    position: absolute;
-    bottom: 0;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 3;
-}
-
-.journey-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    white-space: nowrap;
-    line-height: 1.2;
-    margin-bottom: 5px;
-    font-size: 0.7rem;
-    opacity: 0.65;
-}
-
-.journey-label strong {
-    margin-top: 2px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    opacity: 1;
-}
-
-.journey-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-}
-
-
-/* ------------------------------------------
-   시작 → 현재 연결선
-   ------------------------------------------ */
-
-.weight-direction-line {
-    position: absolute;
-    bottom: 3px;
-    height: 2px;
-    background: currentColor;
-    z-index: 1;
-    opacity: 0.45;
-}
-
-
-/* 감소 : 왼쪽 화살표 */
-.weight-direction-line.arrow-left::after {
-    content: "";
-    position: absolute;
-    left: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: 0;
-    height: 0;
-
-    border-top: 9px solid transparent;
-    border-bottom: 9px solid transparent;
-    border-right: 14px solid currentColor;
-}
-
-
-/* 증가 : 오른쪽 화살표 */
-.weight-direction-line.arrow-right::after {
-    content: "";
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: 0;
-    height: 0;
-
-    border-top: 9px solid transparent;
-    border-bottom: 9px solid transparent;
-    border-left: 14px solid currentColor;
-}
-
-
-/* ------------------------------------------
-   변화량
-   ------------------------------------------ */
-
-.journey-diff {
-    position: absolute;
-    bottom: 32px;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    font-size: 0.7rem;
-    font-weight: 600;
-    z-index: 4;
-    
-}
-.journey-diff.diff-close {
-    bottom: 33px;
-}
-
-.journey-diff:not(.diff-close) {
-    bottom: 15px;
-}
-
-
-
-
-/* 감소 = 초록 */
-
-.weight-down {
-    color: #198754;
-}
-
-
-/* 증가 = 빨강 */
-
-.weight-up {
-    color: #dc3545;
-}
-
-
-/* 동일 */
-
-.weight-same {
-    opacity: 0.6;
-}
-
-
 /* ==========================================
-   체중 스펙트럼 카드
+   체중 변화 - 세로형 스펙트럼
    ========================================== */
 
-.spectrum-container {
+.vertical-weight-spectrum {
     width: auto;
 
     background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 12px;
 
-    padding: 2px 16px 6px; 
+    padding: 10px 16px 12px;
 
     margin: 6px 10px 0;
 
@@ -1307,23 +1174,31 @@ html, body {
 
 
 /* ------------------------------------------
-   최저 / 최고 라벨
+   전체 영역
    ------------------------------------------ */
 
-.spectrum-labels {
-    display: flex;
-    justify-content: space-between;
+.vertical-spectrum-area {
+    position: relative;
 
-    font-size: 13px;
-    font-weight: 700;
+    width: 100%;
+    height: 270px;
 }
 
-.label-min {
-    color: #2563eb;
-}
 
-.label-max {
-    color: #dc2626;
+/* ------------------------------------------
+   세로 스펙트럼
+   ------------------------------------------ */
+
+.spectrum-vertical {
+    position: absolute;
+
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+
+    width: 100%;
+
+    overflow: visible;
 }
 
 
@@ -1331,123 +1206,112 @@ html, body {
    스펙트럼 바
    ------------------------------------------ */
 
-.spectrum-bar-wrapper {
-    position: relative;
-
-    width: 100%;
-    height: 10px;
-
-    margin: 28px 0 16px;
-}
-
 .spectrum-bar {
-    width: 100%;
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+
+    transform: translateX(-50%);
+
+    width: 10px;
     height: 100%;
-    height: 10px;
 
     border-radius: 5px;
 
     background: linear-gradient(
-        90deg,
-        #3b82f6 0%,
+        180deg,
+        #ef4444 0%,
         #06b6d4 50%,
-        #ef4444 100%
+        #3b82f6 100%
     );
 }
 
 
 /* ==========================================
-   최저 / 평균 / 최고 표시
+   최고 / 평균 / 최저 포인트
    ========================================== */
 
 .spectrum-point {
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    left: 50%;
+
+    width: 0;
+    height: 0;
 
     z-index: 5;
-    pointer-events: none;
 }
 
-/* 평균 → 위쪽 */
-.spectrum-average span {
-    position: absolute;
-    bottom: 18px;
 
-    white-space: nowrap;
-    font-size: 11px;
-    font-weight: 600;
-    color: #1e293b;
-}
-
-/* 최저·최고 → 아래쪽 */
-.spectrum-min span,
-.spectrum-max span {
-    position: absolute;
-    top: 30px;
-
-    white-space: nowrap;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.spectrum-min span {
-    color: #0d6efd;
-}
-
-.spectrum-max span {
-    color: #dc3545;
-}
+/* 포인트 동그라미 */
 
 .point-dot {
-    width: 12px;
-    height: 12px;
-    border-width: 2px;
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 11px;
+    height: 11px;
+
+    background: #ffffff;
+
+    border: 3px solid #1e293b;
 
     border-radius: 50%;
 
-    background: #ffffff;
-    border: 3px solid #1e293b;
-
     box-sizing: border-box;
 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.spectrum-average span {
+
+/* ------------------------------------------
+   최고 / 최저
+   ------------------------------------------ */
+
+.spectrum-side-label {
     position: absolute;
 
-    bottom: 18px;
+    right: 22px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 72px;
+
+    text-align: right;
 
     white-space: nowrap;
 
     font-size: 11px;
     font-weight: 600;
 
-    color: #1e293b;
-
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
+    line-height: 1.35;
 }
 
-.spectrum-min span {
-    color: #0d6efd;
-    left: 0px;
+.spectrum-side-label strong {
+    display: block;
+
+    font-size: 11px;
 }
 
-.spectrum-max span {
+.spectrum-side-label span {
+    display: block;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* 최고 */
+
+.spectrum-max .spectrum-side-label {
     color: #dc3545;
-    right: 0px;
-}
-
-.spectrum-min .point-dot {
-    border-color: #0d6efd;
 }
 
 .spectrum-max .point-dot {
@@ -1455,85 +1319,374 @@ html, body {
 }
 
 
-/* ==========================================
-   변동 진폭
-   ========================================== */
+/* 최저 */
 
-.spectrum-footer { 
-    text-align: center; 
-
-    font-size: 13px; 
-    color: #64748b; 
-
-    padding-top: 0;
-    margin-top: 0px;
+.spectrum-min .spectrum-side-label {
+    color: #0d6efd;
 }
 
-
-.spectrum-footer strong {
-    color: #0f172a;
+.spectrum-min .point-dot {
+    border-color: #0d6efd;
 }
 
 
 /* ==========================================
-   기존 스펙트럼 포인터
-   현재 JS에서 사용하지 않아도
-   다른 화면 영향 방지를 위해 유지
+   평균
    ========================================== */
 
-.spectrum-pointer {
+.spectrum-average .point-dot {
+    border-color: #475569;
+}
+
+.spectrum-average-label {
     position: absolute;
 
+    left: 10px;
     top: 50%;
-    transform: translate(-50%, -50%);
 
-    width: 16px;
-    height: 16px;
-
-    background-color: #ffffff;
-
-    border: 3px solid #1e293b;
-
-    border-radius: 50%;
-
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.pointer-tooltip {
-    position: absolute;
-
-    bottom: 22px;
-    left: 50%;
-
-    transform: translateX(-50%);
+    transform: translateY(-50%);
 
     white-space: nowrap;
-
-    background: #1e293b;
-    color: #ffffff;
 
     font-size: 11px;
     font-weight: 600;
 
-    padding: 3px 8px;
-
-    border-radius: 6px;
+    color: #475569;
 }
 
-.pointer-tooltip::after {
+.spectrum-average-label strong {
+    margin-left: 3px;
+
+    font-weight: 700;
+
+    color: #1e293b;
+}
+
+
+/* ==========================================
+   변동 진폭
+   ========================================== */
+
+.spectrum-amplitude {
+    position: absolute;
+
+    left: calc(50% - 47px);
+
+    top: 0;
+    height: 100%;
+
+    width: 40px;
+
+    z-index: 2;
+}
+
+
+/* 진폭 세로선 */
+
+.amplitude-line {
+    position: absolute;
+
+    left: 40%;
+    top: 28px;
+    bottom: 26px;
+
+    width: 2px;
+
+    transform: translateX(-50%);
+
+    background: #64748b;
+}
+
+
+/* 진폭 화살표 */
+
+.amplitude-arrow {
+    position: absolute;
+
+    left: 40%;
+
+    transform: translateX(-50%);
+
+    font-size: 10px;
+
+    color: #64748b;
+
+    line-height: 1;
+}
+
+.arrow-top {
+    top: 20px;
+}
+
+.arrow-bottom {
+    bottom: 20px;
+}
+
+
+/* 진폭 텍스트 */
+
+.amplitude-label {
+    position: absolute;
+
+    left: -60px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 90px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    background: transparent;
+}
+
+.amplitude-label span {
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.amplitude-label strong {
+    display: block;
+
+    margin-top: 1px;
+
+    font-size: 11px;
+
+    color: #1e293b;
+}
+
+
+/* ==========================================
+   시작 → 현재 연결선
+   ========================================== */
+
+.weight-journey-vertical {
+    position: absolute;
+
+    left: calc(50% + 77.3px);
+
+    width: 2px;
+
+    background: #7c3aed;
+
+    z-index: 3;
+
+    overflow: visible;
+}
+
+
+/* 연결선 */
+
+.journey-line {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 2px;
+    height: 100%;
+
+    background: #8b5cf6;
+}
+
+
+/* ==========================================
+   시작 / 현재 포인트
+   ========================================== */
+
+.journey-point {
+    position: absolute;
+
+    left: calc(50% + 78px);
+
+    width: 0;
+    height: 0;
+
+    z-index: 6;
+}
+
+
+/* 동그라미 */
+
+.journey-dot {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    transform: translate(-50%, -50%);
+
+    width: 10px;
+    height: 10px;
+
+    background: #ffffff;
+
+    border: 3px solid #2563eb;
+
+    border-radius: 50%;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+
+/* 현재 */
+
+.journey-current .journey-dot {
+    border-color: #7c3aed;
+}
+
+
+/* ------------------------------------------
+   시작 / 현재 라벨
+   ------------------------------------------ */
+
+.journey-label {
+    position: absolute;
+
+    left: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    white-space: nowrap;
+
+    font-size: 11px;
+
+    line-height: 1.3;
+}
+
+.journey-start .journey-label {
+    top: 10px;
+    transform: translateY(-100%);
+}
+
+.journey-current .journey-label {
+    top: -8px;
+    transform: translateY(0);
+}
+
+.journey-label span {
+    display: block;
+
+    color: #2563eb;
+
+    font-weight: 600;
+}
+
+.journey-current .journey-label span {
+    color: #7c3aed;
+}
+
+.journey-label strong {
+    display: block;
+
+    color: #1e293b;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   시작 → 현재 방향 화살표
+   ========================================== */
+
+/* 현재가 위에 있는 경우 → 위쪽 화살표 */
+
+.weight-journey-vertical.arrow-up::before {
     content: "";
 
     position: absolute;
 
     left: 50%;
-    bottom: -5px;
+    top: 0px;
 
     transform: translateX(-50%);
 
+    width: 0;
+    height: 0;
+
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid #1e293b;
+    border-bottom: 8px solid #7c3aed;
+
+    z-index: 20;
 }
+
+
+/* 현재가 아래에 있는 경우 → 아래쪽 화살표 */
+
+.weight-journey-vertical.arrow-down::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 0px;
+
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid #7c3aed;
+
+    z-index: 20;
+}
+
+
+/* ==========================================
+   변화량
+   ========================================== */
+
+.journey-diff {
+    position: absolute;
+
+    left: calc(50% + 95px);
+
+    transform: translateY(-50%);
+
+    z-index: 8;
+
+    white-space: nowrap;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* 감소 */
+
+.journey-diff.weight-down {
+    color: #2563eb;
+}
+
+
+/* 증가 */
+
+.journey-diff.weight-up {
+    color: #dc3545;
+}
+
+
+/* 변화 없음 */
+
+.journey-diff.weight-same {
+    color: #64748b;
+}
+
+
+
+
+
+
+
 
 /* ==========================================
    체중 그래프 네온 효과
