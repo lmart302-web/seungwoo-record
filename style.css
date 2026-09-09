@@ -1510,7 +1510,7 @@ html, body {
 .journey-label span {
     display: inline;
     margin-left: 4px;
-    color: #2563eb;
+    color: #22c55e;
     font-weight: 600;
 }
 
@@ -1636,7 +1636,10 @@ html, body {
     z-index: 1;
 }
 
-
+/* 화살표만 숨기기 */
+.weight-journey-vertical.hide-arrow::before {
+    display: none;
+}
 
 
 

@@ -221,6 +221,12 @@ console.log("diffTop:", (firstPercent + lastPercent) / 2);
             ? "arrow-up"
             : "";
 
+            const journeyPixelGap =
+    startCurrentHeight * 270 / 100;
+
+const hideJourneyArrow =
+    journeyPixelGap < 25;
+
 const diffTop =
     (firstPercent + lastPercent) / 2;
             // ------------------------------------------
@@ -317,7 +323,7 @@ height: ${lastPercent}%;
                              ================================== -->
 
                         <div
-                            class="weight-journey-vertical ${arrowDirection}"
+                            class="weight-journey-vertical ${arrowDirection} ${hideJourneyArrow ? "hide-arrow" : ""}"
                             style="
     top: calc(${startCurrentTop}% + 7px);
     height: calc(${startCurrentHeight}% - 14px);
@@ -326,9 +332,6 @@ height: ${lastPercent}%;
 
                             <div class="journey-line"></div>
 
-                            <div
-                                class="journey-arrow ${arrowDirection}">
-                            </div>
 
                         </div>
 
