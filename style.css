@@ -1365,7 +1365,7 @@ html, body {
    ========================================== */
 
 .spectrum-average .point-dot {
-    border-color: #475569;
+    border-color: #94a3b8;
 }
 
 .spectrum-average-label {
@@ -1383,7 +1383,7 @@ html, body {
     font-weight: 600;
     line-height: 1.35;
 
-    color: #475569;
+    color: #64748b;
 }
 
 .spectrum-average-label strong {
@@ -1459,7 +1459,7 @@ html, body {
 .weight-journey-vertical {
     position: absolute;
 
-    left: 49.7%;
+    left: 49.9%;
 
     width: 2px;
 

@@ -16,26 +16,43 @@ const monthTitle = document.getElementById("monthTitle");
 
 let currentDate = new Date();
 
-// 안전한 날짜 파싱 함수 (시차 방지)
+
+// ==========================================
+// 안전한 날짜 파싱
+// ==========================================
+
 function parseDate(dateStr) {
     if (!dateStr) return null;
 
-    // Firestore Timestamp 객체인 경우
-    if (typeof dateStr === "object" && typeof dateStr.toDate === "function") {
+    // Firestore Timestamp
+    if (
+        typeof dateStr === "object" &&
+        typeof dateStr.toDate === "function"
+    ) {
         return dateStr.toDate();
     }
 
-    // "YYYY-MM-DD" 또는 "YYYY-MM-DDTHH:mm:ss" 형태의 문자열 파싱
+    // YYYY-MM-DD 또는 YYYY-MM-DDTHH:mm:ss
     if (typeof dateStr === "string") {
-        const cleanStr = dateStr.split("T")[0]; // 시간 정보 제외
+        const cleanStr = dateStr.split("T")[0];
         const parts = cleanStr.split("-");
+
         if (parts.length >= 3) {
-            return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+            return new Date(
+                Number(parts[0]),
+                Number(parts[1]) - 1,
+                Number(parts[2])
+            );
         }
     }
 
     return new Date(dateStr);
 }
+
+
+// ==========================================
+// Firebase 기록 불러오기
+// ==========================================
 
 async function loadRecords() {
     try {
@@ -49,41 +66,80 @@ async function loadRecords() {
             records.push(doc.data());
         });
 
+        // 날짜순 정렬
         records.sort(function (a, b) {
             const dateA = parseDate(a.date);
             const dateB = parseDate(b.date);
+
             return (dateA || 0) - (dateB || 0);
         });
 
         drawReport();
+
     } catch (error) {
         console.error("데이터 로드 중 오류 발생:", error);
     }
 }
+
+
+// ==========================================
+// 월간 리포트
+// ==========================================
 
 function drawReport() {
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
+
+    // ==========================================
+    // 월 제목
+    // ==========================================
+
     if (monthTitle) {
-        monthTitle.innerText = year + "년 " + (month + 1) + "월";
+        monthTitle.innerText =
+            year + "년 " + (month + 1) + "월";
     }
+
+
+    // ==========================================
+    // 운동 기록 페이지 링크
+    // ==========================================
 
     const runningLink = document.querySelector(".running-link");
+
     if (runningLink) {
-        const monthValue = year + "-" + String(month + 1).padStart(2, "0");
-        runningLink.href = "running.html?month=" + monthValue;
+        const monthValue =
+            year + "-" + String(month + 1).padStart(2, "0");
+
+        runningLink.href =
+            "running.html?month=" + monthValue;
     }
+
+
+    // ==========================================
+    // 체중 기록 페이지 링크
+    // ==========================================
 
     const weightLink = document.querySelector(".weight-link");
+
     if (weightLink) {
-        const monthValue = year + "-" + String(month + 1).padStart(2, "0");
-        weightLink.href = "weight.html?month=" + monthValue;
+        const monthValue =
+            year + "-" + String(month + 1).padStart(2, "0");
+
+        weightLink.href =
+            "weight.html?month=" + monthValue;
     }
 
+
+    // ==========================================
+    // 해당 월 기록만 추출
+    // ==========================================
+
     const monthRecords = records.filter(function (record) {
+
         const recordDate = parseDate(record.date);
+
         if (!recordDate) return false;
 
         return (
@@ -92,554 +148,972 @@ function drawReport() {
         );
     });
 
-    // 월이 끝났는지 확인
+
+    // ==========================================
+    // 월 종료 여부
+    // ==========================================
+
     const today = new Date();
 
     const isMonthFinished =
         year < today.getFullYear() ||
-        (year === today.getFullYear() && month < today.getMonth());
+        (
+            year === today.getFullYear() &&
+            month < today.getMonth()
+        );
 
-    const currentLabel = isMonthFinished ? "종료" : "현재";
+    const currentLabel =
+        isMonthFinished ? "종료" : "현재";
+
 
     // ==========================================
-    // 체중 리포트 및 세로형 스펙트럼 렌더링
+    // 체중 리포트
     // ==========================================
+
     const weightRecords = monthRecords.filter(function (record) {
         return record.weight;
     });
 
-    const weightSummaryEl = document.getElementById("weightSummary");
+    const weightSummaryEl =
+        document.getElementById("weightSummary");
+
 
     if (weightSummaryEl) {
 
-        const weightSection = weightSummaryEl.closest(".section");
+        const weightSection =
+            weightSummaryEl.closest(".section");
+
 
         if (weightRecords.length) {
 
-            const first = Number(weightRecords[0].weight);
-            const last = Number(
-                weightRecords[weightRecords.length - 1].weight
-            );
+            const first =
+                Number(weightRecords[0].weight);
 
+            const last =
+                Number(
+                    weightRecords[weightRecords.length - 1].weight
+                );
+
+
+            // 평균
             const averageWeight =
                 weightRecords.reduce(function (sum, record) {
                     return sum + Number(record.weight);
                 }, 0) / weightRecords.length;
 
-            const maxWeight = Math.max(
-                ...weightRecords.map(r => Number(r.weight))
-            );
 
-            const minWeight = Math.min(
-                ...weightRecords.map(r => Number(r.weight))
-            );
+            // 최고 / 최저
+            const maxWeight =
+                Math.max(
+                    ...weightRecords.map(function (r) {
+                        return Number(r.weight);
+                    })
+                );
 
-            const amplitude = (maxWeight - minWeight).toFixed(1);
+            const minWeight =
+                Math.min(
+                    ...weightRecords.map(function (r) {
+                        return Number(r.weight);
+                    })
+                );
+
+
+            // 진폭
+            const amplitude =
+                (maxWeight - minWeight).toFixed(1);
+
 
             // ------------------------------------------
-            // 체중값 → 스펙트럼 위치
+            // 체중값 → 세로 위치
             // 0% = 최고
             // 100% = 최저
             // ------------------------------------------
+
             function getVerticalPercent(weight) {
 
                 if (maxWeight === minWeight) {
                     return 50;
                 }
 
-                const percent =
-                    ((maxWeight - weight) /
-                        (maxWeight - minWeight)) * 100;
-
-                return percent;
+                return (
+                    (maxWeight - weight) /
+                    (maxWeight - minWeight)
+                ) * 100;
             }
 
-            const firstPercent = getVerticalPercent(first);
-            const lastPercent = getVerticalPercent(last);
+
+            const firstPercent =
+                getVerticalPercent(first);
+
+            const lastPercent =
+                getVerticalPercent(last);
+
+
+            // ------------------------------------------
+            // 시작 / 현재 라벨 간격
+            // ------------------------------------------
 
             const minLabelGap = 75;
 
-let startLabelOffset = -10.25;
-let currentLabelOffset = 7.25;
+            let startLabelOffset = -10.25;
+            let currentLabelOffset = 7.25;
 
-const pixelGap =
-    Math.abs(firstPercent - lastPercent) *
-    270 / 100;
 
-if (pixelGap < minLabelGap) {
+            const pixelGap =
+                Math.abs(firstPercent - lastPercent) *
+                270 / 100;
 
-    const push = Math.min(
-    (minLabelGap - pixelGap) / 2,
-    12
-);
 
-    if (firstPercent < lastPercent) {
-        startLabelOffset = -push;
-        currentLabelOffset = push;
-    } else {
-        startLabelOffset = push;
-        currentLabelOffset = -push;
-    }
-}
+            if (pixelGap < minLabelGap) {
 
-            const averageDisplayWeight = Number(averageWeight.toFixed(1));
-const avgPercent = getVerticalPercent(averageDisplayWeight);
+                const push =
+                    Math.min(
+                        (minLabelGap - pixelGap) / 2,
+                        12
+                    );
 
-            const diff = (last - first).toFixed(1);
 
-            
+                if (firstPercent < lastPercent) {
 
-            console.log("월:", currentLabel);
-console.log("firstPercent:", firstPercent);
-console.log("lastPercent:", lastPercent);
-console.log("diffTop:", (firstPercent + lastPercent) / 2);
+                    startLabelOffset = -push;
+                    currentLabelOffset = push;
+
+                } else {
+
+                    startLabelOffset = push;
+                    currentLabelOffset = -push;
+                }
+            }
+
+
+            // 평균 위치
+            const averageDisplayWeight =
+                Number(averageWeight.toFixed(1));
+
+            const avgPercent =
+                getVerticalPercent(averageDisplayWeight);
+
+
+            // ------------------------------------------
+            // 시작 → 현재 변화량
+            // ------------------------------------------
+
+            const diff =
+                (last - first).toFixed(1);
+
 
             let diffText = "변화 없음";
             let diffClass = "weight-same";
 
+
             if (Number(diff) > 0) {
+
                 diffText = "+" + diff;
                 diffClass = "weight-up";
+
             } else if (Number(diff) < 0) {
+
                 diffText = diff;
                 diffClass = "weight-down";
             }
 
+
             // ------------------------------------------
-            // 시작 → 현재 방향
+            // 시작 → 현재 연결선
             // ------------------------------------------
+
             const startCurrentTop =
-                Math.min(firstPercent, lastPercent);
+                Math.min(
+                    firstPercent,
+                    lastPercent
+                );
+
 
             const startCurrentHeight =
-                Math.abs(firstPercent - lastPercent);
+                Math.abs(
+                    firstPercent - lastPercent
+                );
+
 
             const arrowDirection =
-    lastPercent > firstPercent
-        ? "arrow-down"
-        : lastPercent < firstPercent
-            ? "arrow-up"
-            : "";
+                lastPercent > firstPercent
+                    ? "arrow-down"
+                    : lastPercent < firstPercent
+                        ? "arrow-up"
+                        : "";
+
 
             const journeyPixelGap =
-    startCurrentHeight * 270 / 100;
+                startCurrentHeight * 270 / 100;
 
-const hideJourneyArrow =
-    journeyPixelGap < 25;
 
-const diffTop =
-    (firstPercent + lastPercent) / 2;
+            const hideJourneyArrow =
+                journeyPixelGap < 25;
+
+
             // ------------------------------------------
             // 세로 스펙트럼 HTML
             // ------------------------------------------
+
             const spectrumHtml = `
 
-            <div class="vertical-weight-spectrum">
+                <div class="vertical-weight-spectrum">
 
-                <div class="vertical-spectrum-area">
+                    <div class="vertical-spectrum-area">
 
-                    <!-- ==================================
-                         최고 / 평균 / 최저
-                         ================================== -->
+                        <div class="spectrum-vertical">
 
-                    <div class="spectrum-vertical">
-
-                        <div class="spectrum-bar"></div>
-<div
-    class="spectrum-current-fill"
-    style="
-        top: 0;
-height: ${lastPercent}%;
-    "
-></div>
-
-                        <!-- 최고 -->
-                        <div
-                            class="spectrum-point spectrum-max"
-                            style="top: 0%;">
-                            <div class="point-dot"></div>
-
-                            <div class="spectrum-side-label">
-                                <strong>최고</strong>
-                                <span>${maxWeight.toFixed(1)}</span>
-                            </div>
-                        </div>
+                            <!-- 스펙트럼 -->
+                            <div class="spectrum-bar"></div>
 
 
-                        <!-- 평균 -->
-                        <div
-                            class="spectrum-point spectrum-average"
-                            style="top: ${avgPercent}%;">
-                            <div class="point-dot"></div>
-
-                            <div class="spectrum-average-label">
-                                평균
-                                <strong>${averageDisplayWeight.toFixed(1)}</strong>
-                            </div>
-                        </div>
-
-
-                        <!-- 최저 -->
-                        <div
-                            class="spectrum-point spectrum-min"
-                            style="top: 100%;">
-                            <div class="point-dot"></div>
-
-                            <div class="spectrum-side-label">
-                                <strong>최저</strong>
-                                <span>${minWeight.toFixed(1)}</span>
-                            </div>
-                        </div>
-
-
-                        <!-- ==================================
-                             변동 진폭
-                             최고 → 최저
-                             ================================== -->
-
-                        <div class="spectrum-amplitude">
-
-                            <div class="amplitude-line"></div>
-
-                            <div class="amplitude-arrow arrow-top">
-                                ▲
-                            </div>
-
-                            <div class="amplitude-arrow arrow-bottom">
-                                ▼
-                            </div>
-
-                            <div class="amplitude-label">
-                                <span>진폭</span>
-                                <strong>${amplitude}</strong>
-                            </div>
-
-                        </div>
-
-
-                        <!-- ==================================
-                             시작 → 현재
-                             실제 체중 위치에 맞춤
-                             ================================== -->
-
-                        <div
-                            class="weight-journey-vertical ${arrowDirection} ${hideJourneyArrow ? "hide-arrow" : ""}"
-                            style="
-    top: calc(${startCurrentTop}% + 7px);
-    height: calc(${startCurrentHeight}% - 14px);
-"
-                        >  
-                        </div>
-
-
-                        <!-- 시작 -->
-                        <div
-                            class="journey-point journey-start"
-                            style="top: ${firstPercent}%"
-                        >
-
-                            <div class="journey-dot"></div>
-
+                            <!-- 현재 위치까지 채우기 -->
                             <div
-    class="journey-label"
-    style="transform: translateY(calc(-50% + ${startLabelOffset}px));"
->
-    <strong>${first.toFixed(1)}</strong>
-    <span>(시작)</span>
-</div>
-
-                        </div>
+                                class="spectrum-current-fill"
+                                style="
+                                    top: 0;
+                                    height: ${lastPercent}%;
+                                "
+                            ></div>
 
 
-                        <!-- 현재 -->
-                        <div
-                            class="journey-point journey-current"
-                            style="top: ${lastPercent}%"
-                        >
-
-                            <div class="journey-dot"></div>
-
+                            <!-- 최고 -->
                             <div
-    class="journey-label"
-    style="transform: translateY(calc(-50% + ${currentLabelOffset}px));"
->
-    <strong>${last.toFixed(1)}</strong>
-    <span>(${currentLabel})</span>
-</div>
+                                class="spectrum-point spectrum-max"
+                                style="top: 0%;"
+                            >
+                                <div class="point-dot"></div>
 
-                        </div>
+                                <div class="spectrum-side-label">
+                                    <strong>최고</strong>
+                                    <span>
+                                        ${maxWeight.toFixed(1)}
+                                    </span>
+                                </div>
+                            </div>
 
 
-                        <!-- 변화량 -->
-                        <div
-                            class="journey-diff ${diffClass}"
-                            style="
-                                top: ${(firstPercent + lastPercent) / 2}%;
-                            "
-                        >
-                            ${diffText}
+                            <!-- 평균 -->
+                            <div
+                                class="spectrum-point spectrum-average"
+                                style="top: ${avgPercent}%"
+                            >
+                                <div class="point-dot"></div>
+
+                                <div class="spectrum-average-label">
+                                    평균
+                                    <strong>
+                                        ${averageDisplayWeight.toFixed(1)}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            <!-- 최저 -->
+                            <div
+                                class="spectrum-point spectrum-min"
+                                style="top: 100%;"
+                            >
+                                <div class="point-dot"></div>
+
+                                <div class="spectrum-side-label">
+                                    <strong>최저</strong>
+                                    <span>
+                                        ${minWeight.toFixed(1)}
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <!-- 진폭 -->
+                            <div class="spectrum-amplitude">
+
+                                <div class="amplitude-line"></div>
+
+                                <div class="amplitude-arrow arrow-top">
+                                    ▲
+                                </div>
+
+                                <div class="amplitude-arrow arrow-bottom">
+                                    ▼
+                                </div>
+
+                                <div class="amplitude-label">
+                                    <span>진폭</span>
+                                    <strong>${amplitude}</strong>
+                                </div>
+
+                            </div>
+
+
+                            <!-- 시작 → 현재 연결선 -->
+                            <div
+                                class="weight-journey-vertical
+                                ${arrowDirection}
+                                ${hideJourneyArrow ? "hide-arrow" : ""}"
+                                style="
+                                    top: calc(${startCurrentTop}% + 7px);
+                                    height: calc(${startCurrentHeight}% - 14px);
+                                "
+                            ></div>
+
+
+                            <!-- 시작 -->
+                            <div
+                                class="journey-point journey-start"
+                                style="top: ${firstPercent}%"
+                            >
+
+                                <div class="journey-dot"></div>
+
+                                <div
+                                    class="journey-label"
+                                    style="
+                                        transform:
+                                        translateY(
+                                            calc(
+                                                -50% +
+                                                ${startLabelOffset}px
+                                            )
+                                        );
+                                    "
+                                >
+                                    <strong>
+                                        ${first.toFixed(1)}
+                                    </strong>
+
+                                    <span>(시작)</span>
+                                </div>
+
+                            </div>
+
+
+                            <!-- 현재 -->
+                            <div
+                                class="journey-point journey-current"
+                                style="top: ${lastPercent}%"
+                            >
+
+                                <div class="journey-dot"></div>
+
+                                <div
+                                    class="journey-label"
+                                    style="
+                                        transform:
+                                        translateY(
+                                            calc(
+                                                -50% +
+                                                ${currentLabelOffset}px
+                                            )
+                                        );
+                                    "
+                                >
+                                    <strong>
+                                        ${last.toFixed(1)}
+                                    </strong>
+
+                                    <span>
+                                        (${currentLabel})
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <!-- 변화량 -->
+                            <div
+                                class="journey-diff ${diffClass}"
+                                style="
+                                    top:
+                                    ${(firstPercent + lastPercent) / 2}%;
+                                "
+                            >
+                                ${diffText}
+                            </div>
+
                         </div>
 
                     </div>
 
                 </div>
-
-            </div>
-        `;
+            `;
 
 
-            weightSummaryEl.innerHTML = spectrumHtml;
+            weightSummaryEl.innerHTML =
+                spectrumHtml;
 
             weightSummaryEl.style.margin = "";
 
+
             if (weightSection) {
-                weightSection.style.paddingBottom = "1.3px";
+                weightSection.style.paddingBottom =
+                    "1.3px";
             }
+
 
         } else {
 
-            weightSummaryEl.innerText = "기록 없음";
+            // 체중 기록 없음
+            weightSummaryEl.innerText =
+                "기록 없음";
 
-            weightSummaryEl.style.marginTop = "16px";
-            weightSummaryEl.style.marginBottom = "0px";
+            weightSummaryEl.style.marginTop =
+                "16px";
+
+            weightSummaryEl.style.marginBottom =
+                "0px";
+
 
             if (weightSection) {
-                weightSection.style.paddingBottom = "20px";
+                weightSection.style.paddingBottom =
+                    "20px";
             }
         }
     }
 
-    // 운동 기록
-    let runningTotal = 0;
-    let runningCount = 0;
-    let goalCount = 0;
 
-    monthRecords.forEach(function (record) {
-        if (record.running) {
-            const time = Number(record.running);
-            runningTotal += time;
-            runningCount++;
-            if (time >= 20) {
-                goalCount++;
-            }
-        }
-    });
+    // ==========================================
+    // 행동 기록
+    // ==========================================
 
-    // 행동
+    const miniCalendar =
+        document.getElementById(
+            "behaviorMiniCalendar"
+        );
+
+    const behaviorSummaryEl =
+        document.querySelector(
+            ".behavior-summary"
+        );
+
+    const behaviorSection =
+        miniCalendar
+            ? miniCalendar.closest(".section")
+            : null;
+
+
+    const hasBehaviorData =
+        monthRecords.some(function (record) {
+            return record.behavior;
+        });
+
+
+    // ------------------------------------------
+    // 행동 통계 계산
+    // ------------------------------------------
+
     let good = 0;
     let normal = 0;
     let hard = 0;
 
+
     monthRecords.forEach(function (record) {
-        if (record.behavior === "good") good++;
-        if (record.behavior === "normal") normal++;
-        if (record.behavior === "hard") hard++;
+
+        if (record.behavior === "good") {
+            good++;
+        }
+
+        if (record.behavior === "normal") {
+            normal++;
+        }
+
+        if (record.behavior === "hard") {
+            hard++;
+        }
     });
 
-    const goodCountEl = document.getElementById("goodCount");
-    const normalCountEl = document.getElementById("normalCount");
-    const hardCountEl = document.getElementById("hardCount");
 
-    if (goodCountEl) goodCountEl.innerText = good;
-    if (normalCountEl) normalCountEl.innerText = normal;
-    if (hardCountEl) hardCountEl.innerText = hard;
+    const goodCountEl =
+        document.getElementById("goodCount");
 
-    // ==========================================
-    // ===== 행동 영역 (간격 및 하단 여백 최적화) =====
-    // ==========================================
-    const miniCalendar = document.getElementById("behaviorMiniCalendar");
-    const behaviorSummaryEl = document.querySelector(".behavior-summary");
-    const behaviorSection = miniCalendar ? miniCalendar.closest(".section") : null;
+    const normalCountEl =
+        document.getElementById("normalCount");
 
-    const hasBehaviorData = monthRecords.some(function (r) {
-        return r.behavior;
-    });
+    const hardCountEl =
+        document.getElementById("hardCount");
+
+
+    if (goodCountEl) {
+        goodCountEl.innerText = good;
+    }
+
+    if (normalCountEl) {
+        normalCountEl.innerText = normal;
+    }
+
+    if (hardCountEl) {
+        hardCountEl.innerText = hard;
+    }
+
+
+    // ------------------------------------------
+    // 행동 기록 없음
+    // ------------------------------------------
 
     if (!hasBehaviorData) {
+
         if (behaviorSummaryEl) {
-            behaviorSummaryEl.style.display = "none";
+            behaviorSummaryEl.style.display =
+                "none";
         }
+
 
         if (miniCalendar) {
+
             miniCalendar.innerHTML = "";
-            miniCalendar.style.display = "block";
 
-            miniCalendar.style.marginTop = "16px";
-            miniCalendar.style.marginBottom = "0px";
-            miniCalendar.style.padding = "0px";
-            miniCalendar.style.minHeight = "0px";
+            miniCalendar.style.display =
+                "block";
 
-            const noDataEl = document.createElement("div");
-            noDataEl.innerText = "기록 없음";
-            noDataEl.style.margin = "0";
-            noDataEl.style.padding = "0";
-            noDataEl.style.lineHeight = "1";
+            miniCalendar.style.marginTop =
+                "16px";
 
-            miniCalendar.appendChild(noDataEl);
+            miniCalendar.style.marginBottom =
+                "0px";
+
+            miniCalendar.style.padding =
+                "0px";
+
+            miniCalendar.style.minHeight =
+                "0px";
+
+
+            const noDataEl =
+                document.createElement("div");
+
+            noDataEl.innerText =
+                "기록 없음";
+
+            noDataEl.style.margin =
+                "0";
+
+            noDataEl.style.padding =
+                "0";
+
+            noDataEl.style.lineHeight =
+                "1";
+
+
+            miniCalendar.appendChild(
+                noDataEl
+            );
         }
 
-        // [기록 없음] 행동통계 카드 기본 여백 복원
-        if (behaviorSection) behaviorSection.style.paddingBottom = "20px";
+
+        if (behaviorSection) {
+            behaviorSection.style.paddingBottom =
+                "20px";
+        }
+
+
+    // ------------------------------------------
+    // 행동 기록 있음
+    // ------------------------------------------
 
     } else {
+
         if (behaviorSummaryEl) {
-            behaviorSummaryEl.style.display = "block";
+            behaviorSummaryEl.style.display =
+                "block";
         }
 
-        // [기록 있음] 행동통계 카드 하단 여백 최대로 줄임 (6px)
-        if (behaviorSection) behaviorSection.style.paddingBottom = "20px";
 
-        let good = 0, normal = 0, hard = 0;
-        monthRecords.forEach(function (r) {
-            if (r.behavior === "good") good++;
-            if (r.behavior === "normal") normal++;
-            if (r.behavior === "hard") hard++;
-        });
+        if (behaviorSection) {
+            behaviorSection.style.paddingBottom =
+                "20px";
+        }
 
-        const goodCountEl = document.getElementById("goodCount");
-        const normalCountEl = document.getElementById("normalCount");
-        const hardCountEl = document.getElementById("hardCount");
-
-        if (goodCountEl) goodCountEl.innerText = good;
-        if (normalCountEl) normalCountEl.innerText = normal;
-        if (hardCountEl) hardCountEl.innerText = hard;
 
         if (miniCalendar) {
+
             miniCalendar.innerHTML = "";
 
-            miniCalendar.style.display = "grid";
-            miniCalendar.style.textAlign = "initial";
-            miniCalendar.style.marginTop = "";
-            miniCalendar.style.marginBottom = "";
+            miniCalendar.style.display =
+                "grid";
 
-            ["월", "화", "수", "목", "금"].forEach(function (day) {
-                const header = document.createElement("div");
-                header.className = "mini-header";
-                header.innerText = day;
-                miniCalendar.appendChild(header);
-            });
+            miniCalendar.style.textAlign =
+                "initial";
 
-            const lastDayNum = new Date(year, month + 1, 0).getDate();
+            miniCalendar.style.marginTop =
+                "";
 
+            miniCalendar.style.marginBottom =
+                "";
+
+
+            // 요일 헤더
+            ["월", "화", "수", "목", "금"]
+                .forEach(function (day) {
+
+                    const header =
+                        document.createElement("div");
+
+                    header.className =
+                        "mini-header";
+
+                    header.innerText =
+                        day;
+
+                    miniCalendar.appendChild(
+                        header
+                    );
+                });
+
+
+            // 해당 월 마지막 날짜
+            const lastDayNum =
+                new Date(
+                    year,
+                    month + 1,
+                    0
+                ).getDate();
+
+
+            // 날짜별 기록 저장
             const recordMap = {};
-            monthRecords.forEach(function (r) {
-                const rd = parseDate(r.date);
-                if (rd) recordMap[rd.getDate()] = r;
+
+
+            monthRecords.forEach(function (record) {
+
+                const recordDate =
+                    parseDate(record.date);
+
+                if (recordDate) {
+                    recordMap[
+                        recordDate.getDate()
+                    ] = record;
+                }
             });
 
-            const firstDayObj = new Date(year, month, 1);
-            const startDayOfWeek = firstDayObj.getDay();
+
+            // 해당 월 1일의 요일
+            const firstDayObj =
+                new Date(
+                    year,
+                    month,
+                    1
+                );
+
+            const startDayOfWeek =
+                firstDayObj.getDay();
+
 
             let offset = 0;
-            if (startDayOfWeek !== 0 && startDayOfWeek !== 6) {
-                offset = startDayOfWeek - 1;
+
+
+            if (
+                startDayOfWeek !== 0 &&
+                startDayOfWeek !== 6
+            ) {
+                offset =
+                    startDayOfWeek - 1;
             }
 
-            for (let i = 0; i < offset; i++) {
-                const empty = document.createElement("div");
-                empty.style.visibility = "hidden";
-                miniCalendar.appendChild(empty);
+
+            // 시작 전 빈칸
+            for (
+                let i = 0;
+                i < offset;
+                i++
+            ) {
+
+                const empty =
+                    document.createElement("div");
+
+                empty.style.visibility =
+                    "hidden";
+
+                miniCalendar.appendChild(
+                    empty
+                );
             }
 
-            for (let dayNum = 1; dayNum <= lastDayNum; dayNum++) {
-                const dateObj = new Date(year, month, dayNum);
-                const dayOfWeek = dateObj.getDay();
 
-                if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+            // 날짜 생성
+            for (
+                let dayNum = 1;
+                dayNum <= lastDayNum;
+                dayNum++
+            ) {
 
-                const record = recordMap[dayNum];
+                const dateObj =
+                    new Date(
+                        year,
+                        month,
+                        dayNum
+                    );
 
-                if (record && record.behavior) {
-                    const cell = document.createElement("div");
-                    cell.className = "mini-day";
+                const dayOfWeek =
+                    dateObj.getDay();
 
-                    if (record.behavior === "good") cell.classList.add("mini-good");
-                    else if (record.behavior === "normal") cell.classList.add("mini-normal");
-                    else if (record.behavior === "hard") cell.classList.add("mini-hard");
 
-                    cell.title = record.date;
-                    miniCalendar.appendChild(cell);
+                // 주말 제외
+                if (
+                    dayOfWeek === 0 ||
+                    dayOfWeek === 6
+                ) {
+                    continue;
+                }
+
+
+                const record =
+                    recordMap[dayNum];
+
+
+                if (
+                    record &&
+                    record.behavior
+                ) {
+
+                    const cell =
+                        document.createElement(
+                            "div"
+                        );
+
+                    cell.className =
+                        "mini-day";
+
+
+                    if (
+                        record.behavior === "good"
+                    ) {
+
+                        cell.classList.add(
+                            "mini-good"
+                        );
+
+                    } else if (
+                        record.behavior === "normal"
+                    ) {
+
+                        cell.classList.add(
+                            "mini-normal"
+                        );
+
+                    } else if (
+                        record.behavior === "hard"
+                    ) {
+
+                        cell.classList.add(
+                            "mini-hard"
+                        );
+                    }
+
+
+                    cell.title =
+                        record.date;
+
+                    miniCalendar.appendChild(
+                        cell
+                    );
+
+
                 } else {
-                    const emptyCell = document.createElement("div");
-                    emptyCell.style.visibility = "hidden";
-                    miniCalendar.appendChild(emptyCell);
+
+                    const emptyCell =
+                        document.createElement(
+                            "div"
+                        );
+
+                    emptyCell.style.visibility =
+                        "hidden";
+
+                    miniCalendar.appendChild(
+                        emptyCell
+                    );
                 }
             }
         }
     }
 
+
     // ==========================================
-    // 점심 TOP1
+    // 점심 TOP 1
     // ==========================================
+
     const lunchMap = {};
 
+
     monthRecords.forEach(function (record) {
+
         if (!record.lunch) return;
 
-        const lunchName = record.lunch.trim();
+
+        const lunchName =
+            record.lunch.trim();
+
+
         if (!lunchName) return;
+
 
         if (!lunchMap[lunchName]) {
             lunchMap[lunchName] = 0;
         }
+
+
         lunchMap[lunchName]++;
     });
 
+
+    // 가장 많이 먹은 횟수
     let maxCount = 0;
+
+
     for (const lunch in lunchMap) {
-        if (lunchMap[lunch] > maxCount) {
-            maxCount = lunchMap[lunch];
+
+        if (
+            lunchMap[lunch] > maxCount
+        ) {
+            maxCount =
+                lunchMap[lunch];
         }
     }
 
-    const topLunchEl = document.getElementById("topLunch");
+
+    const topLunchEl =
+        document.getElementById(
+            "topLunch"
+        );
+
 
     if (topLunchEl) {
-        const lunchSection = topLunchEl.closest(".section");
+
+        const lunchSection =
+            topLunchEl.closest(
+                ".section"
+            );
+
 
         topLunchEl.style.cssText = "";
 
+
         if (maxCount > 0) {
+
             const topLunches = [];
+
+
             for (const lunch in lunchMap) {
-                if (lunchMap[lunch] === maxCount) {
-                    topLunches.push(lunch);
+
+                if (
+                    lunchMap[lunch] === maxCount
+                ) {
+                    topLunches.push(
+                        lunch
+                    );
                 }
             }
 
+
+            // 공동 1위
             if (topLunches.length > 1) {
-    topLunchEl.innerText = topLunches.join(" · ") + " · 각 " + maxCount + "회";
-} else {
-    topLunchEl.innerText = topLunches[0] + " · " + maxCount + "회";
-}
 
-            topLunchEl.classList.add("top-lunch-box");
-            if (lunchSection) lunchSection.style.paddingBottom = "20px";
+                topLunchEl.innerText =
+                    topLunches.join(" · ") +
+                    " · 각 " +
+                    maxCount +
+                    "회";
+
+            } else {
+
+                topLunchEl.innerText =
+                    topLunches[0] +
+                    " · " +
+                    maxCount +
+                    "회";
+            }
+
+
+            topLunchEl.classList.add(
+                "top-lunch-box"
+            );
+
+
+            if (lunchSection) {
+                lunchSection.style.paddingBottom =
+                    "20px";
+            }
+
+
         } else {
-            topLunchEl.innerText = "기록 없음";
 
-            topLunchEl.classList.remove("top-lunch-box");
-            topLunchEl.style.marginTop = "16px";
-            topLunchEl.style.color = "#6c757d";
-            if (lunchSection) lunchSection.style.paddingBottom = "20px";
+            // 점심 기록 없음
+            topLunchEl.innerText =
+                "기록 없음";
+
+            topLunchEl.classList.remove(
+                "top-lunch-box"
+            );
+
+            topLunchEl.style.marginTop =
+                "16px";
+
+            topLunchEl.style.color =
+                "#6c757d";
+
+
+            if (lunchSection) {
+                lunchSection.style.paddingBottom =
+                    "20px";
+            }
         }
     }
 }
 
-const prevBtn = document.getElementById("prevMonth");
+
+// ==========================================
+// 이전 달
+// ==========================================
+
+const prevBtn =
+    document.getElementById(
+        "prevMonth"
+    );
+
+
 if (prevBtn) {
-    prevBtn.addEventListener("click", function () {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        drawReport();
-    });
+
+    prevBtn.addEventListener(
+        "click",
+        function () {
+
+            currentDate.setMonth(
+                currentDate.getMonth() - 1
+            );
+
+            drawReport();
+        }
+    );
 }
 
-const nextBtn = document.getElementById("nextMonth");
+
+// ==========================================
+// 다음 달
+// ==========================================
+
+const nextBtn =
+    document.getElementById(
+        "nextMonth"
+    );
+
+
 if (nextBtn) {
-    nextBtn.addEventListener("click", function () {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        drawReport();
-    });
+
+    nextBtn.addEventListener(
+        "click",
+        function () {
+
+            currentDate.setMonth(
+                currentDate.getMonth() + 1
+            );
+
+            drawReport();
+        }
+    );
 }
+
+
+// ==========================================
+// 실행
+// ==========================================
 
 loadRecords();
