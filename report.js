@@ -99,7 +99,7 @@ function drawReport() {
         year < today.getFullYear() ||
         (year === today.getFullYear() && month < today.getMonth());
 
-    const currentLabel = isMonthFinished ? "끝" : "현재";
+    const currentLabel = isMonthFinished ? "종료" : "현재";
 
     // ==========================================
     // 체중 리포트 및 세로형 스펙트럼 렌더링
@@ -156,9 +156,37 @@ function drawReport() {
 
             const firstPercent = getVerticalPercent(first);
             const lastPercent = getVerticalPercent(last);
+
+            const minLabelGap = 75;
+
+let startLabelOffset = 0;
+let currentLabelOffset = 0;
+
+const pixelGap =
+    Math.abs(firstPercent - lastPercent) *
+    270 / 100;
+
+if (pixelGap < minLabelGap) {
+
+    const push = Math.min(
+    (minLabelGap - pixelGap) / 2,
+    12
+);
+
+    if (firstPercent < lastPercent) {
+        startLabelOffset = -push;
+        currentLabelOffset = push;
+    } else {
+        startLabelOffset = push;
+        currentLabelOffset = -push;
+    }
+}
+
             const avgPercent = getVerticalPercent(averageWeight);
 
             const diff = (last - first).toFixed(1);
+
+            
 
             console.log("월:", currentLabel);
 console.log("firstPercent:", firstPercent);
@@ -306,10 +334,13 @@ const diffTop =
 
                             <div class="journey-dot"></div>
 
-                            <div class="journey-label">
-                                <span>시작</span>
-                                <strong>${first.toFixed(1)}</strong>
-                            </div>
+                            <div
+    class="journey-label"
+    style="transform: translateY(calc(-50% + ${startLabelOffset}px));"
+>
+    <strong>${first.toFixed(1)}</strong>
+    <span>(시작)</span>
+</div>
 
                         </div>
 
@@ -322,10 +353,13 @@ const diffTop =
 
                             <div class="journey-dot"></div>
 
-                            <div class="journey-label">
-                                <span>${currentLabel}</span>
-                                <strong>${last.toFixed(1)}</strong>
-                            </div>
+                            <div
+    class="journey-label"
+    style="transform: translateY(calc(-50% + ${currentLabelOffset}px));"
+>
+    <strong>${last.toFixed(1)}</strong>
+    <span>(${currentLabel})</span>
+</div>
 
                         </div>
 
