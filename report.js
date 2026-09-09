@@ -160,10 +160,10 @@ function drawReport() {
             const isDiffClose = Math.abs(firstPercent - lastPercent) < 15;
 
             if (Number(diff) > 0) {
-                diffText = "+" + diff + "kg";
+                diffText = "+" + diff;
                 diffClass = "weight-up";
             } else if (Number(diff) < 0) {
-                diffText = diff + "kg";
+                diffText = diff;
                 diffClass = "weight-down";
             }
 
@@ -197,7 +197,7 @@ function drawReport() {
                         style="left: ${firstPercent}%;">
                         <div class="journey-label">
                             시작
-                            <strong>${first.toFixed(1)}kg</strong>
+                            <strong>${first.toFixed(1)}</strong>
                         </div>
                         <div class="journey-dot"></div>
                     </div>
@@ -207,7 +207,7 @@ function drawReport() {
                         style="left: ${lastPercent}%;">
                         <div class="journey-label">
     ${currentLabel}
-    <strong>${last.toFixed(1)}kg</strong>
+    <strong>${last.toFixed(1)}</strong>
 </div>
                         <div class="journey-dot"></div>
                     </div>
@@ -236,7 +236,7 @@ function drawReport() {
         class="spectrum-point spectrum-min"
         style="left: 0%;">
         <div class="point-dot"></div>
-        <span>최저 ${minWeight.toFixed(1)}kg</span>
+        <span>최저 ${minWeight.toFixed(1)}</span>
     </div>
 
     <!-- 평균 -->
@@ -252,7 +252,7 @@ function drawReport() {
         class="spectrum-point spectrum-max"
         style="left: 100%;">
         <div class="point-dot"></div>
-        <span>최고 ${maxWeight.toFixed(1)}kg</span>
+        <span>최고 ${maxWeight.toFixed(1)}</span>
     </div>
 
 </div>
@@ -260,7 +260,7 @@ function drawReport() {
 
                     <div class="spectrum-footer">
     ↔ 변동 진폭:
-    <strong>${amplitude}kg</strong>
+    <strong>${amplitude}</strong>
 </div>
 
                 </div>
