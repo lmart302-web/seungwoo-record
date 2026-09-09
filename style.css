@@ -1421,27 +1421,13 @@ html, body {
 
     width: 2px;
 
-    background: #7c3aed;
+    background: #374151;
 
     z-index: 3;
 
     overflow: visible;
 }
 
-
-/* 연결선 */
-
-.journey-line {
-    position: absolute;
-
-    left: 0;
-    top: 0;
-
-    width: 2px;
-    height: 100%;
-
-    background: #374151;
-}
 
 
 /* ==========================================
@@ -1556,7 +1542,7 @@ html, body {
 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 10px solid #7c3aed;
+    border-bottom: 10px solid #374151;
 
     z-index: 20;
 }
@@ -1579,7 +1565,7 @@ html, body {
 
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 10px solid #7c3aed;
+    border-top: 10px solid #374151;
 
     z-index: 20;
 }

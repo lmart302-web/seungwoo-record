@@ -328,11 +328,7 @@ height: ${lastPercent}%;
     top: calc(${startCurrentTop}% + 7px);
     height: calc(${startCurrentHeight}% - 14px);
 "
-                        >
-
-                            <div class="journey-line"></div>
-
-
+                        >  
                         </div>
 
 
