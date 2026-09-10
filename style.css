@@ -1458,16 +1458,18 @@ html, body {
 
 .weight-journey-vertical {
     position: absolute;
-
-    left: 49.7%;
-
+    left: 49.94%;
     width: 2px;
-
     background: #22c55e;
-
     z-index: 3;
-
     overflow: visible;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+    .weight-journey-vertical {
+        left: 49.7%;
+    }
 }
 
 
