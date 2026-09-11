@@ -395,7 +395,7 @@ function drawWeight() {
                 ? `${label[0]}(${label[1]})`
                 : label;
 
-              return `${date} : ${context.parsed.y}kg`;
+              return `${date} : ${context.parsed.y} kg`;
             }
           }
         }
@@ -689,10 +689,10 @@ function drawAllWeight() {
                 ];
 
               if (Array.isArray(label)) {
-                return `${label[0]} : ${context.parsed.y}`;
+                return `${label[0]} : ${context.parsed.y} kg`;
               }
 
-              return `${label} : ${context.parsed.y}kg`;
+              return `${label} : ${context.parsed.y} kg`;
             }
           }
         }
