@@ -263,8 +263,18 @@ function drawWeight() {
         }
       ]
     },
-    options: COMMON_CHART_OPTIONS,
-    plugins: [averageLabelPlugin]
+    options: {
+  ...COMMON_CHART_OPTIONS,
+  plugins: {
+    ...COMMON_CHART_OPTIONS.plugins,
+    tooltip: {
+      callbacks: {
+        label: (context) => `${context.parsed.y}`
+      }
+    }
+  }
+},
+plugins: [averageLabelPlugin]
   });
 }
 
@@ -497,9 +507,17 @@ function drawAllWeight() {
       ]
     },
     options: {
-      ...COMMON_CHART_OPTIONS,
-      interaction: { mode: "index", intersect: false }
+  ...COMMON_CHART_OPTIONS,
+  interaction: { mode: "index", intersect: false },
+  plugins: {
+    ...COMMON_CHART_OPTIONS.plugins,
+    tooltip: {
+      callbacks: {
+        label: (context) => `${context.parsed.y}`
+      }
     }
+  }
+}
   });
 }
 
