@@ -158,7 +158,7 @@ const averageLabelPlugin = {
     ctx.textBaseline = "middle";
 
     ctx.fillText(
-      `평균 ${Number(value).toFixed(1)}`,
+      `평균 ${Number(value).toFixed(1)} kg`,
       chartArea.left + 5,
       point.y
     );
