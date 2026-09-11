@@ -663,78 +663,215 @@ function drawAllWeight() {
   ========================================================= */
 
   const monthlyRangePlugin = {
-    id: "monthlyRange",
+  id: "monthlyRange",
 
-    afterDatasetsDraw(chart) { 
-  const { ctx, scales, chartArea } = chart; 
+  afterDatasetsDraw(chart) {
+    const { ctx, scales, chartArea } = chart;
 
-  const xScale = scales.x; 
-  const yScale = scales.y; 
+    const xScale = scales.x;
+    const yScale = scales.y;
 
-  if (!xScale || !yScale || !chartArea) return; 
+    if (!xScale || !yScale || !chartArea) return;
 
-  ctx.save(); 
+    /* =========================================================
+       1. 기본 진폭선
+       → 차트 영역 밖으로 나가지 않게 clip
+    ========================================================= */
 
-  ctx.beginPath();
-  ctx.rect(
-    chartArea.left,
-    chartArea.top,
-    chartArea.right - chartArea.left,
-    chartArea.bottom - chartArea.top
-  );
-  ctx.clip();
+    ctx.save();
 
-  monthlyRecords.forEach((item, index) => {
+    ctx.beginPath();
+    ctx.rect(
+      chartArea.left,
+      chartArea.top,
+      chartArea.right - chartArea.left,
+      chartArea.bottom - chartArea.top
+    );
+    ctx.clip();
 
-        if (
-          item.max === null ||
-          item.min === null
-        ) {
-          return;
-        }
+    monthlyRecords.forEach((item, index) => {
 
-        const x = xScale.getPixelForValue(index);
-        const yMax = yScale.getPixelForValue(item.max);
-        const yMin = yScale.getPixelForValue(item.min);
+      if (
+        item.max === null ||
+        item.min === null
+      ) {
+        return;
+      }
 
-        if (
-          !Number.isFinite(x) ||
-          !Number.isFinite(yMax) ||
-          !Number.isFinite(yMin)
-        ) {
-          return;
-        }
+      const x = xScale.getPixelForValue(index);
+      const yMax = yScale.getPixelForValue(item.max);
+      const yMin = yScale.getPixelForValue(item.min);
 
-        /*
-         * 평균점과 진폭선이 너무 겹쳐 보이지 않도록
-         * 진폭선을 평균점보다 뒤에 배치
-         */
+      if (
+        !Number.isFinite(x) ||
+        !Number.isFinite(yMax) ||
+        !Number.isFinite(yMin)
+      ) {
+        return;
+      }
 
-        const capWidth = 5;
+      const capWidth = 5;
 
-ctx.beginPath();
+      /* =========================
+         기본 최고 ↕ 최저 진폭
+      ========================= */
 
-// 세로 진폭
-ctx.moveTo(x, yMax);
-ctx.lineTo(x, yMin);
+      ctx.beginPath();
 
-// 최고 캡
-ctx.moveTo(x - capWidth, yMax);
-ctx.lineTo(x + capWidth, yMax);
+      // 세로 진폭
+      ctx.moveTo(x, yMax);
+      ctx.lineTo(x, yMin);
 
-// 최저 캡
-ctx.moveTo(x - capWidth, yMin);
-ctx.lineTo(x + capWidth, yMin);
+      // 최고 캡
+      ctx.moveTo(x - capWidth, yMax);
+      ctx.lineTo(x + capWidth, yMax);
 
-ctx.lineWidth = 2;
-ctx.strokeStyle = "rgba(120, 130, 140, 0.45)";
-ctx.lineCap = "round";
-ctx.stroke();
-      });
+      // 최저 캡
+      ctx.moveTo(x - capWidth, yMin);
+      ctx.lineTo(x + capWidth, yMin);
 
-      ctx.restore();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(120, 130, 140, 0.45)";
+      ctx.lineCap = "round";
+      ctx.stroke();
+    });
+
+    ctx.restore();
+
+
+    /* =========================================================
+       2. Hover 최고 / 최저 표시
+       → clip 하지 않음
+       → 실제 값이 차트 밖이어도 kg 표시
+    ========================================================= */
+
+    const activeElements = chart.getActiveElements();
+
+    if (!activeElements || !activeElements.length) {
+      return;
     }
-  };
+
+    const activeIndex = activeElements[0].index;
+
+    const item = monthlyRecords[activeIndex];
+
+    if (
+      !item ||
+      item.max === null ||
+      item.min === null
+    ) {
+      return;
+    }
+
+    const x = xScale.getPixelForValue(activeIndex);
+    const yMax = yScale.getPixelForValue(item.max);
+    const yMin = yScale.getPixelForValue(item.min);
+
+    if (!Number.isFinite(x)) {
+      return;
+    }
+
+    /* =========================================================
+       최고 / 최저의 실제 위치가 차트 안에 있는지 확인
+    ========================================================= */
+
+    const maxVisible =
+      Number.isFinite(yMax) &&
+      yMax >= chartArea.top &&
+      yMax <= chartArea.bottom;
+
+    const minVisible =
+      Number.isFinite(yMin) &&
+      yMin >= chartArea.top &&
+      yMin <= chartArea.bottom;
+
+
+    /* =========================================================
+       표시 위치
+    ========================================================= */
+
+    ctx.save();
+
+    ctx.font = "11px sans-serif";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#555";
+
+    const labelWidth = 45;
+    const gap = 8;
+
+    let labelX = x + gap;
+
+    // 오른쪽 끝 월이면 왼쪽에 표시
+    if (labelX + labelWidth > chartArea.right) {
+      labelX = x - labelWidth - gap;
+    }
+
+    // 그래도 왼쪽 밖이면 차트 안쪽으로
+    if (labelX < chartArea.left) {
+      labelX = chartArea.left + 4;
+    }
+
+
+    /* =========================================================
+       최고
+    ========================================================= */
+
+    if (maxVisible) {
+
+      // 차트 안에 있을 때만 점 표시
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "rgba(120, 130, 140, 0.8)";
+      ctx.lineWidth = 1.5;
+
+      ctx.beginPath();
+      ctx.arc(x, yMax, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    // 최고 kg은 항상 표시
+    ctx.fillStyle = "#555";
+
+    ctx.fillText(
+      `${Number(item.max).toFixed(1)}kg`,
+      labelX,
+      maxVisible
+        ? yMax
+        : chartArea.top + 10
+    );
+
+
+    /* =========================================================
+       최저
+    ========================================================= */
+
+    if (minVisible) {
+
+      // 차트 안에 있을 때만 점 표시
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "rgba(120, 130, 140, 0.8)";
+      ctx.lineWidth = 1.5;
+
+      ctx.beginPath();
+      ctx.arc(x, yMin, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    // 최저 kg은 항상 표시
+    ctx.fillStyle = "#555";
+
+    ctx.fillText(
+      `${Number(item.min).toFixed(1)}kg`,
+      labelX,
+      minVisible
+        ? yMin
+        : chartArea.bottom - 10
+    );
+
+    ctx.restore();
+  }
+};
 
   /* =========================================================
      기존 차트 제거
