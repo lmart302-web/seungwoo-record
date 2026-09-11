@@ -411,6 +411,9 @@ function drawWeight() {
 /* =========================================================
    전체 그래프 & 리스트
 ========================================================= */
+/* =========================================================
+   전체 그래프 & 리스트
+========================================================= */
 function drawAllWeight() {
   if (!elements.allCtx) return;
 
@@ -457,16 +460,25 @@ function drawAllWeight() {
     });
 
     let average = null;
+    let max = null;
+    let min = null;
 
     if (monthRecords.length) {
-      const total = monthRecords.reduce(
-        (sum, r) => sum + Number(r.weight),
+      const monthWeights = monthRecords.map((record) =>
+        Number(record.weight)
+      );
+
+      const total = monthWeights.reduce(
+        (sum, weight) => sum + weight,
         0
       );
 
       average = Number(
-        (total / monthRecords.length).toFixed(1)
+        (total / monthWeights.length).toFixed(1)
       );
+
+      max = Math.max(...monthWeights);
+      min = Math.min(...monthWeights);
     }
 
     const monthStr = `${month + 1}월`;
@@ -488,7 +500,9 @@ function drawAllWeight() {
     monthlyRecords.push({
       year,
       month,
-      average
+      average,
+      max,
+      min
     });
 
     month++;
@@ -498,6 +512,10 @@ function drawAllWeight() {
       year++;
     }
   }
+
+  /* =========================================================
+     전체 평균의 최고 / 최저
+  ========================================================= */
 
   const validMonthlyAverages = monthlyRecords
     .map((item) => item.average)
@@ -589,7 +607,10 @@ function drawAllWeight() {
     }
   });
 
-  // 전체 차트 최고/최저 점 색상 및 크기 지정
+  /* =========================================================
+     평균점 색상
+  ========================================================= */
+
   const pointBgColors = monthlyData.map((val) => {
 
     if (val === null) {
@@ -628,6 +649,79 @@ function drawAllWeight() {
     return 4;
   });
 
+  /* =========================================================
+     월별 최고 ↕ 최저 진폭 플러그인
+  ========================================================= */
+
+  const monthlyRangePlugin = {
+    id: "monthlyRange",
+
+    afterDatasetsDraw(chart) {
+      const { ctx, scales } = chart;
+
+      const xScale = scales.x;
+      const yScale = scales.y;
+
+      if (!xScale || !yScale) return;
+
+      ctx.save();
+
+      monthlyRecords.forEach((item, index) => {
+
+        if (
+          item.max === null ||
+          item.min === null
+        ) {
+          return;
+        }
+
+        const x = xScale.getPixelForValue(index);
+        const yMax = yScale.getPixelForValue(item.max);
+        const yMin = yScale.getPixelForValue(item.min);
+
+        if (
+          !Number.isFinite(x) ||
+          !Number.isFinite(yMax) ||
+          !Number.isFinite(yMin)
+        ) {
+          return;
+        }
+
+        /*
+         * 평균점과 진폭선이 너무 겹쳐 보이지 않도록
+         * 진폭선을 평균점보다 뒤에 배치
+         */
+
+        const capWidth = 5;
+
+ctx.beginPath();
+
+// 세로 진폭
+ctx.moveTo(x, yMax);
+ctx.lineTo(x, yMin);
+
+// 최고 캡
+ctx.moveTo(x - capWidth, yMax);
+ctx.lineTo(x + capWidth, yMax);
+
+// 최저 캡
+ctx.moveTo(x - capWidth, yMin);
+ctx.lineTo(x + capWidth, yMin);
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "rgba(120, 130, 140, 0.45)";
+ctx.lineCap = "round";
+ctx.stroke();
+      });
+
+      ctx.restore();
+    }
+  };
+
+  /* =========================================================
+     기존 차트 제거
+  ========================================================= */
+
   if (allChart) {
     allChart.destroy();
   }
@@ -639,6 +733,10 @@ function drawAllWeight() {
     existingChart.destroy();
   }
 
+  /* =========================================================
+     전체 차트 생성
+  ========================================================= */
+
   allChart = new Chart(elements.allCtx, {
     type: "line",
 
@@ -648,6 +746,7 @@ function drawAllWeight() {
       datasets: [
         {
           label: "월 평균 체중(kg)",
+
           data: monthlyData,
 
           pointRadius: pointRadii,
@@ -697,7 +796,11 @@ function drawAllWeight() {
           }
         }
       }
-    }
+    },
+
+    plugins: [
+      monthlyRangePlugin
+    ]
   });
 }
 
