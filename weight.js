@@ -153,6 +153,15 @@ const averageLabelPlugin = {
 
     ctx.save();
 
+    ctx.beginPath();
+ctx.rect(
+  chartArea.left,
+  chartArea.top,
+  chartArea.right - chartArea.left,
+  chartArea.bottom - chartArea.top
+);
+ctx.clip();
+
     ctx.font = "12px sans-serif";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
@@ -656,17 +665,26 @@ function drawAllWeight() {
   const monthlyRangePlugin = {
     id: "monthlyRange",
 
-    afterDatasetsDraw(chart) {
-      const { ctx, scales } = chart;
+    afterDatasetsDraw(chart) { 
+  const { ctx, scales, chartArea } = chart; 
 
-      const xScale = scales.x;
-      const yScale = scales.y;
+  const xScale = scales.x; 
+  const yScale = scales.y; 
 
-      if (!xScale || !yScale) return;
+  if (!xScale || !yScale || !chartArea) return; 
 
-      ctx.save();
+  ctx.save(); 
 
-      monthlyRecords.forEach((item, index) => {
+  ctx.beginPath();
+  ctx.rect(
+    chartArea.left,
+    chartArea.top,
+    chartArea.right - chartArea.left,
+    chartArea.bottom - chartArea.top
+  );
+  ctx.clip();
+
+  monthlyRecords.forEach((item, index) => {
 
         if (
           item.max === null ||
