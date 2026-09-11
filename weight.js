@@ -303,7 +303,7 @@ function drawWeight() {
           class="record-value"
           style="color: #222222; font-weight: 600;"
         >
-          ${numWeight.toFixed(1)}kg
+          ${numWeight.toFixed(1)} kg
         </span>
 
         <span
@@ -862,7 +862,7 @@ function drawAllWeight() {
     ctx.fillStyle = "#555";
 
     ctx.fillText(
-      `${Number(item.min).toFixed(1)}kg`,
+      `${Number(item.min).toFixed(1)} kg`,
       labelX,
       minVisible
         ? yMin
