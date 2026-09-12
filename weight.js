@@ -48,7 +48,7 @@ const isMobile = window.innerWidth <= 600;
 const COMMON_CHART_OPTIONS = {
   responsive: true,
   maintainAspectRatio: true,
-  aspectRatio: isMobile ? 1.1 : 2.6,
+  aspectRatio: isMobile ? 1.6 : 2.8,
   animation: ANIMATION_CONFIG,
 
   plugins: {
