@@ -99,9 +99,9 @@ function drawCalendar() {
                 let exerciseText = "🏃";
 
 if (record.running) {
-    exerciseText += ` ${record.running}분`;
+    exerciseText = `🏃 ${record.running}분`;
 } else if (record.steps) {
-    exerciseText += ` 🚶 ${Number(record.steps).toLocaleString()}걸음`;
+    exerciseText = `🚶 ${Number(record.steps).toLocaleString()}걸음`;
 }
 
 html += `<div class='record-line'>${exerciseText}</div>`;
