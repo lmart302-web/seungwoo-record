@@ -50,6 +50,9 @@ recordDate.addEventListener("change", async function(){
         document.getElementById("running").value =
         record.running || "";
 
+        document.getElementById("steps").value =
+record.steps || "";
+
         document.getElementById("weight").value =
         record.weight || "";
 
@@ -62,6 +65,8 @@ recordDate.addEventListener("change", async function(){
         document.getElementById("afternoon").value = "";
 
         document.getElementById("running").value = "";
+
+        document.getElementById("steps").value ="";
 
         document.getElementById("weight").value = "";
 

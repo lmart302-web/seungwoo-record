@@ -100,16 +100,8 @@ function drawCalendar() {
 
 if (record.running) {
     exerciseText += ` ${record.running}분`;
-}
-
-if (record.steps) {
-    if (record.running) {
-        exerciseText += " · ";
-    } else {
-        exerciseText += " ";
-    }
-
-    exerciseText += `🚶 ${Number(record.steps).toLocaleString()}걸음`;
+} else if (record.steps) {
+    exerciseText += ` 🚶 ${Number(record.steps).toLocaleString()}걸음`;
 }
 
 html += `<div class='record-line'>${exerciseText}</div>`;
