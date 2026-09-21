@@ -96,7 +96,23 @@ function drawCalendar() {
                 html += `<div class='record-line'>🕘 ${record.morning || ""}</div>`;
                 html += `<div class='record-line'>🍚 ${record.lunch || ""}</div>`;
                 html += `<div class='record-line'>⛅ ${record.afternoon || ""}</div>`;
-                html += `<div class='record-line'>🏃 ${record.running ? record.running + "분" : ""}</div>`;
+                let exerciseText = "🏃";
+
+if (record.running) {
+    exerciseText += ` ${record.running}분`;
+}
+
+if (record.steps) {
+    if (record.running) {
+        exerciseText += " · ";
+    } else {
+        exerciseText += " ";
+    }
+
+    exerciseText += `🚶 ${Number(record.steps).toLocaleString()}걸음`;
+}
+
+html += `<div class='record-line'>${exerciseText}</div>`;
                 html += `<div class='record-line'>⚖️ ${record.weight ? Number(record.weight).toFixed(1) + "kg" : ""}</div>`;
             }
         } else {
