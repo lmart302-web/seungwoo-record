@@ -959,9 +959,20 @@ function drawAllWeight() {
       },
 
       plugins: {
-        ...COMMON_CHART_OPTIONS.plugins,
+  ...COMMON_CHART_OPTIONS.plugins,
 
-        tooltip: {
+  legend: {
+    position: "top",
+    align: "end",
+
+    labels: {
+      filter: (legendItem) => {
+        return legendItem.datasetIndex !== 1;
+      }
+    }
+  },
+
+  tooltip: {
   displayColors: false,
 
   filter: (tooltipItem) => {
