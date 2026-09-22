@@ -658,6 +658,22 @@ function drawAllWeight() {
     return 4;
   });
 
+    /* =========================================================
+     마지막 달 현재 체중 표시
+  ========================================================= */
+
+  const latestWeightRecord = validRecords
+    .slice()
+    .sort((a, b) => parseDate(a.date) - parseDate(b.date))
+    .at(-1);
+
+  const currentWeightData = monthlyData.map(() => null);
+
+  if (latestWeightRecord && monthlyData.length) {
+    currentWeightData[monthlyData.length - 1] =
+      Number(latestWeightRecord.weight);
+  }
+
   /* =========================================================
      월별 최고 ↕ 최저 진폭 플러그인
   ========================================================= */
@@ -899,24 +915,39 @@ function drawAllWeight() {
       labels,
 
       datasets: [
-        {
-          label: "월 평균 체중(kg)",
+  {
+    label: "월 평균 체중(kg)",
 
-          data: monthlyData,
+    data: monthlyData,
 
-          pointRadius: pointRadii,
-          pointHoverRadius: 7,
+    pointRadius: pointRadii,
+    pointHoverRadius: 7,
 
-          pointBackgroundColor:
-            pointBgColors,
+    pointBackgroundColor:
+      pointBgColors,
 
-          pointBorderColor:
-            pointBgColors,
+    pointBorderColor:
+      pointBgColors,
 
-          spanGaps: true,
-          tension: 0.2
-        }
-      ]
+    spanGaps: true,
+    tension: 0.2
+  },
+
+  {
+    label: "현재 체중",
+
+    data: currentWeightData,
+
+    showLine: false,
+
+    pointRadius: 6,
+    pointHoverRadius: 8,
+
+    pointBackgroundColor: "#222222",
+    pointBorderColor: "#ffffff",
+    pointBorderWidth: 2
+  }
+]
     },
 
     options: {
@@ -931,25 +962,40 @@ function drawAllWeight() {
         ...COMMON_CHART_OPTIONS.plugins,
 
         tooltip: {
-          displayColors: false,
+  displayColors: false,
 
-          callbacks: {
-            title: () => "",
+  filter: (tooltipItem) => {
+    // 마지막 달에서는 현재 체중 데이터 숨김
+    const lastIndex =
+      tooltipItem.chart.data.labels.length - 1;
 
-            label: (context) => {
-              const label =
-                context.chart.data.labels[
-                  context.dataIndex
-                ];
+    if (
+      tooltipItem.dataIndex === lastIndex &&
+      tooltipItem.datasetIndex === 1
+    ) {
+      return false;
+    }
 
-              if (Array.isArray(label)) {
-                return `${label[0]} : ${context.parsed.y} kg`;
-              }
+    return true;
+  },
 
-              return `${label} : ${context.parsed.y} kg`;
-            }
-          }
-        }
+  callbacks: {
+    title: () => "",
+
+    label: (context) => {
+      const label =
+        context.chart.data.labels[
+          context.dataIndex
+        ];
+
+      if (Array.isArray(label)) {
+        return `${label[0]} : ${context.parsed.y} kg`;
+      }
+
+      return `${label} : ${context.parsed.y} kg`;
+    }
+  }
+}
       }
     },
 
