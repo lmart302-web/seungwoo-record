@@ -934,19 +934,21 @@ function drawAllWeight() {
   },
 
   {
-    label: "현재 체중",
+  label: "현재 체중",
 
-    data: currentWeightData,
+  data: currentWeightData,
 
-    showLine: false,
+  showLine: false,
 
-    pointRadius: 6,
-    pointHoverRadius: 8,
+  pointRadius: 6,
+  pointHoverRadius: 8,
 
-    pointBackgroundColor: "#222222",
-    pointBorderColor: "#ffffff",
-    pointBorderWidth: 2
-  }
+  pointBackgroundColor: "#222222",
+  pointBorderColor: "#ffffff",
+  pointBorderWidth: 2,
+
+  pointStyle: "circle"
+}
 ]
     },
 
@@ -962,15 +964,31 @@ function drawAllWeight() {
   ...COMMON_CHART_OPTIONS.plugins,
 
   legend: {
-    position: "top",
-    align: "end",
+  position: "top",
+  align: "end",
 
-    labels: {
-      filter: (legendItem) => {
-        return legendItem.datasetIndex !== 1;
-      }
+  labels: {
+    usePointStyle: true,
+
+    generateLabels: (chart) => {
+      const datasets = chart.data.datasets;
+
+      return datasets.map((dataset, index) => ({
+        text: dataset.label,
+        datasetIndex: index,
+
+        // 월 평균 = 기존 파란 네모
+        // 현재 체중 = 검은 점
+        fillStyle: index === 1 ? "#222222" : dataset.borderColor,
+        strokeStyle: index === 1 ? "#222222" : dataset.borderColor,
+        lineWidth: index === 1 ? 0 : 2,
+
+        pointStyle: index === 1 ? "circle" : "rect",
+        hidden: !chart.isDatasetVisible(index)
+      }));
     }
-  },
+  }
+},
 
   tooltip: {
   displayColors: false,
