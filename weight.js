@@ -1020,40 +1020,35 @@ function drawAllWeight() {
         },
 
         tooltip: {
-          displayColors: false,
+  displayColors: false,
 
-          filter: (tooltipItem) => {
-            // 마지막 달에서는 현재 체중 데이터 숨김
-            const lastIndex =
-              tooltipItem.chart.data.labels.length - 1;
+  // 툴팁 위치를 평균 체중 점 기준으로 맞춤
+  position: "average",
 
-            if (
-              tooltipItem.dataIndex === lastIndex &&
-              tooltipItem.datasetIndex === 1
-            ) {
-              return false;
-            }
+  callbacks: {
+    title: () => "",
 
-            return true;
-          },
+   label: (context) => {
+  const label =
+    context.chart.data.labels[context.dataIndex];
 
-          callbacks: {
-            title: () => "",
+  // 마지막 달의 현재 체중
+  if (
+    context.datasetIndex === 1 &&
+    context.dataIndex === context.chart.data.labels.length - 1
+  ) {
+    return `현재 : ${context.parsed.y} kg`;
+  }
 
-            label: (context) => {
-              const label =
-                context.chart.data.labels[
-                  context.dataIndex
-                ];
+  // 기존 월 평균 체중
+  if (Array.isArray(label)) {
+    return `${label[0]} : ${context.parsed.y} kg`;
+  }
 
-              if (Array.isArray(label)) {
-                return `${label[0]} : ${context.parsed.y} kg`;
-              }
-
-              return `${label} : ${context.parsed.y} kg`;
-            }
-          }
-        }
+  return `${label} : ${context.parsed.y} kg`;
+}
+  }
+}
       }
     },
 
