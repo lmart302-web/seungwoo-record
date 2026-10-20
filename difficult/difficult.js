@@ -25,8 +25,7 @@ if(auth !== "true"){
 
 }
 
-import { app } from "../firebase.js";
-
+import { app } from "../js/firebase.js";
 
 import {
     getFirestore,
@@ -34,13 +33,9 @@ import {
     getDocs,
     deleteDoc,
     doc
-}
-    from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const db = getFirestore(app);
-
 
 
 const difficultList =

@@ -1,7 +1,8 @@
 console.log("difficultInput.js 실행됨");
 
 
-import { app } from "../firebase.js";
+import { app } from "../js/firebase.js";
+
 
 
 import {
